@@ -5,6 +5,8 @@ import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.Representation;
 import org.TicTacToe.interaction.Display;
 import org.TicTacToe.interaction.Terminal;
+import org.TicTacToe.player.ArtificialPlayer;
+import org.TicTacToe.player.Player;
 
 public class TicTacToe {
     Board board;
@@ -18,12 +20,15 @@ public class TicTacToe {
         this.size = size;
         this.board = new Board(size);
         this.rules = new Rules();
-        this.players = new Player[]{new Player(Representation.ROUND), new Player(Representation.CROSS)};
     }
 
     public void start() {
+
+        createPlayers();
+
         boolean isFinished = false;
         board.display();
+
         while (!isFinished) {
             activePlayer = activePlayer == 0 ? 1 : 0;
             Display.getInstance().displayText("Joueur " + activePlayer);
@@ -68,5 +73,25 @@ public class TicTacToe {
 
     private Boolean isEmptyCase(Coordinate coordinate) {
         return board.getCell(coordinate).getType() == Representation.EMPTY;
+    }
+
+    private void createPlayers() {
+        Display.getInstance().displayText("Comment voulez-vous jouer?");
+        Display.getInstance().displayText("0: 2 Joueurs Humain");
+        Display.getInstance().displayText("1: 1 humain et un joueur artificiel");
+        Display.getInstance().displayText("2: 2 Joueurs artificiels");
+        int result = Terminal.getInstance().askForInteger(3);
+
+        switch (result) {
+            case 1:
+                this.players = new Player[]{new Player(Representation.ROUND), new Player(Representation.CROSS)};
+                break;
+            case 2:
+                this.players = new Player[]{new Player(Representation.ROUND), new ArtificialPlayer(Representation.CROSS)};
+                break;
+            case 3:
+                this.players = new Player[]{new ArtificialPlayer(Representation.ROUND), new ArtificialPlayer(Representation.CROSS)};
+                break;
+        }
     }
 }

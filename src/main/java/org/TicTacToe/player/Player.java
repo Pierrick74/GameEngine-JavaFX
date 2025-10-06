@@ -1,4 +1,4 @@
-package org.TicTacToe;
+package org.TicTacToe.player;
 
 import org.TicTacToe.commun.Representation;
 

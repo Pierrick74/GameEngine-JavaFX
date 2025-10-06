@@ -1,6 +1,6 @@
 package org.TicTacToe.board;
 
-import org.TicTacToe.Player;
+import org.TicTacToe.player.Player;
 import org.TicTacToe.commun.Representation;
 
 public class Cell {
