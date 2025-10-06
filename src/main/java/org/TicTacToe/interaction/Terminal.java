@@ -29,7 +29,7 @@ public class Terminal {
                 if( number < maxValue ) {
                     isValide = true;
                 } else {
-                    System.out.println("Merci de rentrer un nombre valide entre 0 et " +  maxValue);
+                    System.out.println("Merci de rentrer un nombre valide entre 0 et " +  (maxValue-1));
                 }
             } else {
                 System.out.println("Erreur: ce n'est pas un entier valide, recommencer");

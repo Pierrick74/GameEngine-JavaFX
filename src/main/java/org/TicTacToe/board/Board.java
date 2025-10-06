@@ -18,15 +18,26 @@ public class Board {
         }
     }
 
+    public void display() {
+        Display.getInstance().display(board);
+    }
+
+    public Boolean isFull() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j].player == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public Cell getCell(Coordinate coordinate) {
         return board[coordinate.getRow()][coordinate.getCol()];
     }
 
     public void setCell(Coordinate coordinate, Player player) {
         board[coordinate.getRow()][coordinate.getCol()] = new Cell(player);
-    }
-
-    public void display() {
-        Display.getInstance().display(board);
     }
 }

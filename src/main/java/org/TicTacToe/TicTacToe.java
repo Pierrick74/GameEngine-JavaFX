@@ -8,20 +8,25 @@ import org.TicTacToe.interaction.Terminal;
 
 public class TicTacToe {
     Board board;
-    Player player;
+    Integer activePlayer = 0;
     Integer size;
+    Player[] players;
 
     public TicTacToe(Integer size) {
         this.size = size;
         this.board = new Board(size);
-        this.player = new Player(Representation.ROUND);
+        this.players = new Player[]{new Player(Representation.ROUND), new Player(Representation.CROSS)};
     }
 
     public void start() {
         board.display();
-        Coordinate coordinate = askForCoordinate();
-        board.setCell(coordinate, player);
-        board.display();
+        while (!board.isFull()) {
+            activePlayer = activePlayer == 0 ? 1 : 0;
+            Display.getInstance().displayText("Joueur " + activePlayer);
+            Coordinate coordinate = askForCoordinate();
+            board.setCell(coordinate, players[activePlayer]);
+            board.display();
+        }
     }
 
     private Coordinate askForCoordinate() {
