@@ -1,8 +1,6 @@
 package org.TicTacToe;
 
 public class Display {
-
-    private Integer widthScreen;
     private String separationLigne;
 
 
@@ -17,7 +15,7 @@ public class Display {
     }
 
     private void calculateSeparation(Cell[][] board) {
-        widthScreen = board.length;
+        Integer widthScreen = board.length;
         separationLigne = "-";
         for  (int x = 0; x < widthScreen; x++) {
             separationLigne += "----";
