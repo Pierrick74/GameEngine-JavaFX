@@ -8,6 +8,9 @@ import org.TicTacToe.interaction.Terminal;
 import org.TicTacToe.player.ArtificialPlayer;
 import org.TicTacToe.player.Player;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 public class TicTacToe {
     Board board;
     Player[] players;
@@ -22,7 +25,7 @@ public class TicTacToe {
         this.rules = new Rules();
     }
 
-    public void start() {
+    public void start() throws InterruptedException {
 
         createPlayers();
 
@@ -31,9 +34,12 @@ public class TicTacToe {
 
         while (!isFinished) {
             activePlayer = activePlayer == 0 ? 1 : 0;
-            Display.getInstance().displayText("Joueur " + activePlayer);
-            Coordinate coordinate = askForCoordinate();
-            board.setCell(coordinate, players[activePlayer]);
+
+            if( players[activePlayer] instanceof ArtificialPlayer){
+                artificialPlayerTurn();
+            } else {
+                humainPlayerTurn();
+            }
             board.display();
 
             if(rules.isFinished(board)){
@@ -46,6 +52,19 @@ public class TicTacToe {
                 Display.getInstance().displayText("Personne ne gagne");
             }
         }
+    }
+
+    private void humainPlayerTurn(){
+        Display.getInstance().displayText("Joueur " + activePlayer);
+        Coordinate coordinate = askForCoordinate();
+        board.setCell(coordinate, players[activePlayer]);
+    }
+
+    private void artificialPlayerTurn() throws InterruptedException {
+        Display.getInstance().displayText("Joueur " + activePlayer);
+        Coordinate coordinate = getCoordinateForIAPlayer();
+        TimeUnit.SECONDS.sleep(2);
+        board.setCell(coordinate, players[activePlayer]);
     }
 
     private Coordinate askForCoordinate() {
@@ -71,6 +90,23 @@ public class TicTacToe {
         return coordinate;
     }
 
+    private Coordinate getCoordinateForIAPlayer() {
+        boolean isValide = false;
+        Random rand = new Random();
+        Coordinate coordinate = null;
+
+        while (!isValide) {
+            int row = rand.nextInt(size);
+            int col = rand.nextInt(size);
+            coordinate = new Coordinate(row, col);
+
+            if(isEmptyCase(coordinate)){
+                isValide = true;
+            }
+        }
+        return coordinate;
+    }
+
     private Boolean isEmptyCase(Coordinate coordinate) {
         return board.getCell(coordinate).getType() == Representation.EMPTY;
     }
@@ -83,13 +119,13 @@ public class TicTacToe {
         int result = Terminal.getInstance().askForInteger(3);
 
         switch (result) {
-            case 1:
+            case 0:
                 this.players = new Player[]{new Player(Representation.ROUND), new Player(Representation.CROSS)};
                 break;
-            case 2:
+            case 1:
                 this.players = new Player[]{new Player(Representation.ROUND), new ArtificialPlayer(Representation.CROSS)};
                 break;
-            case 3:
+            case 2:
                 this.players = new Player[]{new ArtificialPlayer(Representation.ROUND), new ArtificialPlayer(Representation.CROSS)};
                 break;
         }
