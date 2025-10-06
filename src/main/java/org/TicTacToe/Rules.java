@@ -4,7 +4,6 @@ import org.TicTacToe.board.Board;
 import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.Representation;
-import org.TicTacToe.interaction.Display;
 
 public class Rules {
 
@@ -17,14 +16,14 @@ public class Rules {
         int size = board.getSize();
 
         for(int row = 0; row < size; row++) {
-            over = isRowOver(row, board);
+            over = isRowOver(board);
             if(over) {
                 return true;
             }
         }
 
         for(int col = 0; col < size; col++) {
-            over = isColumnOver(col, board);
+            over = isColumnOver(board);
             if(over) {
                 return true;
             }
@@ -38,7 +37,7 @@ public class Rules {
     }
 
 
-    private boolean isRowOver(int row, Board board){
+    private boolean isRowOver(Board board){
         int size = board.getSize();
 
         for(int irow = 0; irow < size; irow++) {
@@ -65,7 +64,7 @@ public class Rules {
         return representationCross == 3 || representationRound == 3;
     }
 
-    private boolean isColumnOver(int col, Board board){
+    private boolean isColumnOver(Board board){
         int size = board.getSize();
 
         for(int icol = 0; icol < size; icol++) {

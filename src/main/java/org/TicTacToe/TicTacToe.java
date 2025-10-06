@@ -93,7 +93,7 @@ public class TicTacToe {
     private Coordinate getCoordinateForIAPlayer() {
         boolean isValide = false;
         Random rand = new Random();
-        Coordinate coordinate = null;
+        Coordinate coordinate;
 
         coordinate = rules.getCoordinateToBlock(board, players[activePlayer].getType());
         if(coordinate != null){
