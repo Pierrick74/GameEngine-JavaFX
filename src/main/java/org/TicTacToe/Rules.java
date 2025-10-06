@@ -40,37 +40,41 @@ public class Rules {
 
     private boolean isRowOver(int row, Board board){
         int size = board.getSize();
-        Representation type = null;
-        for(int col = 0; col < size; col++) {
-            if(board.getCell(new Coordinate(row, col)).getType() ==  Representation.EMPTY) {
-                return false;
-            }
-            if(type == null){
-                type = board.getCell(new Coordinate(row, col)).getType();
-            }
-            if( type != board.getCell(new Coordinate(row, col)).getType()) {
-                return false;
+
+        for(int irow = 0; irow < size; irow++) {
+            Cell[] cells = board.getCellsInRow(irow);
+            if(isCellsOver(cells)) {
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+
+    private boolean isCellsOver(Cell[] cells) {
+        int representationCross = 0;
+        int representationRound = 0;
+        for(int i = 0; i < cells.length; i++) {
+            Cell cell = cells[i];
+            if(cell.getType() == Representation.CROSS) {
+                representationCross++;
+            }
+            if(cell.getType() == Representation.ROUND) {
+                representationRound++;
+            }
+        }
+        return representationCross == 3 || representationRound == 3;
     }
 
     private boolean isColumnOver(int col, Board board){
-        Representation type = null;
         int size = board.getSize();
 
-        for(int row = 0; row < size; row++) {
-            if(board.getCell(new Coordinate(row, col)).getType() ==  Representation.EMPTY) {
-                return false;
-            }
-            if(type == null){
-                type = board.getCell(new Coordinate(row, col)).getType();
-            }
-            if( type != board.getCell(new Coordinate(row, col)).getType()) {
-                return false;
+        for(int icol = 0; icol < size; icol++) {
+            Cell[] cells = board.getCellsInRow(icol);
+            if(isCellsOver(cells)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private boolean isDiagonalOver(Board board){
@@ -112,12 +116,16 @@ public class Rules {
     // check position to play with IA
     private boolean isActionToBlock(Cell[] cells, Representation type) {
         int representationNumber = 0;
+        int EmptyPlace = 0;
         for(int i = 0; i < cells.length; i++) {
             if(cells[i].getType() ==  type) {
                 representationNumber++;
             }
+            if(cells[i].getType() ==  Representation.EMPTY) {
+                EmptyPlace++;
+            }
         }
-        return representationNumber == 2 ? true : false;
+        return representationNumber == 2 && EmptyPlace == 1;
     }
 
     private int getPositionToBlock(Cell[] cells) {
@@ -160,7 +168,7 @@ public class Rules {
         if(isActionToBlock(cells, typeToBlock)) {
             int pos = getPositionToBlock(cells);
             int result = size - 1 - pos;
-            return new Coordinate(result, result);
+            return new Coordinate(pos, result);
         }
         return null;
     }

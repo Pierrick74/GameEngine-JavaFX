@@ -64,7 +64,7 @@ public class Board {
         Cell[] cells = new Cell[size];
 
         for(int i = 0; i < size; i++) {
-            cells[i] = board[size - 1 - i][size - 1 - i];
+            cells[i] = board[i][size - 1 - i];
         }
         return cells;
     }

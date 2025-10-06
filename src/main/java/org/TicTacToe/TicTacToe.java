@@ -16,7 +16,7 @@ public class TicTacToe {
     Player[] players;
     Rules rules;
 
-    Integer activePlayer = 0;
+    Integer activePlayer = 1;
     Integer size;
 
     public TicTacToe(Integer size) {
@@ -63,7 +63,7 @@ public class TicTacToe {
     private void artificialPlayerTurn() throws InterruptedException {
         Display.getInstance().displayText("Joueur " + activePlayer);
         Coordinate coordinate = getCoordinateForIAPlayer();
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         board.setCell(coordinate, players[activePlayer]);
     }
 
