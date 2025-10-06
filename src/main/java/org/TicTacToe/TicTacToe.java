@@ -15,6 +15,7 @@ public class TicTacToe {
     Board board;
     Player[] players;
     Rules rules;
+    Brain brain;
 
     Integer activePlayer = 1;
     Integer size;
@@ -23,6 +24,7 @@ public class TicTacToe {
         this.size = size;
         this.board = new Board(size);
         this.rules = new Rules();
+        this.brain = new Brain();
     }
 
     public void start() throws InterruptedException {
@@ -81,7 +83,7 @@ public class TicTacToe {
             coordinate = new Coordinate(row, col);
             Display.getInstance().displayText(coordinate.toString());
 
-            if(!isEmptyCase(coordinate)) {
+            if(!board.isEmptyCase(coordinate)) {
                 Display.getInstance().displayText("La case est déja prise, merci de rentrer une nouvelle valeur");
             } else {
                 isValide = true;
@@ -95,7 +97,13 @@ public class TicTacToe {
         Random rand = new Random();
         Coordinate coordinate;
 
-        coordinate = rules.getCoordinateToBlock(board, players[activePlayer].getType());
+        coordinate = brain.getCoordinateToBlock(board, players[activePlayer].getType());
+        if(coordinate != null){
+            return coordinate;
+        }
+
+        Representation type = players[activePlayer].getType() == Representation.CROSS ? Representation.ROUND : Representation.CROSS;
+        coordinate = brain.getCoordinateToBlock(board, type);
         if(coordinate != null){
             return coordinate;
         }
@@ -105,15 +113,11 @@ public class TicTacToe {
             int col = rand.nextInt(size);
             coordinate = new Coordinate(row, col);
 
-            if(isEmptyCase(coordinate)){
+            if(board.isEmptyCase(coordinate)){
                 isValide = true;
             }
         }
         return coordinate;
-    }
-
-    private Boolean isEmptyCase(Coordinate coordinate) {
-        return board.getCell(coordinate).getType() == Representation.EMPTY;
     }
 
     private void createPlayers() {

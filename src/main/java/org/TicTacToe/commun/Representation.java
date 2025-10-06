@@ -5,7 +5,7 @@ public enum Representation {
     ROUND("O"),
     EMPTY(" ");
 
-    private String abreviation ;
+    private final String abreviation ;
 
     private Representation(String abreviation) {
         this.abreviation = abreviation ;

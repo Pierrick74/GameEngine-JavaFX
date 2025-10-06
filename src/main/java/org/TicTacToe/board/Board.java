@@ -1,5 +1,6 @@
 package org.TicTacToe.board;
 
+import org.TicTacToe.commun.Representation;
 import org.TicTacToe.player.Player;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.interaction.Display;
@@ -69,7 +70,9 @@ public class Board {
         return cells;
     }
 
-
+    public Boolean isEmptyCase(Coordinate coordinate) {
+        return getCell(coordinate).getType() == Representation.EMPTY;
+    }
 
     public Cell getCell(Coordinate coordinate) {
         return board[coordinate.getRow()][coordinate.getCol()];

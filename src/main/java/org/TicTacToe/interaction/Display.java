@@ -28,7 +28,7 @@ public class Display {
     }
 
     private void calculateSeparation(Cell[][] board) {
-        Integer widthScreen = board.length;
+        int widthScreen = board.length;
         separationLigne = "-";
         for  (int x = 0; x < widthScreen; x++) {
             separationLigne += "----";
