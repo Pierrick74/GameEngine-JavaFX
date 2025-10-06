@@ -1,8 +1,21 @@
-package org.TicTacToe;
+package org.TicTacToe.interaction;
+
+import org.TicTacToe.board.Cell;
 
 public class Display {
     private String separationLigne;
 
+    private static Display instance;
+    public static Display getInstance() {
+        if (instance == null) {
+            instance = new Display();
+        }
+        return instance;
+    }
+
+    public void displayText(String data) {
+        System.out.println(data);
+    }
 
     public void display(Cell[][] board) {
         calculateSeparation(board);
@@ -25,7 +38,7 @@ public class Display {
     private void showLigne(Cell[][] board, int row) {
         System.out.print("|");
         for(int x = 0; x < board[row].length; x++) {
-            System.out.print(board[row][x] + "|");
+            System.out.print(" " + board[row][x].getType().getValue() + " |");
         }
         System.out.println();
     }
