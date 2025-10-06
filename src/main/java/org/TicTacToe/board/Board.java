@@ -33,6 +33,44 @@ public class Board {
         return true;
     }
 
+    public Cell[] getCellsInRow(int row) {
+        Cell[] cells = new Cell[size];
+
+        for(int col = 0; col < size; col++) {
+            cells[col] = board[row][col];
+        }
+        return cells;
+    }
+
+    public Cell[] getCellsInColumn(int col) {
+        Cell[] cells = new Cell[size];
+
+        for(int row = 0; row < size; row++) {
+            cells[row] = board[row][col];
+        }
+        return cells;
+    }
+
+    public Cell[] getCellsInDiagonal() {
+        Cell[] cells = new Cell[size];
+
+        for(int i = 0; i < size; i++) {
+            cells[i] = board[i][i];
+        }
+        return cells;
+    }
+
+    public Cell[] getCellsInReverseDiagonal() {
+        Cell[] cells = new Cell[size];
+
+        for(int i = 0; i < size; i++) {
+            cells[i] = board[size - 1 - i][size - 1 - i];
+        }
+        return cells;
+    }
+
+
+
     public Cell getCell(Coordinate coordinate) {
         return board[coordinate.getRow()][coordinate.getCol()];
     }

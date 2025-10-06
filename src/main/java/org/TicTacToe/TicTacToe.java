@@ -95,6 +95,11 @@ public class TicTacToe {
         Random rand = new Random();
         Coordinate coordinate = null;
 
+        coordinate = rules.getCoordinateToBlock(board, players[activePlayer].getType());
+        if(coordinate != null){
+            return coordinate;
+        }
+
         while (!isValide) {
             int row = rand.nextInt(size);
             int col = rand.nextInt(size);
