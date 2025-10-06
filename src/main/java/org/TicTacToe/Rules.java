@@ -3,21 +3,15 @@ package org.TicTacToe;
 import org.TicTacToe.board.Board;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.Representation;
-import org.TicTacToe.interaction.Display;
 
 public class Rules {
 
     public boolean isFinished(Board board) {
-
-        if(isOver(board)) {
-            return true;
-        }
-
-        return false;
+        return isOver(board);
     }
 
     private boolean isOver(Board board) {
-        Boolean over = false;
+        boolean over = false;
         int size = board.getSize();
 
         for(int row = 0; row < size; row++) {
@@ -38,11 +32,7 @@ public class Rules {
             return true;
         }
 
-        if(isReverseDiagonalOver(board)) {
-            return true;
-        }
-
-        return false;
+        return isReverseDiagonalOver(board);
     }
 
     private boolean isRowOver(int row, Board board){

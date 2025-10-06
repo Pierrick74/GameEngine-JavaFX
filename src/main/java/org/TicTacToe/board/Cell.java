@@ -18,7 +18,7 @@ public class Cell {
         if( this.player == null ) {
             return "   ";
         } else {
-            return " " + player.toString() + " ";
+            return " " + player + " ";
         }
     }
 

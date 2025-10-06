@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Terminal {
 
     private static Terminal instance;
-    private Scanner scanner;
+    final private Scanner scanner;
 
     private Terminal() {
         this.scanner = new Scanner(System.in);
@@ -19,7 +19,7 @@ public class Terminal {
     }
 
     public Integer askForInteger(int maxValue) {
-        Boolean isValide = false;
+        boolean isValide = false;
         int number = 0;
         while(!isValide) {
             if (scanner.hasNextInt()) {
@@ -38,5 +38,4 @@ public class Terminal {
         }
         return number;
     }
-
 }

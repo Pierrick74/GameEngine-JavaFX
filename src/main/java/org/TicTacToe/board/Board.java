@@ -23,7 +23,7 @@ public class Board {
     }
 
     public Boolean isFull() {
-        for (int i = 0; i < board.length; i++) {
+        for(int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j].player == null) {
                     return false;

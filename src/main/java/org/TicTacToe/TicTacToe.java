@@ -24,7 +24,7 @@ public class TicTacToe {
     public void start() {
         boolean isFinished = false;
         board.display();
-        while (isFinished == false) {
+        while (!isFinished) {
             activePlayer = activePlayer == 0 ? 1 : 0;
             Display.getInstance().displayText("Joueur " + activePlayer);
             Coordinate coordinate = askForCoordinate();
@@ -45,7 +45,7 @@ public class TicTacToe {
 
     private Coordinate askForCoordinate() {
         Coordinate coordinate = null;
-        Boolean isValide = false;
+        boolean isValide = false;
 
         while (!isValide) {
             Display.getInstance().displayText("quel est la ligne que vous voulez");
@@ -67,9 +67,6 @@ public class TicTacToe {
     }
 
     private Boolean isEmptyCase(Coordinate coordinate) {
-        if( board.getCell(coordinate).getType() != Representation.EMPTY) {
-            return false;
-        }
-        return true;
+        return board.getCell(coordinate).getType() == Representation.EMPTY;
     }
 }
