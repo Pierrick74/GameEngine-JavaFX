@@ -68,7 +68,7 @@ public class Rules {
         int size = board.getSize();
 
         for(int icol = 0; icol < size; icol++) {
-            Cell[] cells = board.getCellsInRow(icol);
+            Cell[] cells = board.getCellsInColumn(icol);
             if(isCellsOver(cells)) {
                 return true;
             }
