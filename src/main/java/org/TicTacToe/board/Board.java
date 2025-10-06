@@ -40,4 +40,8 @@ public class Board {
     public void setCell(Coordinate coordinate, Player player) {
         board[coordinate.getRow()][coordinate.getCol()] = new Cell(player);
     }
+
+    public int getSize() {
+        return size;
+    }
 }
