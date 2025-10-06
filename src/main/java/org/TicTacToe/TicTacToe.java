@@ -64,7 +64,7 @@ public class TicTacToe {
 
     private void artificialPlayerTurn() throws InterruptedException {
         Display.getInstance().displayText("Joueur " + activePlayer);
-        Coordinate coordinate = getCoordinateForIAPlayer();
+        Coordinate coordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer]);
         TimeUnit.SECONDS.sleep(1);
         board.setCell(coordinate, players[activePlayer]);
     }
@@ -86,34 +86,6 @@ public class TicTacToe {
             if(!board.isEmptyCase(coordinate)) {
                 Display.getInstance().displayText("La case est déja prise, merci de rentrer une nouvelle valeur");
             } else {
-                isValide = true;
-            }
-        }
-        return coordinate;
-    }
-
-    private Coordinate getCoordinateForIAPlayer() {
-        boolean isValide = false;
-        Random rand = new Random();
-        Coordinate coordinate;
-
-        coordinate = brain.getCoordinateToBlock(board, players[activePlayer].getType());
-        if(coordinate != null){
-            return coordinate;
-        }
-
-        Representation type = players[activePlayer].getType() == Representation.CROSS ? Representation.ROUND : Representation.CROSS;
-        coordinate = brain.getCoordinateToBlock(board, type);
-        if(coordinate != null){
-            return coordinate;
-        }
-
-        while (!isValide) {
-            int row = rand.nextInt(size);
-            int col = rand.nextInt(size);
-            coordinate = new Coordinate(row, col);
-
-            if(board.isEmptyCase(coordinate)){
                 isValide = true;
             }
         }

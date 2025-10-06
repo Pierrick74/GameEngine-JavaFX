@@ -4,9 +4,41 @@ import org.TicTacToe.board.Board;
 import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.Representation;
+import org.TicTacToe.player.Player;
+
+import java.util.Random;
 
 public class Brain {
-    // check position to play with IA
+
+    public Coordinate getCoordinateForIAPlayer(Board board, Player player) {
+        boolean isValide = false;
+        int size =  board.getSize();
+        Random rand = new Random();
+        Coordinate coordinate;
+
+        Representation type = player.getType() == Representation.CROSS ? Representation.ROUND : Representation.CROSS;
+        coordinate = getCoordinateToBlock(board, type);
+        if(coordinate != null){
+            return coordinate;
+        }
+
+        coordinate = getCoordinateToBlock(board, player.getType());
+        if(coordinate != null){
+            return coordinate;
+        }
+
+        while (!isValide) {
+            int row = rand.nextInt(size);
+            int col = rand.nextInt(size);
+            coordinate = new Coordinate(row, col);
+
+            if(board.isEmptyCase(coordinate)){
+                isValide = true;
+            }
+        }
+        return coordinate;
+    }
+
     private boolean isActionToBlock(Cell[] cells, Representation type) {
         int representationNumber = 0;
         int EmptyPlace = 0;
