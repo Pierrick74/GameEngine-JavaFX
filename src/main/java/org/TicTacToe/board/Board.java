@@ -6,7 +6,7 @@ import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.interaction.Display;
 
 /**
- * Responsablility of the board
+ * Responsibility of the board
  */
 public class Board {
     Integer xSize;
@@ -14,7 +14,7 @@ public class Board {
     Cell[][] board;
 
     /**
-     * build the board with 2 parametes and fill with empty cell
+     * build the board with 2 parameters and fill with empty cell
      * @param xSize number of column
      * @param ySize number of rows
      */
@@ -38,7 +38,7 @@ public class Board {
 
     /**
      * check if board is full
-     * @return true if it full
+     * @return true if it fulls
      */
     public Boolean isFull() {
         for(int i = 0; i < ySize; i++) {
@@ -121,7 +121,11 @@ public class Board {
         board[coordinate.getRow()][coordinate.getCol()] = new Cell(player);
     }
 
-    public int getSize(){
+    public int getXSize(){
         return xSize;
+    }
+
+    public int getYSize(){
+        return ySize;
     }
 }

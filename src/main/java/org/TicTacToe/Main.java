@@ -1,11 +1,8 @@
 package org.TicTacToe;
 
 import org.TicTacToe.commun.GameType;
-import org.TicTacToe.commun.Representation;
 import org.TicTacToe.interaction.Display;
 import org.TicTacToe.interaction.Terminal;
-import org.TicTacToe.player.ArtificialPlayer;
-import org.TicTacToe.player.Player;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.

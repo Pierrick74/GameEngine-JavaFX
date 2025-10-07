@@ -24,9 +24,7 @@ public class Rules {
         if (isOverCells(diagonalCells)) return true;
 
         Cell[] reverseDiagonalCells = board.getReverseDiagonalCells(lastRoundCoordinate);
-        if (isOverCells(reverseDiagonalCells)) return true;
-
-        return false;
+        return isOverCells(reverseDiagonalCells);
     }
 
     public boolean isOverCells(Cell[] cells){

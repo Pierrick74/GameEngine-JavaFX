@@ -3,6 +3,9 @@ package org.TicTacToe;
 import org.TicTacToe.board.Board;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.GameType;
+import org.TicTacToe.commun.PlacementStrategy.FreePlacement;
+import org.TicTacToe.commun.PlacementStrategy.GravityPlacement;
+import org.TicTacToe.commun.PlacementStrategy.PlacementStrategie;
 import org.TicTacToe.commun.RepresentationStrategy.GomokuRepresentation;
 import org.TicTacToe.commun.RepresentationStrategy.Power4Representation;
 import org.TicTacToe.commun.RepresentationStrategy.RepresentationStrategy;
@@ -19,6 +22,7 @@ public class Game {
     Rules rules;
     Brain brain;
     RepresentationStrategy symboleStrategie;
+    PlacementStrategie placementStrategie;
 
     Player[] players;
     Integer activePlayer = 1;
@@ -42,6 +46,7 @@ public class Game {
         this.rules = new Rules(3);
         this.brain = new Brain();
         this.symboleStrategie = new TicTacToeRepresentation();
+        this.placementStrategie = new FreePlacement();
     }
 
     public void initGomoku() {
@@ -51,6 +56,7 @@ public class Game {
         this.rules = new Rules(5);
         this.brain = new Brain();
         this.symboleStrategie = new GomokuRepresentation();
+        this.placementStrategie = new FreePlacement();
     }
 
     public void initPower4() {
@@ -60,6 +66,7 @@ public class Game {
         this.rules = new Rules(4);
         this.brain = new Brain();
         this.symboleStrategie = new Power4Representation();
+        this.placementStrategie = new GravityPlacement();
     }
 
     public void start() throws InterruptedException {
@@ -93,7 +100,7 @@ public class Game {
 
     private void humainPlayerTurn(){
         Display.getInstance().displayText("Joueur " + activePlayer);
-        lastCoordinate = askForCoordinate();
+        lastCoordinate = placementStrategie.askForPlacement(board);
         board.setCell(lastCoordinate, players[activePlayer]);
     }
 
@@ -102,29 +109,6 @@ public class Game {
         lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer]);
         TimeUnit.SECONDS.sleep(1);
         board.setCell(lastCoordinate, players[activePlayer]);
-    }
-
-    private Coordinate askForCoordinate() {
-        Coordinate coordinate = null;
-        boolean isValide = false;
-
-        while (!isValide) {
-            Display.getInstance().displayText("quel est la ligne que vous voulez");
-            int row = Terminal.getInstance().askForInteger(ySize);
-
-            Display.getInstance().displayText("quel est la colonne que vous voulez");
-            int col = Terminal.getInstance().askForInteger(xSize);
-
-            coordinate = new Coordinate(row, col);
-            Display.getInstance().displayText(coordinate.toString());
-
-            if(!board.isEmptyCase(coordinate)) {
-                Display.getInstance().displayText("La case est déja prise, merci de rentrer une nouvelle valeur");
-            } else {
-                isValide = true;
-            }
-        }
-        return coordinate;
     }
 
     private void createPlayers() {

@@ -63,7 +63,7 @@ public class Brain {
     }
 
     public Coordinate getCoordinateToBlock(Board board, Representation type) {
-        int size = board.getSize();
+        int size =3;
         Representation typeToBlock = type == Representation.CROSS ? Representation.ROUND : Representation.CROSS;
         Cell[] cells;
 
