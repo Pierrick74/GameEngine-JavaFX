@@ -9,18 +9,21 @@ import org.TicTacToe.interaction.Display;
  * Responsablility of the board
  */
 public class Board {
-    Integer size;
+    Integer xSize;
+    Integer ySize;
     Cell[][] board;
 
     /**
-     * Init Board
-     * @param size : size of the square
+     * build the board with 2 parametes and fill with empty cell
+     * @param xSize number of column
+     * @param ySize number of rows
      */
-    public Board(Integer size) {
-        this.size = size;
-        board = new Cell[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+    public Board(Integer xSize, Integer ySize) {
+        this.xSize = xSize;
+        this.ySize = ySize;
+        board = new Cell[ySize][xSize];
+        for (int i = 0; i < xSize; i++) {
+            for (int j = 0; j < ySize; j++) {
                 board[i][j] = new Cell();
             }
         }
@@ -38,8 +41,8 @@ public class Board {
      * @return true if it full
      */
     public Boolean isFull() {
-        for(int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
+        for(int i = 0; i < ySize; i++) {
+            for (int j = 0; j < xSize; j++) {
                 if (board[i][j].player == null) {
                     return false;
                 }
@@ -48,58 +51,45 @@ public class Board {
         return true;
     }
 
-    /**
-     * used to recover all call in a specifical Row
-     * @param row number of the row
-     * @return a array of Cell
-     */
-    public Cell[] getCellsInRow(int row) {
-        Cell[] cells = new Cell[size];
+    public Cell[] getHorizontalCells(Coordinate coordinate) {
+        Cell[] horizontalCells = new Cell[xSize];
 
-        for(int col = 0; col < size; col++) {
-            cells[col] = board[row][col];
+        for(int col = 0; col < xSize; col++) {
+            horizontalCells[col] = board[coordinate.getRow()][col];
         }
-        return cells;
+        return horizontalCells;
     }
 
-    /**
-     * used to recover all call in a specifical Col
-     * @param col number of the column
-     * @return an array of Cell
-     */
-    public Cell[] getCellsInColumn(int col) {
-        Cell[] cells = new Cell[size];
-
-        for(int row = 0; row < size; row++) {
-            cells[row] = board[row][col];
+    public Cell[] getVerticalCells(Coordinate coordinate) {
+        Cell[] verticalCells = new Cell[ySize];
+        for(int row = 0; row < ySize; row++) {
+            verticalCells[row] = board[row][coordinate.getCol()];
         }
-        return cells;
+        return verticalCells;
     }
 
-    /**
-     * used to recover all call in a normal diagonal
-     * @return a array of Cell
-     */
-    public Cell[] getCellsInDiagonal() {
-        Cell[] cells = new Cell[size];
+    public Cell[] getDiagonalCells(Coordinate coordinate) {
+        int min = Math.min(coordinate.getRow(), coordinate.getCol());
+        int x = coordinate.getCol() - min;
+        int y = coordinate.getRow() - min;
 
-        for(int i = 0; i < size; i++) {
-            cells[i] = board[i][i];
+        Cell[] diagonalCells = new Cell[ySize];
+        for(int i = 0; i < xSize && i < ySize; i++) {
+            diagonalCells[i] = board[i+y][i+x];
         }
-        return cells;
+        return diagonalCells;
     }
 
-    /**
-     * used to recover all call in a reverse diagonal
-     * @return an array of Cell
-     */
-    public Cell[] getCellsInReverseDiagonal() {
-        Cell[] cells = new Cell[size];
+    public Cell[] getReverseDiagonalCells(Coordinate coordinate) {
+        int min = Math.min(coordinate.getRow(), xSize - 1 - coordinate.getCol());
+        int x = coordinate.getCol() + min;
+        int y = coordinate.getRow() + min;
 
-        for(int i = 0; i < size; i++) {
-            cells[i] = board[i][size - 1 - i];
+        Cell[] diagonalCells = new Cell[ySize];
+        for(int i = 0; (x-i) >= 0 && (y-i) >= 0; i++) {
+            diagonalCells[i] = board[y-i][x-i];
         }
-        return cells;
+        return diagonalCells;
     }
 
     /**
@@ -129,11 +119,7 @@ public class Board {
         board[coordinate.getRow()][coordinate.getCol()] = new Cell(player);
     }
 
-    /**
-     * use for get size of the board
-     * @return size in int
-     */
-    public int getSize() {
-        return size;
+    public int getSize(){
+        return xSize;
     }
 }

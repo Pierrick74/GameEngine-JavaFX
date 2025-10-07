@@ -5,110 +5,42 @@ import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.Representation;
 
+
 public class Rules {
+    int consecutiveNumber;
 
-    public boolean isFinished(Board board) {
-        return isOver(board);
+    public Rules(int consecutiveNumber) {
+        this.consecutiveNumber = consecutiveNumber;
     }
 
-    private boolean isOver(Board board) {
-        boolean over = false;
-        int size = board.getSize();
+    public boolean isFinished(Board board, Coordinate lastRoundCoordinate) {
+        Cell[] horizontalCells = board.getHorizontalCells(lastRoundCoordinate);
+        if (isOverCells(horizontalCells)) return true;
 
-        for(int row = 0; row < size; row++) {
-            over = isRowOver(board);
-            if(over) {
-                return true;
-            }
-        }
+        Cell[] verticalCells = board.getVerticalCells(lastRoundCoordinate);
+        if (isOverCells(verticalCells)) return true;
 
-        for(int col = 0; col < size; col++) {
-            over = isColumnOver(board);
-            if(over) {
-                return true;
-            }
-        }
+        Cell[] diagonalCells = board.getDiagonalCells(lastRoundCoordinate);
+        if (isOverCells(diagonalCells)) return true;
 
-        if(isDiagonalOver(board)) {
-            return true;
-        }
+        Cell[] reverseDiagonalCells = board.getReverseDiagonalCells(lastRoundCoordinate);
+        if (isOverCells(reverseDiagonalCells)) return true;
 
-        return isReverseDiagonalOver(board);
-    }
-
-
-    private boolean isRowOver(Board board){
-        int size = board.getSize();
-
-        for(int irow = 0; irow < size; irow++) {
-            Cell[] cells = board.getCellsInRow(irow);
-            if(isCellsOver(cells)) {
-                return true;
-            }
-        }
         return false;
     }
 
-    private boolean isCellsOver(Cell[] cells) {
-        int representationCross = 0;
-        int representationRound = 0;
-        for(int i = 0; i < cells.length; i++) {
-            Cell cell = cells[i];
-            if(cell.getType() == Representation.CROSS) {
-                representationCross++;
-            }
-            if(cell.getType() == Representation.ROUND) {
-                representationRound++;
-            }
-        }
-        return representationCross == 3 || representationRound == 3;
-    }
-
-    private boolean isColumnOver(Board board){
-        int size = board.getSize();
-
-        for(int icol = 0; icol < size; icol++) {
-            Cell[] cells = board.getCellsInColumn(icol);
-            if(isCellsOver(cells)) {
-                return true;
+    public boolean isOverCells(Cell[] cells){
+        Representation currentRepresentation = cells[0].getType();
+        int consecutiveNumber = 1;
+        for(int i = 1; i < cells.length; i++){
+            if (cells[i].getType().equals(currentRepresentation)){
+                consecutiveNumber++;
+            } else {
+                consecutiveNumber = 1;
+                currentRepresentation = cells[i].getType();
             }
         }
-        return false;
+        return consecutiveNumber == 3;
     }
 
-    private boolean isDiagonalOver(Board board){
-        Representation type = null;
-        int size = board.getSize();
-
-        for(int i = 0; i < size; i++) {
-            if(board.getCell(new Coordinate(i, i)).getType() ==  Representation.EMPTY) {
-                return false;
-            }
-            if(type == null){
-                type = board.getCell(new Coordinate(i, i)).getType();
-            }
-            if( type != board.getCell(new Coordinate(i, i)).getType()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isReverseDiagonalOver(Board board) {
-        Representation type = null;
-        int size = board.getSize();
-
-        for (int i = 0; i < size; i++) {
-            if (board.getCell(new Coordinate(i, size - 1 - i)).getType() == Representation.EMPTY) {
-                return false;
-            }
-            if (type == null) {
-                type = board.getCell(new Coordinate(i, size - 1 - i)).getType();
-            }
-            if (type != board.getCell(new Coordinate(i, size - 1 - i)).getType()) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

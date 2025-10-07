@@ -20,6 +20,7 @@ public class Game {
     Integer activePlayer = 1;
     Integer xSize;
     Integer ySize;
+    Coordinate lastCoordinate = null;
 
     public Game(GameType gameType) {
         switch(gameType) {
@@ -34,24 +35,24 @@ public class Game {
     public void initTicTacToe() {
         this.xSize = 3;
         this.ySize = 3;
-        this.board = new Board(3);
-        this.rules = new Rules();
+        this.board = new Board(3, 3);
+        this.rules = new Rules(3);
         this.brain = new Brain();
     }
 
     public void initGomoku() {
         this.xSize = 15;
         this.ySize = 15;
-        this.board = new Board(3);
-        this.rules = new Rules();
+        this.board = new Board(15, 15);
+        this.rules = new Rules(5);
         this.brain = new Brain();
     }
 
     public void initPower4() {
         this.xSize = 7;
         this.ySize = 6;
-        this.board = new Board(3);
-        this.rules = new Rules();
+        this.board = new Board(7, 6);
+        this.rules = new Rules(4);
         this.brain = new Brain();
     }
 
@@ -72,7 +73,7 @@ public class Game {
             }
             board.display();
 
-            if(rules.isFinished(board)){
+            if(rules.isFinished(board, lastCoordinate)){
                 isFinished = true;
                 Display.getInstance().displayText("Joueur " + activePlayer + " gagne");
             }
@@ -86,15 +87,15 @@ public class Game {
 
     private void humainPlayerTurn(){
         Display.getInstance().displayText("Joueur " + activePlayer);
-        Coordinate coordinate = askForCoordinate();
-        board.setCell(coordinate, players[activePlayer]);
+        lastCoordinate = askForCoordinate();
+        board.setCell(lastCoordinate, players[activePlayer]);
     }
 
     private void artificialPlayerTurn() throws InterruptedException {
         Display.getInstance().displayText("Joueur " + activePlayer);
-        Coordinate coordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer]);
+        lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer]);
         TimeUnit.SECONDS.sleep(1);
-        board.setCell(coordinate, players[activePlayer]);
+        board.setCell(lastCoordinate, players[activePlayer]);
     }
 
     private Coordinate askForCoordinate() {
