@@ -64,7 +64,7 @@ public class Board {
 
     /**
      * used to recover all call in a specifical Col
-     * @param Col number of the column
+     * @param col number of the column
      * @return an array of Cell
      */
     public Cell[] getCellsInColumn(int col) {

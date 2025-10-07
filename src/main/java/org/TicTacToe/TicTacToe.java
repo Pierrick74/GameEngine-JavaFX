@@ -8,7 +8,6 @@ import org.TicTacToe.interaction.Terminal;
 import org.TicTacToe.player.ArtificialPlayer;
 import org.TicTacToe.player.Player;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class TicTacToe {
