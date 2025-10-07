@@ -5,10 +5,17 @@ import org.TicTacToe.player.Player;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.interaction.Display;
 
+/**
+ * Responsablility of the board
+ */
 public class Board {
     Integer size;
     Cell[][] board;
 
+    /**
+     * Init Board
+     * @param size : size of the square
+     */
     public Board(Integer size) {
         this.size = size;
         board = new Cell[size][size];
@@ -19,10 +26,17 @@ public class Board {
         }
     }
 
+    /*
+    use for display
+     */
     public void display() {
         Display.getInstance().display(board);
     }
 
+    /**
+     * check if board is full
+     * @return true if it full
+     */
     public Boolean isFull() {
         for(int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -34,6 +48,11 @@ public class Board {
         return true;
     }
 
+    /**
+     * used to recover all call in a specifical Row
+     * @param row number of the row
+     * @return a array of Cell
+     */
     public Cell[] getCellsInRow(int row) {
         Cell[] cells = new Cell[size];
 
@@ -43,6 +62,11 @@ public class Board {
         return cells;
     }
 
+    /**
+     * used to recover all call in a specifical Col
+     * @param Col number of the column
+     * @return an array of Cell
+     */
     public Cell[] getCellsInColumn(int col) {
         Cell[] cells = new Cell[size];
 
@@ -52,6 +76,10 @@ public class Board {
         return cells;
     }
 
+    /**
+     * used to recover all call in a normal diagonal
+     * @return a array of Cell
+     */
     public Cell[] getCellsInDiagonal() {
         Cell[] cells = new Cell[size];
 
@@ -61,6 +89,10 @@ public class Board {
         return cells;
     }
 
+    /**
+     * used to recover all call in a reverse diagonal
+     * @return an array of Cell
+     */
     public Cell[] getCellsInReverseDiagonal() {
         Cell[] cells = new Cell[size];
 
@@ -70,18 +102,37 @@ public class Board {
         return cells;
     }
 
+    /**
+     * check if call have a player inside
+     * @param coordinate position (row coll) of the cell
+     * @return true if there is a player inside
+     */
     public Boolean isEmptyCase(Coordinate coordinate) {
         return getCell(coordinate).getType() == Representation.EMPTY;
     }
 
+    /**
+     * use for get a specifical Cell
+     * @param coordinate position (row coll) of the cell
+     * @return a Cell
+     */
     public Cell getCell(Coordinate coordinate) {
         return board[coordinate.getRow()][coordinate.getCol()];
     }
 
+    /**
+     * use for put a player in a cell
+     * @param coordinate position (row coll) of the cell
+     * @param player player to put
+     */
     public void setCell(Coordinate coordinate, Player player) {
         board[coordinate.getRow()][coordinate.getCol()] = new Cell(player);
     }
 
+    /**
+     * use for get size of the board
+     * @return size in int
+     */
     public int getSize() {
         return size;
     }
