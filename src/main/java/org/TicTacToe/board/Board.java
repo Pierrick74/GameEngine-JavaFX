@@ -73,8 +73,9 @@ public class Board {
         int x = coordinate.getCol() - min;
         int y = coordinate.getRow() - min;
 
-        Cell[] diagonalCells = new Cell[ySize];
-        for(int i = 0; i < xSize && i < ySize; i++) {
+        int diagonalLength = Math.min(xSize - x, ySize - y);
+        Cell[] diagonalCells = new Cell[diagonalLength];
+        for(int i = 0; i < diagonalLength; i++) {
             diagonalCells[i] = board[i+y][i+x];
         }
         return diagonalCells;
@@ -83,11 +84,12 @@ public class Board {
     public Cell[] getReverseDiagonalCells(Coordinate coordinate) {
         int min = Math.min(coordinate.getRow(), xSize - 1 - coordinate.getCol());
         int x = coordinate.getCol() + min;
-        int y = coordinate.getRow() + min;
+        int y = coordinate.getRow() - min;
 
-        Cell[] diagonalCells = new Cell[ySize];
-        for(int i = 0; (x-i) >= 0 && (y-i) >= 0; i++) {
-            diagonalCells[i] = board[y-i][x-i];
+        int diagonalLength = Math.min(x + 1, ySize - y);
+        Cell[] diagonalCells = new Cell[diagonalLength];
+        for(int i = 0; i < diagonalLength; i++) {
+            diagonalCells[i] = board[y+i][x-i];
         }
         return diagonalCells;
     }

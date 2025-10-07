@@ -12,7 +12,7 @@ public class Brain {
 
     public Coordinate getCoordinateForIAPlayer(Board board, Player player) {
         boolean isValide = false;
-        int size =  board.getSize();
+        int size =  3;
         Random rand = new Random();
         Coordinate coordinate;
 
@@ -68,7 +68,7 @@ public class Brain {
         Cell[] cells;
 
         for(int row = 0; row < size; row++) {
-            cells = board.getCellsInRow(row);
+            cells = board.getHorizontalCells(new Coordinate(row, 0));
             if(isActionToBlock(cells, typeToBlock)) {
                 int column = getPositionToBlock(cells);
                 return new Coordinate(row, column);
@@ -76,20 +76,20 @@ public class Brain {
         }
 
         for(int col = 0; col < size; col++) {
-            cells = board.getCellsInColumn(col);
+            cells = board.getVerticalCells(new Coordinate(0, col));
             if(isActionToBlock(cells, typeToBlock)) {
                 int row = getPositionToBlock(cells);
                 return new Coordinate(row, col);
             }
         }
 
-        cells = board.getCellsInDiagonal();
+        cells = board.getDiagonalCells(new Coordinate(1, 1));
         if(isActionToBlock(cells, typeToBlock)) {
             int pos = getPositionToBlock(cells);
             return new Coordinate(pos, pos);
         }
 
-        cells = board.getCellsInReverseDiagonal();
+        cells = board.getReverseDiagonalCells(new Coordinate(1, 1));
         if(isActionToBlock(cells, typeToBlock)) {
             int pos = getPositionToBlock(cells);
             int result = size - 1 - pos;
