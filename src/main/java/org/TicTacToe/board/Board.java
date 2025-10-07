@@ -22,8 +22,8 @@ public class Board {
         this.xSize = xSize;
         this.ySize = ySize;
         board = new Cell[ySize][xSize];
-        for (int i = 0; i < xSize; i++) {
-            for (int j = 0; j < ySize; j++) {
+        for (int i = 0; i < ySize; i++) {
+            for (int j = 0; j < xSize; j++) {
                 board[i][j] = new Cell();
             }
         }
