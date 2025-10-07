@@ -3,7 +3,10 @@ package org.TicTacToe;
 import org.TicTacToe.board.Board;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.GameType;
-import org.TicTacToe.commun.Representation;
+import org.TicTacToe.commun.RepresentationStrategy.GomokuRepresentation;
+import org.TicTacToe.commun.RepresentationStrategy.Power4Representation;
+import org.TicTacToe.commun.RepresentationStrategy.RepresentationStrategy;
+import org.TicTacToe.commun.RepresentationStrategy.TicTacToeRepresentation;
 import org.TicTacToe.interaction.Display;
 import org.TicTacToe.interaction.Terminal;
 import org.TicTacToe.player.ArtificialPlayer;
@@ -13,10 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
     Board board;
-    Player[] players;
     Rules rules;
     Brain brain;
+    RepresentationStrategy symboleStrategie;
 
+    Player[] players;
     Integer activePlayer = 1;
     Integer xSize;
     Integer ySize;
@@ -27,7 +31,6 @@ public class Game {
             case TICTACTOE ->   initTicTacToe();
             case GOMOKU -> initGomoku();
             case POWER4 -> initPower4();
-
         }
     }
 
@@ -38,6 +41,7 @@ public class Game {
         this.board = new Board(3, 3);
         this.rules = new Rules(3);
         this.brain = new Brain();
+        this.symboleStrategie = new TicTacToeRepresentation();
     }
 
     public void initGomoku() {
@@ -46,6 +50,7 @@ public class Game {
         this.board = new Board(15, 15);
         this.rules = new Rules(5);
         this.brain = new Brain();
+        this.symboleStrategie = new GomokuRepresentation();
     }
 
     public void initPower4() {
@@ -54,6 +59,7 @@ public class Game {
         this.board = new Board(7, 6);
         this.rules = new Rules(4);
         this.brain = new Brain();
+        this.symboleStrategie = new Power4Representation();
     }
 
     public void start() throws InterruptedException {
@@ -130,13 +136,13 @@ public class Game {
 
         switch (result) {
             case 0:
-                this.players = new Player[]{new Player(Representation.ROUND), new Player(Representation.CROSS)};
+                this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new Player(symboleStrategie.getPlayerSymbol(1))};
                 break;
             case 1:
-                this.players = new Player[]{new Player(Representation.ROUND), new ArtificialPlayer(Representation.CROSS)};
+                this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
                 break;
             case 2:
-                this.players = new Player[]{new ArtificialPlayer(Representation.ROUND), new ArtificialPlayer(Representation.CROSS)};
+                this.players = new Player[]{new ArtificialPlayer(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
                 break;
         }
     }

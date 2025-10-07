@@ -31,16 +31,17 @@ public class Rules {
 
     public boolean isOverCells(Cell[] cells){
         Representation currentRepresentation = cells[0].getType();
-        int consecutiveNumber = 1;
+        int number = 1;
         for(int i = 1; i < cells.length; i++){
-            if (cells[i].getType().equals(currentRepresentation)){
-                consecutiveNumber++;
+            if (cells[i].getType().equals(currentRepresentation) && cells[i].getType() != Representation.EMPTY){
+                number++;
+                if(number == consecutiveNumber) return true;
             } else {
-                consecutiveNumber = 1;
+                number = 1;
                 currentRepresentation = cells[i].getType();
             }
         }
-        return consecutiveNumber == 3;
+        return false;
     }
 
 }
