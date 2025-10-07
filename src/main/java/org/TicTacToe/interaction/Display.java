@@ -6,6 +6,10 @@ public class Display {
     private String separationLigne;
 
     private static Display instance;
+
+    private Display() {
+    }
+
     public static Display getInstance() {
         if (instance == null) {
             instance = new Display();
