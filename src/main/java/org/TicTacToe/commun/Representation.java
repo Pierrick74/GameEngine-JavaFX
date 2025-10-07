@@ -3,7 +3,11 @@ package org.TicTacToe.commun;
 public enum Representation {
     CROSS("X"),
     ROUND("O"),
-    EMPTY(" ");
+    EMPTY(" "),
+    BLACK("B"),
+    WHITE("W"),
+    YELLOW("Y"),
+    RED("R");
 
     private final String abreviation ;
 
