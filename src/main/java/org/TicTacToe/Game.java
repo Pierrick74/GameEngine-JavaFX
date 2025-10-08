@@ -1,7 +1,7 @@
 package org.TicTacToe;
 
 import org.TicTacToe.board.Board;
-import org.TicTacToe.brain.tictactoeBrain;
+import org.TicTacToe.brain.Brain;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.GameType;
 import org.TicTacToe.commun.PlacementStrategy.FreePlacement;
@@ -28,6 +28,8 @@ public class Game {
     Integer xSize;
     Integer ySize;
     Coordinate lastCoordinate = null;
+    int maxDepth;
+    Display display;
 
     public Game(GameType gameType) {
         switch(gameType) {
@@ -43,8 +45,9 @@ public class Game {
         this.ySize = 3;
         this.board = new Board(3, 3);
         this.rules = new Rules(3, new FreePlacement());
-        this.brain = new tictactoeBrain(rules);
+        this.brain = new Brain(rules);
         this.symboleStrategie = new TicTacToeRepresentation();
+        this.maxDepth = 99;
     }
 
     public void initGomoku() {
@@ -52,8 +55,9 @@ public class Game {
         this.ySize = 15;
         this.board = new Board(15, 15);
         this.rules = new Rules(5, new FreePlacement());
-        this.brain = new tictactoeBrain(rules);
+        this.brain = new Brain(rules);
         this.symboleStrategie = new GomokuRepresentation();
+        this.maxDepth = 2;
     }
 
     public void initPower4() {
@@ -61,8 +65,9 @@ public class Game {
         this.ySize = 6;
         this.board = new Board(7, 6);
         this.rules = new Rules(4, new GravityPlacement());
-        this.brain = new tictactoeBrain(rules);
+        this.brain = new Brain(rules);
         this.symboleStrategie = new Power4Representation();
+        this.maxDepth = 5;
     }
 
     public void start() throws InterruptedException {
@@ -103,7 +108,8 @@ public class Game {
     private void artificialPlayerTurn() throws InterruptedException {
         Display.getInstance().displayText("Joueur " + activePlayer);
         int inactivePlayer = activePlayer == 1 ? 0 : 1;
-        lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], 5);
+
+        lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], maxDepth);
         TimeUnit.SECONDS.sleep(1);
         board.setCell(lastCoordinate, players[activePlayer]);
     }
