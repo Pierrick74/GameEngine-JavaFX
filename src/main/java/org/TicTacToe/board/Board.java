@@ -128,4 +128,14 @@ public class Board {
     public int getYSize(){
         return ySize;
     }
+
+    public Board getClone() {
+        Board clone = new Board(xSize, ySize);
+        for (int i = 0; i < ySize; i++) {
+            for (int j = 0; j < xSize; j++) {
+                clone.board[i][j] = new Cell(board[i][j].player);
+            }
+        }
+        return clone;
+    }
 }

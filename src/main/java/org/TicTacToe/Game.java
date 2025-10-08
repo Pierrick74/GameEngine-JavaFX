@@ -1,6 +1,7 @@
 package org.TicTacToe;
 
 import org.TicTacToe.board.Board;
+import org.TicTacToe.brain.tictactoeBrain;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.GameType;
 import org.TicTacToe.commun.PlacementStrategy.FreePlacement;
@@ -44,7 +45,7 @@ public class Game {
         this.ySize = 3;
         this.board = new Board(3, 3);
         this.rules = new Rules(3);
-        this.brain = new Brain();
+        this.brain = new tictactoeBrain();
         this.symboleStrategie = new TicTacToeRepresentation();
         this.placementStrategie = new FreePlacement();
     }

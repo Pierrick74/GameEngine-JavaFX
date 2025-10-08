@@ -3,7 +3,9 @@ package org.TicTacToe;
 import org.TicTacToe.board.Board;
 import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
+import org.TicTacToe.commun.FinishName;
 import org.TicTacToe.commun.Representation;
+import org.TicTacToe.player.Player;
 
 
 public class Rules {
@@ -40,6 +42,17 @@ public class Rules {
             }
         }
         return false;
+    }
+
+    public FinishName getResult(Board board, Coordinate lastCoordinate) {
+        if(isFinished(board, lastCoordinate)){
+           return FinishName.WIN;
+        }
+
+        if(board.isFull()){
+            return FinishName.TIE;
+        }
+        return null;
     }
 
 }
