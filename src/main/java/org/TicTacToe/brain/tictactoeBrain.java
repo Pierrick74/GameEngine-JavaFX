@@ -13,6 +13,11 @@ import static org.TicTacToe.commun.FinishName.*;
 public class tictactoeBrain extends Brain {
     Rules rules =  new Rules(3);
 
+    private Player getOpponent(Player player) {
+        Representation opponentType = player.getType() == Representation.ROUND ? Representation.CROSS : Representation.ROUND;
+        return new Player(opponentType);
+    }
+
     public Coordinate getCoordinateForIAPlayer(Board board, Player player) {
         int bestScore = Integer.MIN_VALUE;
         Coordinate bestCoordinate = null;
@@ -42,8 +47,11 @@ public class tictactoeBrain extends Brain {
             return evaluation;
         }
 
-        Player currentPlayer = isIATurn ? iaPlayer :
-            (iaPlayer.getType() == Representation.ROUND ? new Player(Representation.CROSS) : new Player(Representation.ROUND));
+        if (depth >= 4) {
+            return 0;
+        }
+
+        Player currentPlayer = isIATurn ? iaPlayer : getOpponent(iaPlayer);
 
         if(isIATurn) {
             int bestScore = Integer.MIN_VALUE;

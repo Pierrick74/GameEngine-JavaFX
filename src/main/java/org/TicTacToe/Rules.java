@@ -5,7 +5,6 @@ import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.FinishName;
 import org.TicTacToe.commun.Representation;
-import org.TicTacToe.player.Player;
 
 
 public class Rules {
