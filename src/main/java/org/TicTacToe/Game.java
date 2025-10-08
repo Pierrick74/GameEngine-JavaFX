@@ -6,7 +6,6 @@ import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.GameType;
 import org.TicTacToe.commun.PlacementStrategy.FreePlacement;
 import org.TicTacToe.commun.PlacementStrategy.GravityPlacement;
-import org.TicTacToe.commun.PlacementStrategy.PlacementStrategie;
 import org.TicTacToe.commun.RepresentationStrategy.GomokuRepresentation;
 import org.TicTacToe.commun.RepresentationStrategy.Power4Representation;
 import org.TicTacToe.commun.RepresentationStrategy.RepresentationStrategy;
@@ -23,7 +22,6 @@ public class Game {
     Rules rules;
     Brain brain;
     RepresentationStrategy symboleStrategie;
-    PlacementStrategie placementStrategie;
 
     Player[] players;
     Integer activePlayer = 1;
@@ -44,30 +42,27 @@ public class Game {
         this.xSize = 3;
         this.ySize = 3;
         this.board = new Board(3, 3);
-        this.rules = new Rules(3);
-        this.brain = new tictactoeBrain();
+        this.rules = new Rules(3, new FreePlacement());
+        this.brain = new tictactoeBrain(rules);
         this.symboleStrategie = new TicTacToeRepresentation();
-        this.placementStrategie = new FreePlacement();
     }
 
     public void initGomoku() {
         this.xSize = 15;
         this.ySize = 15;
         this.board = new Board(15, 15);
-        this.rules = new Rules(5);
-        this.brain = new Brain();
+        this.rules = new Rules(5, new FreePlacement());
+        this.brain = new tictactoeBrain(rules);
         this.symboleStrategie = new GomokuRepresentation();
-        this.placementStrategie = new FreePlacement();
     }
 
     public void initPower4() {
         this.xSize = 7;
         this.ySize = 6;
         this.board = new Board(7, 6);
-        this.rules = new Rules(4);
-        this.brain = new Brain();
+        this.rules = new Rules(4, new GravityPlacement());
+        this.brain = new tictactoeBrain(rules);
         this.symboleStrategie = new Power4Representation();
-        this.placementStrategie = new GravityPlacement();
     }
 
     public void start() throws InterruptedException {
@@ -101,13 +96,14 @@ public class Game {
 
     private void humainPlayerTurn(){
         Display.getInstance().displayText("Joueur " + activePlayer);
-        lastCoordinate = placementStrategie.askForPlacement(board);
+        lastCoordinate = rules.askForPlacement(board);
         board.setCell(lastCoordinate, players[activePlayer]);
     }
 
     private void artificialPlayerTurn() throws InterruptedException {
         Display.getInstance().displayText("Joueur " + activePlayer);
-        lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer]);
+        int inactivePlayer = activePlayer == 1 ? 0 : 1;
+        lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], 5);
         TimeUnit.SECONDS.sleep(1);
         board.setCell(lastCoordinate, players[activePlayer]);
     }

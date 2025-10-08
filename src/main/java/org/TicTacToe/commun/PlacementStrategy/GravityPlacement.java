@@ -8,6 +8,9 @@ import org.TicTacToe.commun.Representation;
 import org.TicTacToe.interaction.Display;
 import org.TicTacToe.interaction.Terminal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GravityPlacement implements PlacementStrategie{
     public Coordinate askForPlacement(Board board) {
         int xSize = board.getXSize();
@@ -43,5 +46,23 @@ public class GravityPlacement implements PlacementStrategie{
             }
         }
         return verticalCells.length-1;
+    }
+
+    public List<Coordinate> getAvailableMove(Board board){
+        List<Coordinate> coordinates = new ArrayList<Coordinate>();
+
+        for  (int i = 0; i < board.getXSize(); i++){
+            Cell[] verticalCells = board.getVerticalCells(new Coordinate(0, i));
+            if (verticalCells[0].getType() != Representation.EMPTY){
+                continue;
+            }
+            for(int j = verticalCells.length-1; j >= 0; j--){
+                if (verticalCells[j].getType() == Representation.EMPTY){
+                    coordinates.add(new Coordinate(j, i));
+                    break;
+                }
+            }
+        }
+        return coordinates;
     }
 }

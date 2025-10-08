@@ -4,14 +4,19 @@ import org.TicTacToe.board.Board;
 import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.FinishName;
+import org.TicTacToe.commun.PlacementStrategy.PlacementStrategie;
 import org.TicTacToe.commun.Representation;
+
+import java.util.List;
 
 
 public class Rules {
     int consecutiveNumber;
+    PlacementStrategie placementStrategie;
 
-    public Rules(int consecutiveNumber) {
+    public Rules(int consecutiveNumber, PlacementStrategie placementStrategie) {
         this.consecutiveNumber = consecutiveNumber;
+        this.placementStrategie = placementStrategie;
     }
 
     public boolean isFinished(Board board, Coordinate lastRoundCoordinate) {
@@ -53,5 +58,14 @@ public class Rules {
         }
         return null;
     }
+
+    public Coordinate askForPlacement(Board board) {
+        return placementStrategie.askForPlacement(board);
+    }
+
+    public List<Coordinate> getAvailableMove(Board board){
+        return placementStrategie.getAvailableMove(board);
+    }
+
 
 }

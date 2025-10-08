@@ -2,8 +2,12 @@ package org.TicTacToe.commun.PlacementStrategy;
 
 import org.TicTacToe.board.Board;
 import org.TicTacToe.commun.Coordinate;
+import org.TicTacToe.commun.Representation;
 import org.TicTacToe.interaction.Display;
 import org.TicTacToe.interaction.Terminal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FreePlacement implements PlacementStrategie {
     public Coordinate askForPlacement(Board board) {
@@ -30,5 +34,19 @@ public class FreePlacement implements PlacementStrategie {
             }
         }
         return coordinate;
+    }
+
+    public List<Coordinate> getAvailableMove(Board board){
+        int xSize = board.getXSize();
+        int ySize = board.getYSize();
+        List<Coordinate> coordinates = new ArrayList<Coordinate>();
+        for (int i = 0; i < board.getXSize(); i++) {
+            for (int j = 0; j < board.getYSize(); j++) {
+                if (board.getCell(new Coordinate(i, j)).getType() == Representation.EMPTY) {
+                    coordinates.add(new Coordinate(i, j));
+                }
+            }
+        }
+        return coordinates;
     }
 }

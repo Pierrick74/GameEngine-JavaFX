@@ -8,6 +8,12 @@ import org.TicTacToe.player.Player;
 
 import java.util.Random;
 
+public interface Brain {
+    public Coordinate getCoordinateForIAPlayer(Board board, Player me, Player opponent, Integer depth);
+}
+
+
+/*
 public class Brain {
 
     public Coordinate getCoordinateForIAPlayer(Board board, Player player) {
@@ -98,3 +104,4 @@ public class Brain {
         return null;
     }
 }
+*/

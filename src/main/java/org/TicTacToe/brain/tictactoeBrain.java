@@ -4,95 +4,82 @@ import org.TicTacToe.Brain;
 import org.TicTacToe.Rules;
 import org.TicTacToe.board.Board;
 import org.TicTacToe.commun.Coordinate;
-import org.TicTacToe.commun.FinishName;
-import org.TicTacToe.commun.Representation;
 import org.TicTacToe.player.Player;
 
-import static org.TicTacToe.commun.FinishName.*;
+import java.util.Collections;
+import java.util.List;
 
-public class tictactoeBrain extends Brain {
-    Rules rules =  new Rules(3);
+public class tictactoeBrain implements Brain {
+    Rules rules;
 
-    private Player getOpponent(Player player) {
-        Representation opponentType = player.getType() == Representation.ROUND ? Representation.CROSS : Representation.ROUND;
-        return new Player(opponentType);
+    public tictactoeBrain(Rules rules) {
+        this.rules = rules;
     }
 
-    public Coordinate getCoordinateForIAPlayer(Board board, Player player) {
-        int bestScore = Integer.MIN_VALUE;
-        Coordinate bestCoordinate = null;
+    public Coordinate getCoordinateForIAPlayer(Board board, Player me, Player opponent, Integer depth) {
+        MinMaxResult result = minimaxAlt(board, depth, true, me, opponent, null);
+        System.out.println("==> CHOIX FINAL: (" + result.move().getRow() + "," + result.move().getCol() + ") avec score " + result.score());
+        return result.move();
+    }
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if(board.getCell(new Coordinate(i,j)).getType() == Representation.EMPTY) {
-                    Board testBoard = board.getClone();
-                    testBoard.setCell(new Coordinate(i,j), player);
-                    int score = minimax(testBoard, 0, false, new Coordinate(i,j), player, player);
-                    System.out.println("Test (" + i + "," + j + ") -> score: " + score);
-                    if(score > bestScore) {
-                        bestScore = score;
-                        bestCoordinate = new Coordinate(i,j);
-                    }
+    private MinMaxResult minimaxAlt(
+            Board board,
+            int depth,
+            boolean isMyTurn,
+            Player me,
+            Player opponent,
+            Coordinate coordinate
+    ) {
+
+        MinMaxResult result;
+        MinMaxResult bestResult = null;
+
+        // si gagner / perdu
+        if(coordinate != null){
+            if (rules.isFinished(board, coordinate)) {
+                switch (rules.getResult(board, coordinate)) {
+                    case WIN:
+                        return !isMyTurn ? new MinMaxResult(50, coordinate) : new MinMaxResult(-50, coordinate);
+                    case LOOSE:
+                        return !isMyTurn ? new MinMaxResult(-50, coordinate) : new MinMaxResult(50, coordinate);
+                    case TIE:
+                        return new MinMaxResult(0, coordinate);
                 }
             }
         }
-        System.out.println("Best move: " + bestCoordinate.getRow() + "," + bestCoordinate.getCol() + " avec score: " + bestScore);
-        return bestCoordinate;
-    }
 
-    private int minimax(Board board, int depth, boolean isIATurn, Coordinate lastCoordinate, Player lastPlayer, Player iaPlayer) {
-        int score = 0;
-        int evaluation = evaluateMove(board, lastCoordinate, lastPlayer, iaPlayer);
-        if(evaluation != Integer.MAX_VALUE) {
-            return evaluation;
+        if(depth == 0){
+            return new MinMaxResult(0, coordinate);
         }
 
-        if (depth >= 4) {
-            return 0;
+        List<Coordinate> possibleMove = rules.getAvailableMove(board);
+       Collections.shuffle(possibleMove);
+        if(possibleMove.isEmpty()) {
+            return new MinMaxResult(0, coordinate);
         }
 
-        Player currentPlayer = isIATurn ? iaPlayer : getOpponent(iaPlayer);
-
-        if(isIATurn) {
-            int bestScore = Integer.MIN_VALUE;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if(board.getCell(new Coordinate(i,j)).getType() == Representation.EMPTY) {
-                        board.setCell(new Coordinate(i,j), currentPlayer);
-                        score += minimax(board, depth + 1, false, new Coordinate(i,j), currentPlayer, iaPlayer);
-                        board.setCell(new Coordinate(i,j), new Player(Representation.EMPTY));
-                        bestScore = Math.max(bestScore, score);
-                    }
+        for(Coordinate c : possibleMove) {
+            Board testBoard = board.getClone();
+            if(isMyTurn) {
+                testBoard.setCell(c, me);
+            } else {
+                testBoard.setCell(c, opponent);
+            }
+            result = minimaxAlt(testBoard, depth-1, !isMyTurn, me, opponent, c);
+            System.out.println("Coup testé: (" + c.getRow() + "," + c.getCol() + ") -> score: " + result.score());
+            if(bestResult == null) {
+                bestResult = new MinMaxResult(result.score(), c);
+            } else if(isMyTurn) {
+                if(result.score() > bestResult.score()) {
+                    bestResult = new MinMaxResult(result.score(), c);
+                }
+            } else {
+                if(result.score() < bestResult.score()) {
+                    bestResult = new MinMaxResult(result.score(), c);
                 }
             }
-            return bestScore;
-        } else {
-            int bestScore = Integer.MAX_VALUE;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if(board.getCell(new Coordinate(i,j)).getType() == Representation.EMPTY) {
-                        board.setCell(new Coordinate(i,j), currentPlayer);
-                        score += minimax(board, depth + 1, true, new Coordinate(i,j), currentPlayer, iaPlayer);
-                        board.setCell(new Coordinate(i,j), new Player(Representation.EMPTY));
-                        bestScore = Math.min(score, bestScore);
-                    }
-                }
-            }
-            return bestScore;
+
         }
-    }
-
-    private int evaluateMove(Board board, Coordinate coordinate, Player player, Player iaPlayer) {
-        FinishName result = rules.getResult(board, coordinate);
-
-        if(result == null) {
-            return Integer.MAX_VALUE; // Game continues
-        }
-
-        if (result == TIE) {
-            return 0;
-        }
-
-        return player.getType() == iaPlayer.getType() ? 10 : -10;
+        return bestResult;
     }
 }
