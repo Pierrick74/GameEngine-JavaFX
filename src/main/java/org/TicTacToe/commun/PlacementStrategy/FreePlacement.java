@@ -2,10 +2,7 @@ package org.TicTacToe.commun.PlacementStrategy;
 
 import org.TicTacToe.board.Board;
 import org.TicTacToe.commun.Coordinate;
-import org.TicTacToe.commun.Exception.OutOfBoardException;
 import org.TicTacToe.commun.Representation;
-import org.TicTacToe.interaction.Display;
-import org.TicTacToe.interaction.Terminal;
 import org.TicTacToe.player.Player;
 
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ public class FreePlacement implements PlacementStrategie {
     }
 
     public List<Coordinate> getAvailableMove(Board board){
-        List<Coordinate> coordinates = new ArrayList<Coordinate>();
+        List<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i < board.getXSize(); i++) {
             for (int j = 0; j < board.getYSize(); j++) {
                 if (board.getCell(new Coordinate(i, j)).getType() == Representation.EMPTY) {

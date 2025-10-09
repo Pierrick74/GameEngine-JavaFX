@@ -3,10 +3,7 @@ package org.TicTacToe.commun.PlacementStrategy;
 import org.TicTacToe.board.Board;
 import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
-import org.TicTacToe.commun.Exception.OutOfBoardException;
 import org.TicTacToe.commun.Representation;
-import org.TicTacToe.interaction.Display;
-import org.TicTacToe.interaction.Terminal;
 import org.TicTacToe.player.Player;
 
 import java.util.ArrayList;
@@ -38,7 +35,7 @@ public class GravityPlacement implements PlacementStrategie{
     }
 
     public List<Coordinate> getAvailableMove(Board board){
-        List<Coordinate> coordinates = new ArrayList<Coordinate>();
+        List<Coordinate> coordinates = new ArrayList<>();
 
         for  (int i = 0; i < board.getXSize(); i++){
             Cell[] verticalCells = board.getVerticalCells(new Coordinate(0, i));

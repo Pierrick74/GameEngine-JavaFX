@@ -36,14 +36,13 @@ public class Brain {
         // si gagner / perdu
         if(coordinate != null){
             if (rules.isFinished(board, coordinate)) {
-                switch (rules.getResult(board, coordinate)) {
-                    case WIN:
-                        return !isMyTurn ? new MinMaxResult(50 * depth, coordinate) : new MinMaxResult(-50, coordinate);
-                    case LOOSE:
-                        return !isMyTurn ? new MinMaxResult(-50 * depth, coordinate) : new MinMaxResult(50, coordinate);
-                    case TIE:
-                        return new MinMaxResult(0, coordinate);
-                }
+                return switch (rules.getResult(board, coordinate)) {
+                    case WIN ->
+                            !isMyTurn ? new MinMaxResult(50 * depth, coordinate) : new MinMaxResult(-50, coordinate);
+                    case LOOSE ->
+                            !isMyTurn ? new MinMaxResult(-50 * depth, coordinate) : new MinMaxResult(50, coordinate);
+                    case TIE -> new MinMaxResult(0, coordinate);
+                };
             }
         }
 

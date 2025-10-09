@@ -8,16 +8,16 @@ import org.TicTacToe.interaction.Display;
 import org.TicTacToe.interaction.Terminal;
 
 
-public class Controlleur {
+public class Controller {
     Game game;
     Coordinate coordinate;
 
-    public Controlleur(GameType gameType) {
+    public Controller(GameType gameType) {
         game = new Game(gameType);
     }
 
     public void start() throws InterruptedException {
-        while(game.getGameState() != GameState.FINISHGAME) {
+        while(game.getGameState() != GameState.FINISHED) {
             switch (game.getGameState()) {
                 case INITPLAYER:
                     game.createPlayersWithNumberOfHumain(getNumberOfHumainPlayer());
@@ -30,10 +30,7 @@ public class Controlleur {
                         case INITPLAYER:
                             game.setGameState(GameState.CHECKPLAYER);
                             break;
-                        case MOVE:
-                            game.setGameState(GameState.CHECKFINISH);
-                            break;
-                        case IAMOVE:
+                        case MOVE, IAMOVE:
                             game.setGameState(GameState.CHECKFINISH);
                             break;
                     }
@@ -58,7 +55,7 @@ public class Controlleur {
 
                     if (winner != null) {
                         Display.getInstance().displayText(winner);
-                        game.setGameState(GameState.FINISHGAME);
+                        game.setGameState(GameState.FINISHED);
                     } else {
                         game.changeActivePlayer();
                         game.setGameState(GameState.CHECKPLAYER);

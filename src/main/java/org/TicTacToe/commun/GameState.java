@@ -2,7 +2,7 @@ package org.TicTacToe.commun;
 
 public enum GameState {
     INITPLAYER,
-    FINISHGAME,
+    FINISHED,
     DISPLAYBOARD,
     MOVE,
     CHECKFINISH,

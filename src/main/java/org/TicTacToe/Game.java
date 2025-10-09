@@ -91,7 +91,7 @@ public class Game {
         return null;
     }
 
-    public void humainPlayerTurn(Coordinate coordinate) throws InterruptedException {
+    public void humainPlayerTurn(Coordinate coordinate) {
         lastCoordinate = rules.setCell(board, coordinate, players[activePlayer]);
     }
 

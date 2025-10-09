@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         GameType gameType = selectGame();
-        Controlleur controlleur = new Controlleur(gameType);
+        Controller controlleur = new Controller(gameType);
         controlleur.start();
     }
 
@@ -21,13 +21,10 @@ public class Main {
         Display.getInstance().displayText("2: POWER4");
         int result = Terminal.getInstance().askForInteger(3);
 
-        switch (result) {
-            case 0:
-                return GameType.TICTACTOE;
-            case 1:
-                return GameType.GOMOKU;
-            default:
-                return GameType.POWER4;
-        }
+        return switch (result) {
+            case 0 -> GameType.TICTACTOE;
+            case 1 -> GameType.GOMOKU;
+            default -> GameType.POWER4;
+        };
     }
 }

@@ -11,7 +11,7 @@ public enum Representation {
 
     private final String abreviation ;
 
-    private Representation(String abreviation) {
+    Representation(String abreviation) {
         this.abreviation = abreviation ;
     }
 
