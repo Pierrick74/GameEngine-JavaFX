@@ -4,8 +4,11 @@ import org.TicTacToe.board.Board;
 import org.TicTacToe.board.Cell;
 import org.TicTacToe.commun.Coordinate;
 import org.TicTacToe.commun.FinishName;
+import org.TicTacToe.commun.PlacementStrategy.FreePlacement;
 import org.TicTacToe.commun.PlacementStrategy.PlacementStrategie;
+import org.TicTacToe.commun.PlacementStrategy.TypeOfPlacement;
 import org.TicTacToe.commun.Representation;
+import org.TicTacToe.player.Player;
 
 import java.util.List;
 
@@ -59,13 +62,23 @@ public class Rules {
         return null;
     }
 
-    public Coordinate askForPlacement(Board board) {
-        return placementStrategie.askForPlacement(board);
-    }
-
     public List<Coordinate> getAvailableMove(Board board){
         return placementStrategie.getAvailableMove(board);
     }
 
+    public TypeOfPlacement getTypeOfPlacement() {
+        if(placementStrategie instanceof FreePlacement) {
+            return TypeOfPlacement.FREE;
+        } else {
+            return TypeOfPlacement.GRAVITY;
+        }
+    }
 
+    public boolean isValideCoordinate(Board board, Coordinate coordinate){
+        return placementStrategie.isValideCoordinate(board, coordinate);
+    }
+
+    public Coordinate setCell(Board board, Coordinate coordinate, Player player){
+        return placementStrategie.setCell(board, coordinate, player);
+    }
 }

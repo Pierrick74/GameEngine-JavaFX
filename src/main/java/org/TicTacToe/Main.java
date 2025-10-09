@@ -7,14 +7,14 @@ import org.TicTacToe.interaction.Terminal;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    static Game game;
 
     public static void main(String[] args) throws InterruptedException {
-        selectGame();
-        game.start();
+        GameType gameType = selectGame();
+        Controlleur controlleur = new Controlleur(gameType);
+        controlleur.start();
     }
 
-    private static void selectGame() {
+    private static GameType selectGame() {
         Display.getInstance().displayText("Quel jeu voulez-vous jouer?");
         Display.getInstance().displayText("0: TICTACTOE");
         Display.getInstance().displayText("1: GOMOKU");
@@ -23,14 +23,11 @@ public class Main {
 
         switch (result) {
             case 0:
-                game = new Game(GameType.TICTACTOE);
-                break;
+                return GameType.TICTACTOE;
             case 1:
-                game = new Game(GameType.GOMOKU);
-                break;
-            case 2:
-                game = new Game(GameType.POWER4);
-                break;
+                return GameType.GOMOKU;
+            default:
+                return GameType.POWER4;
         }
     }
 }

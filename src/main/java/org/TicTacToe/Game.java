@@ -3,15 +3,15 @@ package org.TicTacToe;
 import org.TicTacToe.board.Board;
 import org.TicTacToe.brain.Brain;
 import org.TicTacToe.commun.Coordinate;
+import org.TicTacToe.commun.GameState;
 import org.TicTacToe.commun.GameType;
 import org.TicTacToe.commun.PlacementStrategy.FreePlacement;
 import org.TicTacToe.commun.PlacementStrategy.GravityPlacement;
+import org.TicTacToe.commun.PlacementStrategy.TypeOfPlacement;
 import org.TicTacToe.commun.RepresentationStrategy.GomokuRepresentation;
 import org.TicTacToe.commun.RepresentationStrategy.Power4Representation;
 import org.TicTacToe.commun.RepresentationStrategy.RepresentationStrategy;
 import org.TicTacToe.commun.RepresentationStrategy.TicTacToeRepresentation;
-import org.TicTacToe.interaction.Display;
-import org.TicTacToe.interaction.Terminal;
 import org.TicTacToe.player.ArtificialPlayer;
 import org.TicTacToe.player.Player;
 
@@ -25,11 +25,13 @@ public class Game {
 
     Player[] players;
     Integer activePlayer = 1;
-    Integer xSize;
-    Integer ySize;
+    private Integer xSize;
+    private Integer ySize;
     Coordinate lastCoordinate = null;
     int maxDepth;
-    Display display;
+
+    private GameState gameState =  GameState.INITPLAYER;
+    private GameState oldGameState;
 
     public Game(GameType gameType) {
         switch(gameType) {
@@ -70,67 +72,85 @@ public class Game {
         this.maxDepth = 5;
     }
 
-    public void start() throws InterruptedException {
+    public void changeActivePlayer() {
+        activePlayer = activePlayer == 0 ? 1 : 0;
+    }
 
-        createPlayers();
+    public boolean isPlayerHumainTurn() {
+        return !(players[activePlayer] instanceof ArtificialPlayer);
+    }
 
-        boolean isFinished = false;
-        board.display();
-
-        while (!isFinished) {
-            activePlayer = activePlayer == 0 ? 1 : 0;
-
-            if( players[activePlayer] instanceof ArtificialPlayer){
-                artificialPlayerTurn();
-            } else {
-                humainPlayerTurn();
-            }
-            board.display();
-
-            if(rules.isFinished(board, lastCoordinate)){
-                isFinished = true;
-                Display.getInstance().displayText("Joueur " + activePlayer + " gagne");
-            }
-
-            if(board.isFull()){
-                isFinished = true;
-                Display.getInstance().displayText("Personne ne gagne");
-            }
+    public String isGameFinished() {
+        if(rules.isFinished(board, lastCoordinate)){
+            return "Joueur " + activePlayer + " gagne";
         }
+
+        if(board.isFull()){
+            return "Personne ne gagne";
+        }
+        return null;
     }
 
-    private void humainPlayerTurn(){
-        Display.getInstance().displayText("Joueur " + activePlayer);
-        lastCoordinate = rules.askForPlacement(board);
-        board.setCell(lastCoordinate, players[activePlayer]);
+    public void humainPlayerTurn(Coordinate coordinate) throws InterruptedException {
+        lastCoordinate = rules.setCell(board, coordinate, players[activePlayer]);
     }
 
-    private void artificialPlayerTurn() throws InterruptedException {
-        Display.getInstance().displayText("Joueur " + activePlayer);
+    public void artificialPlayerTurn() throws InterruptedException {
         int inactivePlayer = activePlayer == 1 ? 0 : 1;
 
         lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], maxDepth);
         TimeUnit.SECONDS.sleep(1);
-        board.setCell(lastCoordinate, players[activePlayer]);
+        lastCoordinate = rules.setCell(board, lastCoordinate, players[activePlayer]);
     }
 
-    private void createPlayers() {
-        Display.getInstance().displayText("Comment voulez-vous jouer?");
-        Display.getInstance().displayText("0: 2 Joueurs Humain");
-        Display.getInstance().displayText("1: 1 humain et un joueur artificiel");
-        Display.getInstance().displayText("2: 2 Joueurs artificiels");
-        int result = Terminal.getInstance().askForInteger(3);
-
-        switch (result) {
-            case 0:
+    public void createPlayersWithNumberOfHumain(int numberOfHumain) {
+        switch (numberOfHumain) {
+            case 2:
                 this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new Player(symboleStrategie.getPlayerSymbol(1))};
                 break;
             case 1:
                 this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
                 break;
-            case 2:
+            case 0:
                 this.players = new Player[]{new ArtificialPlayer(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
                 break;
         }
+    }
+
+    public void displayBoard() {
+        board.display();
+    }
+
+    public void setGameState(GameState gameState) {
+        this.oldGameState = this.gameState;
+        this.gameState = gameState;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public GameState getOldGameState() {
+        return oldGameState;
+    }
+
+    public TypeOfPlacement getTypeOfPlacement() {
+        return rules.getTypeOfPlacement();
+    }
+
+    public Integer getxSize() {
+        return xSize;
+    }
+
+    public Integer getySize() {
+        return ySize;
+    }
+
+    public boolean isValideCoordinate(Coordinate coordinate) {
+        return rules.isValideCoordinate(this.board, coordinate);
+    }
+
+    public int getActivePlayer() {
+        return activePlayer;
     }
 }

@@ -7,39 +7,28 @@ import org.TicTacToe.commun.Exception.OutOfBoardException;
 import org.TicTacToe.commun.Representation;
 import org.TicTacToe.interaction.Display;
 import org.TicTacToe.interaction.Terminal;
+import org.TicTacToe.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GravityPlacement implements PlacementStrategie{
-    public Coordinate askForPlacement(Board board) {
-        int xSize = board.getXSize();
+    public boolean isValideCoordinate(Board board, Coordinate coordinate) {
+        Cell[] verticalCells = board.getVerticalCells(coordinate);
+        return verticalCells[0].getType() == Representation.EMPTY;
 
-        Coordinate coordinate = null;
-        boolean isValide = false;
-
-        while (!isValide) {
-            Display.getInstance().displayText("quel est la colonne que vous voulez");
-            int col = Terminal.getInstance().askForInteger(xSize);
-
-            try {
-                int row = getRowAvailable(board, col);
-                coordinate = new Coordinate(row, col);
-                isValide = true;
-                Display.getInstance().displayText(coordinate.toString());
-            } catch (OutOfBoardException e){
-                Display.getInstance().displayText(e.getMessage());
-
-            }
-        }
-        return coordinate;
     }
 
-    private int getRowAvailable(Board board, int col) throws OutOfBoardException {
+    public Coordinate setCell(Board board, Coordinate coordinate, Player player) {
+        int row = getRowAvailable(board, coordinate.getCol());
+        Coordinate newCoordinate = new Coordinate(row, coordinate.getCol());
+        board.setCell(newCoordinate, player);
+        return newCoordinate;
+    }
+
+    private int getRowAvailable(Board board, int col) {
         Cell[] verticalCells = board.getVerticalCells(new Coordinate(0, col));
-        if (verticalCells[0].getType() != Representation.EMPTY){
-            throw new OutOfBoardException("Colonne Saturée");
-        }
+
         for (int row = 0; row < verticalCells.length; row++){
             if (verticalCells[row].getType() != Representation.EMPTY){
                 return row-1;
