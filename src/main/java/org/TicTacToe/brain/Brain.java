@@ -38,9 +38,9 @@ public class Brain {
             if (rules.isFinished(board, coordinate)) {
                 switch (rules.getResult(board, coordinate)) {
                     case WIN:
-                        return !isMyTurn ? new MinMaxResult(50, coordinate) : new MinMaxResult(-50, coordinate);
+                        return !isMyTurn ? new MinMaxResult(50 * depth, coordinate) : new MinMaxResult(-50, coordinate);
                     case LOOSE:
-                        return !isMyTurn ? new MinMaxResult(-50, coordinate) : new MinMaxResult(50, coordinate);
+                        return !isMyTurn ? new MinMaxResult(-50 * depth, coordinate) : new MinMaxResult(50, coordinate);
                     case TIE:
                         return new MinMaxResult(0, coordinate);
                 }
@@ -65,7 +65,7 @@ public class Brain {
                 testBoard.setCell(c, opponent);
             }
             result = minimaxAlt(testBoard, depth-1, !isMyTurn, me, opponent, c);
-            System.out.println("Coup testé: (" + c.getRow() + "," + c.getCol() + ") -> score: " + result.score());
+            //System.out.println("Coup testé: (" + c.getRow() + "," + c.getCol() + ") -> score: " + result.score());
             if(bestResult == null) {
                 bestResult = new MinMaxResult(result.score(), c);
             } else if(isMyTurn) {
