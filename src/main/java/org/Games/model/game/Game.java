@@ -29,7 +29,7 @@ public class Game implements Serializable {
     private int maxDepth;
     private GameType gameType;
 
-    private GameState gameState =  GameState.INITGAME;
+    private GameState gameState =  GameState.MAIN;
     private GameState oldGameState;
 
     public Game(GameType gameType) {

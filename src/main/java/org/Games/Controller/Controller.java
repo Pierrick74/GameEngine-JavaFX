@@ -1,5 +1,9 @@
 package org.Games.Controller;
 
+import javafx.application.Platform;
+import org.Games.JavaFX.StageRepository;
+import org.Games.JavaFX.Views.ChooseGameView;
+import org.Games.JavaFX.Views.MainView;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.bd.Persistence;
 import org.Games.model.game.Game;
@@ -16,16 +20,44 @@ public class Controller {
     Coordinate coordinate;
     Persistence dbRepository;
 
-    public Controller() {
-        this.game = null;
+    private static Controller instance;
+
+    public static Controller getInstance() {
+        return instance==null?instance = new Controller():instance;
+    }
+
+    private Controller() {
+        this.game = new Game(GameType.TICTACTOE);
         this.coordinate = null;
         this.dbRepository = new GameSerialization();
     }
 
     public void start() throws InterruptedException {
-        initializeGame();
         while(game.getGameState() != GameState.FINISHED) {
             switch (game.getGameState()) {
+                case MAIN:
+                    Platform.runLater(() -> StageRepository.getInstance().replaceScene(new MainView()));
+                break;
+
+                case ASKFORCHOSEGAME:
+                    Platform.runLater(() -> StageRepository.getInstance().replaceScene(new ChooseGameView()));
+                    break;
+
+                case  CREATETICTACTOE:
+                    game = new Game(GameType.TICTACTOE);
+                    game.setGameState(GameState.INITGAME);
+                    break;
+
+                case  CREATEGOMOKU:
+                    game = new Game(GameType.GOMOKU);
+                    game.setGameState(GameState.INITGAME);
+                    break;
+
+                case  CREATEPOWER4:
+                    game = new Game(GameType.POWER4);
+                    game.setGameState(GameState.INITGAME);
+                    break;
+
                 case INITGAME:
                     if(dbRepository.haveAGameSave(game.getGameType())) {
                         if(isHumainWantToRestoreGame()){
@@ -116,20 +148,7 @@ public class Controller {
                     game.setGameState(GameState.DISPLAYBOARD);
                     break;
             }
-        }
-    }
-
-    private void initializeGame() {
-        Display.getInstance().displayText("Quel jeu voulez-vous jouer?");
-        Display.getInstance().displayText("0: TICTACTOE");
-        Display.getInstance().displayText("1: GOMOKU");
-        Display.getInstance().displayText("2: POWER4");
-        int result = Terminal.getInstance().askForInteger(3);
-
-        switch (result) {
-            case 0 -> game = new Game(GameType.TICTACTOE);
-            case 1 -> game = new Game(GameType.GOMOKU);
-            default -> game = new Game(GameType.POWER4);
+            Thread.sleep(1000);
         }
     }
 
@@ -170,5 +189,9 @@ public class Controller {
         Display.getInstance().displayText("1: non");
         int result =  Terminal.getInstance().askForInteger(2);
         return  result == 0;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.game.setGameState(gameState);
     }
 }
