@@ -3,7 +3,9 @@ package org.Games.model.board;
 import org.Games.model.player.Player;
 import org.Games.model.player.Representation;
 
-public class Cell {
+import java.io.Serializable;
+
+public class Cell implements Serializable {
     Player player;
 
     public Cell() {

@@ -5,10 +5,11 @@ import org.Games.model.board.Board;
 import org.Games.model.board.Coordinate;
 import org.Games.model.player.Player;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class Brain {
+public class Brain implements Serializable {
     Rules rules;
 
     public Brain(Rules rules) {

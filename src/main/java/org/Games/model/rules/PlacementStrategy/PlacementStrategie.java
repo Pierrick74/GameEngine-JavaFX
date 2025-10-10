@@ -6,7 +6,7 @@ import org.Games.model.player.Player;
 
 import java.util.List;
 
-public interface PlacementStrategie {
+public interface PlacementStrategie  {
     List<Coordinate> getAvailableMove(Board board);
     boolean isValideCoordinate(Board board, Coordinate coordinate);
     Coordinate setCell(Board board, Coordinate coordinate, Player player);

@@ -1,6 +1,8 @@
 package org.Games.model.board;
 
-public class Coordinate {
+import java.io.Serializable;
+
+public class Coordinate implements Serializable {
     private final int col;
     private final int row;
 

@@ -14,27 +14,28 @@ import org.Games.model.player.ArtificialPlayer;
 import org.Games.model.player.Player;
 import org.Games.model.rules.Rules;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
-public class Game {
-    Board board;
-    Rules rules;
-    Brain brain;
-    RepresentationStrategy symboleStrategie;
+public class Game implements Serializable {
+    private Board board;
+    private Rules rules;
+    private Brain brain;
+    private RepresentationStrategy symboleStrategie;
 
-    Player[] players;
-    Integer activePlayer = 1;
-    private Integer xSize;
-    private Integer ySize;
-    Coordinate lastCoordinate = null;
-    int maxDepth;
+    private Player[] players;
+    private Integer activePlayer = 1;
+    private Coordinate lastCoordinate = null;
+    private int maxDepth;
+    private GameType gameType;
 
-    private GameState gameState =  GameState.INITPLAYER;
+    private GameState gameState =  GameState.INITGAME;
     private GameState oldGameState;
 
     public Game(GameType gameType) {
+        this.gameType = gameType;
         switch(gameType) {
-            case TICTACTOE ->   initTicTacToe();
+            case TICTACTOE -> initTicTacToe();
             case GOMOKU -> initGomoku();
             case POWER4 -> initPower4();
         }
@@ -42,8 +43,6 @@ public class Game {
 
     //Init
     public void initTicTacToe() {
-        this.xSize = 3;
-        this.ySize = 3;
         this.board = new Board(3, 3);
         this.rules = new Rules(3, new FreePlacement());
         this.brain = new Brain(rules);
@@ -52,8 +51,6 @@ public class Game {
     }
 
     public void initGomoku() {
-        this.xSize = 15;
-        this.ySize = 15;
         this.board = new Board(15, 15);
         this.rules = new Rules(5, new FreePlacement());
         this.brain = new Brain(rules);
@@ -62,8 +59,6 @@ public class Game {
     }
 
     public void initPower4() {
-        this.xSize = 7;
-        this.ySize = 6;
         this.board = new Board(7, 6);
         this.rules = new Rules(4, new GravityPlacement());
         this.brain = new Brain(rules);
@@ -138,11 +133,11 @@ public class Game {
     }
 
     public Integer getxSize() {
-        return xSize;
+        return board.getXSize();
     }
 
     public Integer getySize() {
-        return ySize;
+        return board.getYSize();
     }
 
     public boolean isValideCoordinate(Coordinate coordinate) {
@@ -151,5 +146,9 @@ public class Game {
 
     public int getActivePlayer() {
         return activePlayer;
+    }
+
+    public GameType getGameType() {
+        return gameType;
     }
 }

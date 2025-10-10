@@ -5,10 +5,11 @@ import org.Games.model.board.Coordinate;
 import org.Games.model.player.Representation;
 import org.Games.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FreePlacement implements PlacementStrategie {
+public class FreePlacement implements PlacementStrategie, Serializable {
 
     public boolean isValideCoordinate(Board board, Coordinate coordinate) {
         return board.isEmptyCase(coordinate);

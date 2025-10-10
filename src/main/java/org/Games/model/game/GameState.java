@@ -8,5 +8,7 @@ public enum GameState {
     CHECKFINISH,
     ASKPLAYER,
     CHECKPLAYER,
-    IAMOVE
+    IAMOVE,
+    INITGAME,
+    CHECKSAVE
 }

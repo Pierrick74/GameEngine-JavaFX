@@ -1,5 +1,7 @@
 package org.Games.Controller;
 
+import org.Games.model.bd.GameSerialization;
+import org.Games.model.bd.Persistence;
 import org.Games.model.game.Game;
 import org.Games.model.board.Coordinate;
 import org.Games.model.game.GameState;
@@ -12,16 +14,32 @@ import org.Games.Vue.Terminal;
 public class Controller {
     Game game;
     Coordinate coordinate;
+    Persistence dbRepository;
 
     public Controller() {
         this.game = null;
         this.coordinate = null;
+        this.dbRepository = new GameSerialization();
     }
 
     public void start() throws InterruptedException {
         initializeGame();
         while(game.getGameState() != GameState.FINISHED) {
             switch (game.getGameState()) {
+                case INITGAME:
+                    if(dbRepository.haveAGameSave(game.getGameType())) {
+                        if(isHumainWantToRestoreGame()){
+                            game = dbRepository.getGame(game.getGameType());
+                            game.setGameState(GameState.INITGAME);
+                            game.setGameState(GameState.DISPLAYBOARD);
+                        } else {
+                            game.setGameState(GameState.INITPLAYER);
+                        }
+                    } else {
+                        game.setGameState(GameState.INITPLAYER);
+                    }
+                    break;
+
                 case INITPLAYER:
                     game.createPlayersWithNumberOfHumain(getNumberOfHumainPlayer());
                     game.setGameState(GameState.DISPLAYBOARD);
@@ -36,7 +54,16 @@ public class Controller {
                         case MOVE, IAMOVE:
                             game.setGameState(GameState.CHECKFINISH);
                             break;
+                        case INITGAME:
+                            game.setGameState(GameState.CHECKPLAYER);
                     }
+                    break;
+
+                case CHECKSAVE:
+                    if(isHumainWantToSaveGame()){
+                        dbRepository.saveGame(game);
+                    }
+                    game.setGameState(GameState.CHECKPLAYER);
                     break;
 
                 case CHECKPLAYER:
@@ -61,7 +88,7 @@ public class Controller {
                         game.setGameState(GameState.FINISHED);
                     } else {
                         game.changeActivePlayer();
-                        game.setGameState(GameState.CHECKPLAYER);
+                        game.setGameState(GameState.CHECKSAVE);
                     }
                     break;
 
@@ -127,5 +154,21 @@ public class Controller {
         Display.getInstance().displayText("1: 1 humain et un joueur artificiel");
         Display.getInstance().displayText("0: 2 Joueurs artificiels");
         return Terminal.getInstance().askForInteger(3);
+    }
+
+    private boolean isHumainWantToSaveGame(){
+        Display.getInstance().displayText("Voulez-vous sauvgarder le jeu?");
+        Display.getInstance().displayText("0: oui");
+        Display.getInstance().displayText("1: non");
+        int result =  Terminal.getInstance().askForInteger(2);
+        return  result == 0;
+    }
+
+    private boolean isHumainWantToRestoreGame(){
+        Display.getInstance().displayText("Il y a une partie sauvegardée, voulez vous la restaurer?");
+        Display.getInstance().displayText("0: oui");
+        Display.getInstance().displayText("1: non");
+        int result =  Terminal.getInstance().askForInteger(2);
+        return  result == 0;
     }
 }

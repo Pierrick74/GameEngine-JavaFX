@@ -10,10 +10,11 @@ import org.Games.model.rules.PlacementStrategy.TypeOfPlacement;
 import org.Games.model.player.Representation;
 import org.Games.model.player.Player;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Rules {
+public class Rules implements Serializable {
     int consecutiveNumber;
     PlacementStrategie placementStrategie;
 

@@ -4,10 +4,12 @@ import org.Games.model.player.Representation;
 import org.Games.model.player.Player;
 import org.Games.Vue.Display;
 
+import java.io.Serializable;
+
 /**
  * Responsibility of the board
  */
-public class Board {
+public class Board implements Serializable {
     Integer xSize;
     Integer ySize;
     Cell[][] board;

@@ -1,6 +1,8 @@
 package org.Games.model.player;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     Representation type;
 
     public Player(Representation type) {

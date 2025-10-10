@@ -6,10 +6,11 @@ import org.Games.model.board.Coordinate;
 import org.Games.model.player.Representation;
 import org.Games.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GravityPlacement implements PlacementStrategie{
+public class GravityPlacement implements PlacementStrategie , Serializable {
     public boolean isValideCoordinate(Board board, Coordinate coordinate) {
         Cell[] verticalCells = board.getVerticalCells(coordinate);
         return verticalCells[0].getType() == Representation.EMPTY;
