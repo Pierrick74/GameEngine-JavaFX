@@ -148,7 +148,7 @@ public class Controller {
                     game.setGameState(GameState.DISPLAYBOARD);
                     break;
             }
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
     }
 
