@@ -1,5 +1,8 @@
 package org.Games.Controller;
 
+import org.Games.JavaFX.StageRepository;
+import org.Games.JavaFX.Views.AppView;
+import org.Games.JavaFX.Views.GameView;
 import org.Games.model.AppModel;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
@@ -35,24 +38,20 @@ public class AppController implements Observer {
     }
 
     private void launchGame(GameType gameType) {
-        // TODO: Créer le MVC du jeu choisi
-        // Pour l'instant, juste un message de debug
         System.out.println("Lancement du jeu: " + gameType);
 
-          /*
-          Quand vous aurez le MVC du jeu, ce sera quelque chose comme :
+        try {
+            GameController gameController = new GameController(gameType, this);
+            GameView gameView = new GameView(gameController);
+            gameController.registerView(gameView);
+            StageRepository.getInstance().replaceScene(gameView);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-          switch(gameType) {
-              case TICTACTOE -> {
-                  Game game = new Game(GameType.TICTACTOE);
-                  GameModel gameModel = new GameModel(game);
-                  GameController gameController = new GameController(gameModel);
-                  GameView gameView = new GameView(gameController);
-                  StageRepository.getInstance().replaceScene(gameView);
-              }
-              case GOMOKU -> { ... }
-              case POWER4 -> { ... }
-          }
-          */
+    public void backToGameSelection() {
+        AppView appView = new AppView(this);
+        StageRepository.getInstance().replaceScene(appView);
     }
 }

@@ -15,7 +15,7 @@ public class StageRepository {
 
     // Dimensions communes
     private static final double SCENE_WIDTH = 1200;
-    private static final double SCENE_HEIGHT = 700;
+    private static final double SCENE_HEIGHT = 800;
     private static final Color BACKGROUND_COLOR = Color.web("#E8E4DC"); // Couleur claire pour correspondre au thème
 
     private StageRepository() {}
