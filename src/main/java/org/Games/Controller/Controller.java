@@ -2,8 +2,8 @@ package org.Games.Controller;
 
 import javafx.application.Platform;
 import org.Games.JavaFX.StageRepository;
-import org.Games.JavaFX.Views.ChooseGameView;
 import org.Games.JavaFX.Views.MainView;
+import org.Games.observer.Observer;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.bd.Persistence;
 import org.Games.model.game.Game;
@@ -15,7 +15,7 @@ import org.Games.Vue.Display;
 import org.Games.Vue.Terminal;
 
 
-public class Controller {
+public class Controller implements Observer {
     Game game;
     Coordinate coordinate;
     Persistence dbRepository;
@@ -33,14 +33,20 @@ public class Controller {
     }
 
     public void start() throws InterruptedException {
+
         while(game.getGameState() != GameState.FINISHED) {
             switch (game.getGameState()) {
                 case MAIN:
-                    Platform.runLater(() -> StageRepository.getInstance().replaceScene(new MainView()));
-                break;
+                    Platform.runLater(() -> {
+                        MainView mainView = new MainView();
+                        mainView.addObserver(Controller.getInstance());
+                        StageRepository.getInstance().replaceScene(mainView);
+                    });
+
+                    break;
 
                 case ASKFORCHOSEGAME:
-                    Platform.runLater(() -> StageRepository.getInstance().replaceScene(new ChooseGameView()));
+                    //Platform.runLater(() -> StageRepository.getInstance().replaceScene(new AppView()));
                     break;
 
                 case  CREATETICTACTOE:
@@ -192,6 +198,11 @@ public class Controller {
     }
 
     public void setGameState(GameState gameState) {
+        this.game.setGameState(gameState);
+    }
+
+    @Override
+    public void updateState(GameState gameState) {
         this.game.setGameState(gameState);
     }
 }

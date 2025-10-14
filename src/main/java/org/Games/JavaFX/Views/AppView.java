@@ -12,18 +12,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import org.Games.Controller.Controller;
+import org.Games.Controller.AppController;
 import org.Games.JavaFX.commun.ThemeConfig;
-import org.Games.model.game.GameState;
+import org.Games.model.game.GameType;
 
-public class ChooseGameView extends VBox {
+public class AppView extends VBox {
     private Label titre;
     private VBox vBoxGomoku;
     private VBox vBoxTicTacToe;
     private VBox vBoxPower4;
+    private AppController controller;
 
-    public ChooseGameView() {
+    public AppView(AppController controller) {
         super(10);
+        this.controller = controller;
+
         initializeComponents();
 
         HBox hBox = new HBox();
@@ -36,7 +39,7 @@ public class ChooseGameView extends VBox {
         ThemeConfig.applyDarkBackground(this);
     }
 
-    private VBox createVBox(String path, String labelText, GameState gameState) {
+    private VBox createVBox(String path, String labelText, GameType gameType) {
         Button button = new Button();
         Image image = new Image(path);
         ImageView picture = new ImageView(image);
@@ -69,7 +72,7 @@ public class ChooseGameView extends VBox {
         shadow.setColor(Color.color(0, 0, 0, 0.5));
         button.setEffect(shadow);
 
-        button.setOnAction(e -> Controller.getInstance().setGameState(gameState));
+        button.setOnAction(e -> controller.onGameSelected(gameType));
         button.setOnMousePressed(e -> button.setEffect(null));
         button.setOnMouseReleased(e -> button.setEffect(shadow));
 
@@ -77,9 +80,9 @@ public class ChooseGameView extends VBox {
     }
 
     private void initializeComponents()  {
-        vBoxTicTacToe = createVBox("/org/Games/JavaFX/assets/tictactoe.png", "TicTacToe", GameState.CREATETICTACTOE);
-        vBoxGomoku = createVBox("/org/Games/JavaFX/assets/gomoku.png", "Gomoku", GameState.CREATEGOMOKU);
-        vBoxPower4 = createVBox("/org/Games/JavaFX/assets/power4.png", "Power4", GameState.CREATEPOWER4);
+        vBoxTicTacToe = createVBox("/org/Games/JavaFX/assets/tictactoe.png", "TicTacToe", GameType.TICTACTOE);
+        vBoxGomoku = createVBox("/org/Games/JavaFX/assets/gomoku.png", "Gomoku", GameType.GOMOKU);
+        vBoxPower4 = createVBox("/org/Games/JavaFX/assets/power4.png", "Power4", GameType.POWER4);
 
         titre = new Label("Choisissez un jeu");
         titre.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));

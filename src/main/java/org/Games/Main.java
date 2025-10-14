@@ -1,12 +1,14 @@
 package org.Games;
 
-import javafx.application.Platform;
+
 import javafx.stage.StageStyle;
-import org.Games.Controller.Controller;
+import org.Games.Controller.AppController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.Games.JavaFX.StageRepository;
-import org.Games.JavaFX.Views.MainView;
+import org.Games.JavaFX.Views.AppView;
+import org.Games.model.AppModel;
+
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -16,22 +18,16 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws InterruptedException {
+    public void start(Stage primaryStage) {
 
         primaryStage.initStyle(StageStyle.DECORATED);
         StageRepository.getInstance().setStage(primaryStage);
 
-        // Lancer le jeu dans un thread séparé
-        Thread gameThread = new Thread(() -> {
-            Controller controlleur = Controller.getInstance();
-            try {
-                controlleur.start();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        AppModel appModel = new AppModel();
+        AppController appController = new AppController(appModel);
+        AppView appView = new AppView(appController);
 
-        });
-        gameThread.setDaemon(true); // Se termine avec l'application
-        gameThread.start();
+        // 4. Afficher la scène initiale (sélection de jeu)
+        StageRepository.getInstance().replaceScene(appView);
     }
 }

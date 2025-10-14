@@ -8,15 +8,22 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import org.Games.Controller.Controller;
 import org.Games.JavaFX.commun.ThemeConfig;
+import org.Games.observer.Observer;
+import org.Games.observer.Subject;
 import org.Games.model.game.GameState;
 
-public class MainView extends VBox {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainView extends VBox implements Subject {
     private Label bienvenue;
     private Label titre;
     private Button button;
     private ImageView imageView;
+
+    private List<Observer> observers = new ArrayList<>();
+    private GameState gameState;
 
     public MainView() {
         super(10);
@@ -48,17 +55,30 @@ public class MainView extends VBox {
         // Initialiser imageView à null pour éviter NullPointerException
         imageView = new ImageView();
         imageView.setVisible(false);
-
-        /*
-        Image image = new Image("fr/pierrickviret/javaquest/javafx/assets/home.jpg");
-        imageView.setImage(image);
-        imageView.setFitWidth(400);
-        imageView.setPreserveRatio(true);
-         */
     }
 
     private void setupActions() {
         // Action sur le bouton - maintenant dans une méthode
-        button.setOnAction(e -> Controller.getInstance().setGameState(GameState.ASKFORCHOSEGAME));
+        button.setOnAction(e -> {
+            this.gameState = GameState.ASKFORCHOSEGAME;
+            notifyObservers();
+        });
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.updateState(gameState);
+        }
     }
 }
