@@ -1,5 +1,6 @@
 package org.Games.model.game;
 
+import org.Games.model.bd.GameSerialization;
 import org.Games.model.board.Board;
 import org.Games.model.brain.Brain;
 import org.Games.model.board.Coordinate;
@@ -27,6 +28,7 @@ public class Game implements Serializable, Subject {
     private Rules rules;
     private Brain brain;
     private RepresentationStrategy symboleStrategie;
+    private transient GameSerialization dbRepository;
 
     private Player[] players;
     private Integer activePlayer = 1;
@@ -35,9 +37,8 @@ public class Game implements Serializable, Subject {
     private GameType gameType;
 
     private GameState gameState =  GameState.MAIN;
-    private GameState oldGameState;
 
-    private ArrayList<Observer> observers = new ArrayList<Observer>();
+    private transient ArrayList<Observer> observers = new ArrayList<Observer>();
 
     public Game(GameType gameType) {
         this.gameType = gameType;
@@ -46,6 +47,7 @@ public class Game implements Serializable, Subject {
             case GOMOKU -> initGomoku();
             case POWER4 -> initPower4();
         }
+        this.dbRepository = new GameSerialization();
     }
 
     //Init
@@ -130,6 +132,7 @@ public class Game implements Serializable, Subject {
     }
 
     public void whoPlay() throws InterruptedException {
+        dbRepository.saveGame(this);
         if( isGameFinished() == null) {
             changeActivePlayer();
             if (!isPlayerHumainTurn()) {
@@ -180,16 +183,11 @@ public class Game implements Serializable, Subject {
     }
 
     public void setGameState(GameState gameState) {
-        this.oldGameState = this.gameState;
         this.gameState = gameState;
     }
 
     public GameState getGameState() {
         return gameState;
-    }
-
-    public GameState getOldGameState() {
-        return oldGameState;
     }
 
     public TypeOfPlacement getTypeOfPlacement() {
@@ -232,5 +230,18 @@ public class Game implements Serializable, Subject {
             observer.updateState(gameState);
         }
     }
+
+    /**
+     * Méthode appelée lors de la désérialisation
+     * Réinitialise les attributs transient
+     */
+    private void readObject(java.io.ObjectInputStream in)
+            throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        // Réinitialiser dbRepository après chargement
+        this.dbRepository = new GameSerialization();
+        this.observers = new ArrayList<>();
+    }
+
 
 }

@@ -8,10 +8,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.Games.JavaFX.Views.MenuHandler;
 
 public class StageRepository {
     private static StageRepository instance;
     private Stage stage;
+    private MenuHandler menuHandler;
 
     // Dimensions communes
     private static final double SCENE_WIDTH = 1200;
@@ -28,7 +30,8 @@ public class StageRepository {
         return instance==null?instance=new StageRepository():instance;
     }
 
-    public void replaceScene(javafx.scene.Parent scene) {
+    public void replaceScene(javafx.scene.Parent scene, MenuHandler menuHandler) {
+        this.menuHandler = menuHandler;
         stage.setScene(createScene(scene));
         stage.show();
     }
@@ -48,13 +51,25 @@ public class StageRepository {
         gameMenu.setStyle("-fx-font-size: 16px;");
 
         MenuItem newGame = new MenuItem("Nouvelle partie");
-        //newGame.setOnAction(e -> Platform.runLater(() -> StageRepository.getInstance().replaceScene(new MainMenuView())));
+        newGame.setOnAction(e -> {
+            if (menuHandler != null) {
+                menuHandler.onNewGame();
+            }
+        });
 
         MenuItem saveGame = new MenuItem("Sauvegarder");
-        //saveGame.setOnAction(e -> Game.getInstance().saveGame());
+        saveGame.setOnAction(e -> {
+            if (menuHandler != null) {
+                menuHandler.onSaveGame();
+            }
+        });
 
         MenuItem exitGame = new MenuItem("Quitter");
-        //exitGame.setOnAction(e -> Game.getInstance().setGameState(GameState.exitGame));
+        exitGame.setOnAction(e -> {
+            if (menuHandler != null) {
+                menuHandler.onExit();
+            }
+        });
 
         String itemStyle = "-fx-font-size: 14px; -fx-pref-height: 30px;";
         newGame.setStyle(itemStyle);

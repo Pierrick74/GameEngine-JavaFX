@@ -3,12 +3,15 @@ package org.Games.Controller;
 import org.Games.JavaFX.StageRepository;
 import org.Games.JavaFX.Views.AppView;
 import org.Games.JavaFX.Views.GameView;
+import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.AppModel;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
 
-public class AppController implements Observer {
+import static java.lang.System.exit;
+
+public class AppController implements Observer, MenuHandler {
     private AppModel model;
 
     public AppController(AppModel model) {
@@ -33,7 +36,7 @@ public class AppController implements Observer {
 
         if (model.shouldQuit()) {
             //TODO penser a mettre la sauvegarde
-            System.exit(0);
+            exit(0);
         }
     }
 
@@ -44,7 +47,7 @@ public class AppController implements Observer {
             GameController gameController = new GameController(gameType, this);
             GameView gameView = new GameView(gameController);
             gameController.registerView(gameView);
-            StageRepository.getInstance().replaceScene(gameView);
+            StageRepository.getInstance().replaceScene(gameView, gameController);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -52,6 +55,20 @@ public class AppController implements Observer {
 
     public void backToGameSelection() {
         AppView appView = new AppView(this);
-        StageRepository.getInstance().replaceScene(appView);
+        StageRepository.getInstance().replaceScene(appView, this);
+    }
+
+    @Override
+    public void onNewGame() {
+    }
+
+    @Override
+    public void onSaveGame() {
+
+    }
+
+    @Override
+    public void onExit() {
+        exit(1);
     }
 }

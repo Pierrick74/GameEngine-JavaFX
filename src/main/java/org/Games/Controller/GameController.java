@@ -1,25 +1,24 @@
 package org.Games.Controller;
 
-import javafx.application.Platform;
-import org.Games.JavaFX.StageRepository;
+
 import org.Games.JavaFX.Views.GameView;
-import org.Games.JavaFX.Views.MainView;
-import org.Games.observer.Observer;
+import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.bd.GameSerialization;
+import org.Games.observer.Observer;
 import org.Games.model.bd.Persistence;
 import org.Games.model.game.Game;
 import org.Games.model.board.Coordinate;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
-import org.Games.model.rules.PlacementStrategy.TypeOfPlacement;
 import org.Games.Vue.Display;
 import org.Games.Vue.Terminal;
 
+import static java.lang.System.exit;
 
-public class GameController implements Observer {
+
+public class GameController implements Observer, MenuHandler {
     Game model;
     Coordinate coordinate;
-    Persistence dbRepository;
     private AppController appController;
 
     public GameController(GameType gameType, AppController appController) throws InterruptedException {
@@ -36,13 +35,12 @@ public class GameController implements Observer {
         this.model.setGameState(gameState);
     }
 
-    // S'enregistrer la vue comme observer
-    public void addViewObserver(Observer observer) {
-        model.addObserver(observer);
+    public void registerView(GameView view) {
+        this.model.addObserver(view);
     }
 
     public String getGameName() {
-        return model.getGameName();  // ← Ligne 39 : délégation pure !
+        return model.getGameName();
     }
 
     public int getRowCount() {
@@ -118,9 +116,27 @@ public class GameController implements Observer {
         return  result == 0;
     }
 
-    public void registerView(GameView view) {
-        this.model.addObserver(view);
+    @Override
+    public void onNewGame() {
+        restart();
     }
+
+    @Override
+    public void onSaveGame() {
+        saveGame();
+    }
+
+    @Override
+    public void onExit() {
+        saveGame();
+        exit(1);
+    }
+
+    private void saveGame() {
+        Persistence DBRepository = new GameSerialization();
+        DBRepository.saveGame(model);
+    }
+
 
 /*
     public void start() throws InterruptedException {

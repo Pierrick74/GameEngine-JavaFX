@@ -14,8 +14,10 @@ import org.Games.JavaFX.commun.ThemeConfig;
 import org.Games.model.game.GameState;
 import org.Games.observer.Observer;
 
+import java.io.Serializable;
 
-public class GameView extends VBox implements Observer {
+
+public class GameView extends VBox implements Observer, Serializable {
         private Label titre;
         private GameController controller;
         private GridPane board;
