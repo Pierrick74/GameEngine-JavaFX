@@ -225,6 +225,11 @@ public class Game implements Serializable, Subject {
     }
 
     @Override
+    public void removeAllObserver() {
+        observers = new ArrayList<Observer>();
+    }
+
+    @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
             observer.updateState(gameState);
@@ -241,6 +246,10 @@ public class Game implements Serializable, Subject {
         // Réinitialiser dbRepository après chargement
         this.dbRepository = new GameSerialization();
         this.observers = new ArrayList<>();
+    }
+
+    public Coordinate getLastCoordinate() {
+        return lastCoordinate;
     }
 
 

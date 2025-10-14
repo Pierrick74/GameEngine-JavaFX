@@ -25,9 +25,10 @@ public class Main extends Application {
 
         AppModel appModel = new AppModel();
         AppController appController = new AppController(appModel);
+
         AppView appView = new AppView(appController);
 
-        // 4. Afficher la scène initiale (sélection de jeu)
+        appController.registerView(appView);
         StageRepository.getInstance().replaceScene(appView, appController);
     }
 }

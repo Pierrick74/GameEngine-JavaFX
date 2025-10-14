@@ -76,6 +76,11 @@ public class MainView extends VBox implements Subject {
     }
 
     @Override
+    public void removeAllObserver() {
+
+    }
+
+    @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
             observer.updateState(gameState);

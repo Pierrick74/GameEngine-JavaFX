@@ -14,9 +14,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.Games.Controller.AppController;
 import org.Games.JavaFX.commun.ThemeConfig;
+import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
+import org.Games.observer.Observer;
 
-public class AppView extends VBox {
+import javax.security.auth.callback.Callback;
+
+public class AppView extends VBox implements Observer {
     private Label titre;
     private VBox vBoxGomoku;
     private VBox vBoxTicTacToe;
@@ -88,5 +92,41 @@ public class AppView extends VBox {
         titre.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 50.0));
         titre.setAlignment(Pos.CENTER);
+    }
+
+    @Override
+    public void updateState(GameState gameState) {
+        if(gameState == GameState.CHECKSAVE) {
+            Label question = new Label("Voulez vous charger la sauvegarde ?");
+            question.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+            question.setFont(Font.font("Arial", FontWeight.BOLD, 20.0));
+            question.setAlignment(Pos.CENTER);
+
+            HBox hBox = new HBox();
+            hBox.setAlignment(Pos.CENTER);
+            hBox.setSpacing(10);
+            hBox.getChildren().addAll(createButton("Oui"),createButton("Non"));
+
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.CENTER);
+            vBox.setSpacing(10);
+            vBox.getChildren().addAll(question, hBox);
+
+            this.getChildren().addAll(vBox);
+        }
+    }
+
+    private Button createButton(String labelText) {
+        Button button = new Button(labelText);
+        button.setDefaultButton(true);
+        button.setFont(Font.font("Almendra", FontWeight.LIGHT, 15.0));
+        ThemeConfig.applyButtonStyle(button);
+
+        if(labelText.equals("Oui")) {
+            button.setOnAction(e-> {controller.startGameWithSaveData(true);});
+        } else {
+            button.setOnAction(e-> {controller.startGameWithSaveData(false);});
+        }
+        return button;
     }
 }

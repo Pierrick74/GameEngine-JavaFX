@@ -1,6 +1,5 @@
 package org.Games.Controller;
 
-
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.bd.GameSerialization;
@@ -24,7 +23,17 @@ public class GameController implements Observer, MenuHandler {
     public GameController(GameType gameType, AppController appController) throws InterruptedException {
         this.model = new Game(gameType);
         this.coordinate = null;
-        //TODO a changer
+        initController(appController);
+    }
+
+    public GameController(Game Game, AppController appController) throws InterruptedException {
+        this.model = Game;
+        this.coordinate = model.getLastCoordinate();
+        this.appController = appController;
+    }
+
+    private void initController(AppController appController) throws InterruptedException {
+        //TODO A CHANGER
         model.createPlayersWithNumberOfHumain(2);
         model.whoPlay();
         this.appController = appController;
