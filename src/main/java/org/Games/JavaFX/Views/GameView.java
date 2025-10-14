@@ -85,7 +85,7 @@ public class GameView extends VBox implements Observer, Serializable {
         }
 
         Button replayButton = new Button("Rejouer");
-        replayButton.setOnAction(e -> controller.restart());
+        replayButton.setOnAction(e -> controller.restartNewGame());
         this.getChildren().add(replayButton);
 
     }

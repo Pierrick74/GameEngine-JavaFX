@@ -68,6 +68,10 @@ public class GameController implements Observer, MenuHandler {
         return model.getWinner();
     }
 
+    public void restartNewGame(){
+        appController.deleteGame(model.getGameType());
+        restart();
+    }
     public void restart() {
         appController.backToGameSelection();
     }

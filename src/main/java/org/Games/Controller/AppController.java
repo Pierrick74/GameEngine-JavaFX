@@ -84,4 +84,8 @@ public class AppController implements MenuHandler {
     public void registerView(AppView view) {
         this.model.addObserver(view);
     }
+
+    public void deleteGame(GameType gameType) {
+        dbRepository.deleteGame(gameType);
+    }
 }

@@ -9,4 +9,5 @@ public interface Persistence {
     void saveGame(Game game);
     Game getGame(GameType gameType);
     boolean haveAGameSave(GameType gameType);
+    public void deleteGame(GameType gameType);
 }

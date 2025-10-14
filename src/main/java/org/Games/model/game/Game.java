@@ -217,6 +217,13 @@ public class Game implements Serializable, Subject {
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
+
+        // Si le jeu est déjà terminé, notifier immédiatement
+        if (isGameFinished() != null) {
+            setGameState(GameState.FINISHED);
+            notifyObservers();
+        }
+
     }
 
     @Override

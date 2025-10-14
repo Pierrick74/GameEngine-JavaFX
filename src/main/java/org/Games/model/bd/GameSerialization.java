@@ -55,4 +55,9 @@ public class GameSerialization implements Persistence {
         }
         return name;
     }
+
+    public void deleteGame(GameType gameType) {
+        File file = new File(getNameOfFile(gameType));
+        file.delete();
+    }
 }
