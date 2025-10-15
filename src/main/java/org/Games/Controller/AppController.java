@@ -24,7 +24,7 @@ public class AppController implements MenuHandler {
     /**
      * Change type of game selected in the model
      * if this type have save game, do nothing and wait for intruction
-     * if have, launch game with a new model
+     * if had, launch game with a new model
      * @param gameType type of game user want
      */
     public void onGameSelected(GameType gameType) {

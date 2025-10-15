@@ -87,7 +87,7 @@ public class GameView extends VBox implements Observer, Serializable {
 
     private void showWinner() {
         titre.setText(controller.getWinner());
-        titre.setTextFill(Color.GOLD);
+        titre.setTextFill(Color.GREEN);
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 60.0));
 
         // Désactiver toutes les cases
@@ -98,6 +98,7 @@ public class GameView extends VBox implements Observer, Serializable {
         }
 
         Button replayButton = new Button("Rejouer");
+        ThemeConfig.applyButtonStyle(replayButton);
         replayButton.setOnAction(e -> controller.restartNewGame());
         this.getChildren().add(replayButton);
 

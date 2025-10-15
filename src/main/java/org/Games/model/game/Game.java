@@ -20,9 +20,6 @@ import org.Games.observer.Subject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
-import static java.lang.Thread.sleep;
 
 public class Game implements Serializable, Subject {
     private Board board;
@@ -92,7 +89,6 @@ public class Game implements Serializable, Subject {
 
     /**
      * check if it s a humain turn , IA turn or if it s finish
-     * @throws InterruptedException sleep 1000 to wait between 2 IA turn
      */
     public void whoPlay() {
         dbRepository.saveGame(this);
@@ -114,7 +110,7 @@ public class Game implements Serializable, Subject {
 
     /**
      * create 2 player between IA and humain depends on selection
-     * @param numberOfHumain
+     * @param numberOfHumain number of players
      */
     public void createPlayersWithNumberOfHumain(int numberOfHumain) {
         switch (numberOfHumain) {
