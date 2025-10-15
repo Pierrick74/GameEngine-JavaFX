@@ -6,7 +6,6 @@ import org.Games.model.brain.Brain;
 import org.Games.model.board.Coordinate;
 import org.Games.model.rules.PlacementStrategy.FreePlacement;
 import org.Games.model.rules.PlacementStrategy.GravityPlacement;
-import org.Games.model.rules.PlacementStrategy.TypeOfPlacement;
 import org.Games.model.commun.RepresentationStrategy.GomokuRepresentation;
 import org.Games.model.commun.RepresentationStrategy.Power4Representation;
 import org.Games.model.commun.RepresentationStrategy.RepresentationStrategy;
@@ -50,7 +49,9 @@ public class Game implements Serializable, Subject {
         this.dbRepository = new GameSerialization();
     }
 
-    //Init
+    /**
+     * Initialisation of differente type of game
+     */
     public void initTicTacToe() {
         this.board = new Board(3, 3);
         this.rules = new Rules(3, new FreePlacement());
@@ -75,6 +76,103 @@ public class Game implements Serializable, Subject {
         this.maxDepth = 5;
     }
 
+    /**
+     * Check if coordinate is valide and change the cell with the rules
+     * @param coordinate coordinate selected
+     * @throws InterruptedException
+     */
+    public void humainPlayerTurn(Coordinate coordinate) throws InterruptedException {
+        if(rules.isValideCoordinate(board, coordinate)){
+            lastCoordinate = rules.setCell(board, coordinate, players[activePlayer]);
+            notifyObservers();
+            whoPlay();
+        }
+    }
+
+    /**
+     * check if it s a humain turn , IA turn or if it s finish
+     * @throws InterruptedException sleep 1000 to wait between 2 IA turn
+     */
+    public void whoPlay() throws InterruptedException {
+        dbRepository.saveGame(this);
+        if( isGameFinished() == null) {
+            changeActivePlayer();
+            if (!isPlayerHumainTurn()) {
+                sleep(1000);
+                artificialPlayerTurn();
+            }
+        } else {
+            gameState = GameState.FINISHED;
+            notifyObservers();
+        }
+    }
+
+    /**
+     * create 2 player between IA and humain depends on selection
+     * @param numberOfHumain
+     */
+    public void createPlayersWithNumberOfHumain(int numberOfHumain) {
+        switch (numberOfHumain) {
+            case 2:
+                this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new Player(symboleStrategie.getPlayerSymbol(1))};
+                break;
+            case 1:
+                this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
+                break;
+            case 0:
+                this.players = new Player[]{new ArtificialPlayer(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
+                break;
+        }
+    }
+
+    //private
+    private void changeActivePlayer() {
+        activePlayer = activePlayer == 0 ? 1 : 0;
+    }
+
+    private void artificialPlayerTurn() throws InterruptedException {
+        int inactivePlayer = activePlayer == 1 ? 0 : 1;
+
+        lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], maxDepth);
+        TimeUnit.SECONDS.sleep(1);
+        lastCoordinate = rules.setCell(board, lastCoordinate, players[activePlayer]);
+        notifyObservers();
+        whoPlay();
+    }
+
+    /**
+     * check if active player is a humain
+     * @return boolean
+     */
+    private boolean isPlayerHumainTurn() {
+        return !(players[activePlayer] instanceof ArtificialPlayer);
+    }
+
+    private String isGameFinished() {
+        if(lastCoordinate == null) {
+            return null;
+        }
+
+        if(rules.isFinished(board, lastCoordinate)){
+            return "Joueur " + activePlayer + " gagne";
+        }
+
+        if(board.isFull()){
+            return "Personne ne gagne";
+        }
+        return null;
+    }
+
+    // Getter
+    public int getButtonSize() {
+        switch(gameType){
+            case TICTACTOE -> {return 60;}
+            case GOMOKU -> {return 40;}
+            case POWER4 -> {return 50;}
+        }
+        return 40;
+    }
+
     public String getGameName() {
         return switch(gameType) {
             case TICTACTOE -> "Tic-Tac-Toe";
@@ -95,125 +193,25 @@ public class Game implements Serializable, Subject {
         return board.getCell(new Coordinate(row, col)).getType().getIcone();
     }
 
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    public Coordinate getLastCoordinate() {
+        return lastCoordinate;
+    }
+
     //TODO refacto a faire
     public String getWinner() {
         return isGameFinished();
     }
 
-    private void changeActivePlayer() {
-        activePlayer = activePlayer == 0 ? 1 : 0;
-    }
-
-    public boolean isPlayerHumainTurn() {
-        return !(players[activePlayer] instanceof ArtificialPlayer);
-    }
-
-    public String isGameFinished() {
-        if(lastCoordinate == null) {
-            return null;
-        }
-
-        if(rules.isFinished(board, lastCoordinate)){
-            return "Joueur " + activePlayer + " gagne";
-        }
-
-        if(board.isFull()){
-            return "Personne ne gagne";
-        }
-        return null;
-    }
-
-    public void humainPlayerTurn(Coordinate coordinate) throws InterruptedException {
-        if(rules.isValideCoordinate(board, coordinate)){
-            lastCoordinate = rules.setCell(board, coordinate, players[activePlayer]);
-            notifyObservers();
-            whoPlay();
-        }
-    }
-
-    public void whoPlay() throws InterruptedException {
-        dbRepository.saveGame(this);
-        if( isGameFinished() == null) {
-            changeActivePlayer();
-            if (!isPlayerHumainTurn()) {
-                sleep(1000);
-                artificialPlayerTurn();
-            }
-        } else {
-            gameState = GameState.FINISHED;
-            notifyObservers();
-        }
-    }
-
-    private void artificialPlayerTurn() throws InterruptedException {
-        int inactivePlayer = activePlayer == 1 ? 0 : 1;
-
-        lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], maxDepth);
-        TimeUnit.SECONDS.sleep(1);
-        lastCoordinate = rules.setCell(board, lastCoordinate, players[activePlayer]);
-        notifyObservers();
-        whoPlay();
-    }
-
-    public void createPlayersWithNumberOfHumain(int numberOfHumain) {
-        switch (numberOfHumain) {
-            case 2:
-                this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new Player(symboleStrategie.getPlayerSymbol(1))};
-                break;
-            case 1:
-                this.players = new Player[]{new Player(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
-                break;
-            case 0:
-                this.players = new Player[]{new ArtificialPlayer(symboleStrategie.getPlayerSymbol(0)), new ArtificialPlayer(symboleStrategie.getPlayerSymbol(1))};
-                break;
-        }
-    }
-
-    public void displayBoard() {
-        board.display();
-    }
-
-    public int getButtonSize() {
-        switch(gameType){
-            case TICTACTOE -> {return 60;}
-            case GOMOKU -> {return 40;}
-            case POWER4 -> {return 50;}
-        }
-        return 40;
-    }
-
+    //Setter
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public TypeOfPlacement getTypeOfPlacement() {
-        return rules.getTypeOfPlacement();
-    }
-
-    public Integer getxSize() {
-        return board.getXSize();
-    }
-
-    public Integer getySize() {
-        return board.getYSize();
-    }
-
-    public boolean isValideCoordinate(Coordinate coordinate) {
-        return rules.isValideCoordinate(this.board, coordinate);
-    }
-
-    public int getActivePlayer() {
-        return activePlayer;
-    }
-
-    public GameType getGameType() {
-        return gameType;
-    }
-
+    // observer
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
@@ -254,10 +252,4 @@ public class Game implements Serializable, Subject {
         this.dbRepository = new GameSerialization();
         this.observers = new ArrayList<>();
     }
-
-    public Coordinate getLastCoordinate() {
-        return lastCoordinate;
-    }
-
-
 }

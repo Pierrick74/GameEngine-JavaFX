@@ -29,28 +29,37 @@ public class AppController implements MenuHandler {
     public void onGameSelected(GameType gameType) {
         model.setSelectedGameType(gameType);
         if(!model.isGameSaved(gameType)){
-            launchGameWithOldGame(null);
+            launchGameWithAModel(null);
         }
     }
 
     /**
-     * launch game with or without save model
-     * @param isloard variable who indicate if user want to load save game
+     * Select a new game with a type
+     * @param gameType
      */
-    public void startGameWithSaveData(Boolean isloard) {
-        if(!isloard){
-            launchGameWithOldGame(null);
-        } else {
-            Game saveGame = dbRepository.getGame(model.getSelectedGameType());
-            launchGameWithOldGame(saveGame);
-        }
+    public void startNewGame(GameType gameType) {
+        model.setSelectedGameType(gameType);
+        launchGameWithAModel(null);
+    }
+
+    /**
+     * select to load save game of type
+     * @param gameType
+     */
+    public void startOldGame(GameType gameType) {
+        Game saveGame = dbRepository.getGame(gameType);
+        launchGameWithAModel(saveGame);
+    }
+
+    public boolean isSaveGame(GameType gameType) {
+        return model.isGameSaved(gameType);
     }
 
     /**
      * create game with MVC patern and subscribe view to the model
      * @param gameModel save game model  if existe
      */
-    private void launchGameWithOldGame(Game gameModel) {
+    private void launchGameWithAModel(Game gameModel) {
         System.out.println("Lancement du jeu: ");
 
         try {

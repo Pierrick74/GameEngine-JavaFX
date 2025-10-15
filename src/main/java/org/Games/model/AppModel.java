@@ -31,12 +31,7 @@ public class AppModel implements Subject {
      * @return Boolean
      */
     public boolean isGameSaved(GameType gameType) {
-        isGameSaved = dbRepository.haveAGameSave(gameType);
-        if (isGameSaved){
-            gameState = GameState.CHECKSAVE;
-            notifyObservers();
-        }
-        return isGameSaved;
+        return dbRepository.haveAGameSave(gameType);
     }
 
     // Getters

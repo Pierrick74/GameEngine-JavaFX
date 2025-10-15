@@ -12,11 +12,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.FileChooser;
 import org.Games.Controller.AppController;
 import org.Games.JavaFX.commun.ThemeConfig;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
+
+import static org.Games.model.game.GameType.*;
 
 public class AppView extends VBox implements Observer {
     private Label titre;
@@ -25,18 +28,27 @@ public class AppView extends VBox implements Observer {
     private VBox vBoxPower4;
     private AppController controller;
 
+    private boolean isPower4SavedFile = false;
+    private boolean isGomokuSavedFile = false;
+    private boolean isTicTacToeSavedFile = false;
+
+    private VBox saveBoxDialog;
+    private Button yesSaveFileButton;
+    private Button noSaveFileButton;
+
     public AppView(AppController controller) {
         super(10);
         this.controller = controller;
 
         initializeComponents();
+        initializeSaveComposant();
 
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
         hBox.getChildren().addAll(vBoxTicTacToe,vBoxGomoku,vBoxPower4);
 
-        this.getChildren().addAll(titre, hBox);
+        this.getChildren().addAll(titre, hBox, saveBoxDialog);
 
         ThemeConfig.applyDarkBackground(this);
     }
@@ -74,7 +86,7 @@ public class AppView extends VBox implements Observer {
         shadow.setColor(Color.color(0, 0, 0, 0.5));
         button.setEffect(shadow);
 
-        button.setOnAction(e -> controller.onGameSelected(gameType));
+        button.setOnAction(e -> gameSelected(gameType));
         button.setOnMousePressed(e -> button.setEffect(null));
         button.setOnMouseReleased(e -> button.setEffect(shadow));
 
@@ -83,35 +95,79 @@ public class AppView extends VBox implements Observer {
 
     private void initializeComponents()  {
         vBoxTicTacToe = createVBox("/org/Games/JavaFX/assets/tictactoe.png", "TicTacToe", GameType.TICTACTOE);
-        vBoxGomoku = createVBox("/org/Games/JavaFX/assets/gomoku.png", "Gomoku", GameType.GOMOKU);
+        vBoxGomoku = createVBox("/org/Games/JavaFX/assets/gomoku.png", "Gomoku", GOMOKU);
         vBoxPower4 = createVBox("/org/Games/JavaFX/assets/power4.png", "Power4", GameType.POWER4);
 
         titre = new Label("Choisissez un jeu");
         titre.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 50.0));
         titre.setAlignment(Pos.CENTER);
+
+        saveBoxDialog = createSavedFileDialog();
     }
 
     @Override
     public void updateState(GameState gameState) {
-        if(gameState == GameState.CHECKSAVE) {
-            Label question = new Label("Voulez vous charger la sauvegarde ?");
-            question.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
-            question.setFont(Font.font("Arial", FontWeight.BOLD, 20.0));
-            question.setAlignment(Pos.CENTER);
+    }
 
-            HBox hBox = new HBox();
-            hBox.setAlignment(Pos.CENTER);
-            hBox.setSpacing(10);
-            hBox.getChildren().addAll(createButton("Oui"),createButton("Non"));
+    private void gameSelected(GameType gameType) {
+        switch(gameType) {
+            case GOMOKU:
+                if(isGomokuSavedFile) {
+                    showDialogue(GOMOKU);
+                }
+                else {
+                    controller.startNewGame(gameType);
+                }
+                break;
 
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.CENTER);
-            vBox.setSpacing(10);
-            vBox.getChildren().addAll(question, hBox);
+                case TICTACTOE:
+                    if(isTicTacToeSavedFile) {
+                        showDialogue(TICTACTOE);
+                    }
+                    else {
+                        controller.startNewGame(gameType);
+                    }
+                    break;
 
-            this.getChildren().addAll(vBox);
+                    case POWER4:
+                        if(isPower4SavedFile) {
+                            showDialogue(POWER4);
+                        }
+                        else {
+                            controller.startNewGame(gameType);
+                        }
+                        break;
         }
+    }
+
+    private void showDialogue(GameType gametype){
+        updateSaveButtonAction(gametype);
+        saveBoxDialog.setVisible(true);
+    }
+
+    private VBox createSavedFileDialog() {
+        Label question = new Label("Voulez vous charger la sauvegarde ?");
+        question.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        question.setFont(Font.font("Arial", FontWeight.BOLD, 20.0));
+        question.setAlignment(Pos.CENTER);
+
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setSpacing(10);
+        yesSaveFileButton = createButton("Oui");
+        noSaveFileButton = createButton("Non");
+
+        hBox.getChildren().addAll(yesSaveFileButton, noSaveFileButton);
+
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
+        vBox.getChildren().addAll(question, hBox);
+
+        vBox.setVisible(false);
+
+        return vBox;
     }
 
     private Button createButton(String labelText) {
@@ -119,12 +175,17 @@ public class AppView extends VBox implements Observer {
         button.setDefaultButton(true);
         button.setFont(Font.font("Almendra", FontWeight.LIGHT, 15.0));
         ThemeConfig.applyButtonStyle(button);
-
-        if(labelText.equals("Oui")) {
-            button.setOnAction(e-> {controller.startGameWithSaveData(true);});
-        } else {
-            button.setOnAction(e-> {controller.startGameWithSaveData(false);});
-        }
         return button;
+    }
+
+    private void updateSaveButtonAction(GameType gameType) {
+        yesSaveFileButton.setOnAction(e-> {controller.startOldGame(gameType);});
+        noSaveFileButton.setOnAction(e-> {controller.startNewGame(gameType);});
+    }
+
+    private void initializeSaveComposant() {
+        isPower4SavedFile = controller.isSaveGame(GameType.POWER4);
+        isGomokuSavedFile = controller.isSaveGame(GOMOKU);
+        isTicTacToeSavedFile = controller.isSaveGame(GameType.TICTACTOE);
     }
 }

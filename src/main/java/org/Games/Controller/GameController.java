@@ -24,6 +24,7 @@ public class GameController implements Observer, MenuHandler {
         this.model = new Game(gameType);
         this.coordinate = null;
         initController(appController);
+        this.appController = appController;
     }
 
     public GameController(Game Game, AppController appController) throws InterruptedException {
