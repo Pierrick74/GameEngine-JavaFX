@@ -18,8 +18,6 @@ import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
 
-import javax.security.auth.callback.Callback;
-
 public class AppView extends VBox implements Observer {
     private Label titre;
     private VBox vBoxGomoku;
