@@ -79,7 +79,6 @@ public class Game implements Serializable, Subject {
     /**
      * Check if coordinate is valide and change the cell with the rules
      * @param coordinate coordinate selected
-     * @throws InterruptedException
      */
     public void humainPlayerTurn(Coordinate coordinate) throws InterruptedException {
         if(rules.isValideCoordinate(board, coordinate)){
@@ -98,7 +97,6 @@ public class Game implements Serializable, Subject {
         if( isGameFinished() == null) {
             changeActivePlayer();
             if (!isPlayerHumainTurn()) {
-                sleep(1000);
                 artificialPlayerTurn();
             }
         } else {

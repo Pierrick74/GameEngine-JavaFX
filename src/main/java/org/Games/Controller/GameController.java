@@ -20,10 +20,10 @@ public class GameController implements Observer, MenuHandler {
     Coordinate coordinate;
     private AppController appController;
 
-    public GameController(GameType gameType, AppController appController) throws InterruptedException {
+    public GameController(GameType gameType, AppController appController, Integer numberOfPlayer) throws InterruptedException {
         this.model = new Game(gameType);
         this.coordinate = null;
-        initController(appController);
+        initController(appController, numberOfPlayer);
         this.appController = appController;
     }
 
@@ -33,9 +33,9 @@ public class GameController implements Observer, MenuHandler {
         this.appController = appController;
     }
 
-    private void initController(AppController appController) throws InterruptedException {
+    private void initController(AppController appController, Integer numberOfPlayer) throws InterruptedException {
         //TODO A CHANGER
-        model.createPlayersWithNumberOfHumain(2);
+        model.createPlayersWithNumberOfHumain(numberOfPlayer);
         model.whoPlay();
         this.appController = appController;
     }

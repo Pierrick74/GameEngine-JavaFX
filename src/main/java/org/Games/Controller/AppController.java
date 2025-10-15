@@ -2,6 +2,7 @@ package org.Games.Controller;
 
 import org.Games.JavaFX.StageRepository;
 import org.Games.JavaFX.Views.AppView;
+import org.Games.JavaFX.Views.ChoosePlayerView;
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.AppModel;
@@ -38,8 +39,12 @@ public class AppController implements MenuHandler {
      * @param gameType
      */
     public void startNewGame(GameType gameType) {
-        model.setSelectedGameType(gameType);
-        launchGameWithAModel(null);
+        ChoosePlayerController controller = new ChoosePlayerController(this, gameType);
+        ChoosePlayerView view = new ChoosePlayerView(controller);
+        StageRepository.getInstance().replaceScene(view, controller);
+
+        //model.setSelectedGameType(gameType);
+        //launchGameWithAModel(null);
     }
 
     /**
@@ -67,7 +72,7 @@ public class AppController implements MenuHandler {
             if(gameModel != null){
                 gameController = new GameController(gameModel, this);
             } else {
-                gameController = new GameController(model.getSelectedGameType(), this);
+                gameController = new GameController(model.getSelectedGameType(), this, 2);
             }
             GameView gameView = new GameView(gameController);
             gameController.registerView(gameView);
