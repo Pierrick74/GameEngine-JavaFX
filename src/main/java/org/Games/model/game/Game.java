@@ -1,5 +1,7 @@
 package org.Games.model.game;
 
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.board.Board;
 import org.Games.model.brain.Brain;
@@ -92,12 +94,17 @@ public class Game implements Serializable, Subject {
      * check if it s a humain turn , IA turn or if it s finish
      * @throws InterruptedException sleep 1000 to wait between 2 IA turn
      */
-    public void whoPlay() throws InterruptedException {
+    public void whoPlay() {
         dbRepository.saveGame(this);
         if( isGameFinished() == null) {
             changeActivePlayer();
             if (!isPlayerHumainTurn()) {
-                artificialPlayerTurn();
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(event -> {
+                    artificialPlayerTurn();
+                });
+                pause.play();
+
             }
         } else {
             gameState = GameState.FINISHED;
@@ -128,11 +135,10 @@ public class Game implements Serializable, Subject {
         activePlayer = activePlayer == 0 ? 1 : 0;
     }
 
-    private void artificialPlayerTurn() throws InterruptedException {
+    private void artificialPlayerTurn() {
         int inactivePlayer = activePlayer == 1 ? 0 : 1;
 
         lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], maxDepth);
-        TimeUnit.SECONDS.sleep(1);
         lastCoordinate = rules.setCell(board, lastCoordinate, players[activePlayer]);
         notifyObservers();
         whoPlay();
