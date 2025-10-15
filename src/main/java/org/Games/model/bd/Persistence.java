@@ -1,13 +1,11 @@
 package org.Games.model.bd;
 
-import org.Games.model.game.Game;
+import org.Games.model.game.GameModel;
 import org.Games.model.game.GameType;
 
-import java.sql.Connection;
-
 public interface Persistence {
-    void saveGame(Game game);
-    Game getGame(GameType gameType);
+    void saveGame(GameModel game);
+    GameModel getGame(GameType gameType);
     boolean haveAGameSave(GameType gameType);
     public void deleteGame(GameType gameType);
 }

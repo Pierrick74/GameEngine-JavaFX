@@ -21,7 +21,7 @@ import org.Games.observer.Subject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game implements Serializable, Subject {
+public class GameModel implements Serializable, Subject {
     private Board board;
     private Rules rules;
     private Brain brain;
@@ -38,7 +38,7 @@ public class Game implements Serializable, Subject {
 
     private transient ArrayList<Observer> observers = new ArrayList<Observer>();
 
-    public Game(GameType gameType) {
+    public GameModel(GameType gameType) {
         this.gameType = gameType;
         switch(gameType) {
             case TICTACTOE -> initTicTacToe();

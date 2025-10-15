@@ -5,7 +5,7 @@ import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.bd.GameSerialization;
 import org.Games.observer.Observer;
 import org.Games.model.bd.Persistence;
-import org.Games.model.game.Game;
+import org.Games.model.game.GameModel;
 import org.Games.model.board.Coordinate;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
@@ -16,18 +16,18 @@ import static java.lang.System.exit;
 
 
 public class GameController implements Observer, MenuHandler {
-    Game model;
+    GameModel model;
     Coordinate coordinate;
     private AppController appController;
 
     public GameController(GameType gameType, AppController appController, Integer numberOfPlayer) throws InterruptedException {
-        this.model = new Game(gameType);
+        this.model = new GameModel(gameType);
         this.coordinate = null;
         initController(appController, numberOfPlayer);
         this.appController = appController;
     }
 
-    public GameController(Game Game, AppController appController) throws InterruptedException {
+    public GameController(GameModel Game, AppController appController) throws InterruptedException {
         this.model = Game;
         this.coordinate = model.getLastCoordinate();
         this.appController = appController;

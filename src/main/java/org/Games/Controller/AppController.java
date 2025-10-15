@@ -8,7 +8,7 @@ import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.AppModel;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.bd.Persistence;
-import org.Games.model.game.Game;
+import org.Games.model.game.GameModel;
 import org.Games.model.game.GameType;
 
 
@@ -52,7 +52,7 @@ public class AppController implements MenuHandler {
      * @param gameType
      */
     public void startOldGame(GameType gameType) {
-        Game saveGame = dbRepository.getGame(gameType);
+        GameModel saveGame = dbRepository.getGame(gameType);
         launchGameWithAModel(saveGame);
     }
 
@@ -64,7 +64,7 @@ public class AppController implements MenuHandler {
      * create game with MVC patern and subscribe view to the model
      * @param gameModel save game model  if existe
      */
-    private void launchGameWithAModel(Game gameModel) {
+    private void launchGameWithAModel(GameModel gameModel) {
         System.out.println("Lancement du jeu: ");
 
         try {

@@ -1,6 +1,6 @@
 package org.Games.model.bd;
 
-import org.Games.model.game.Game;
+import org.Games.model.game.GameModel;
 import org.Games.model.game.GameType;
 
 import java.io.*;
@@ -8,7 +8,7 @@ import java.io.*;
 public class GameSerialization implements Persistence {
 
     @Override
-    public void saveGame(Game game) {
+    public void saveGame(GameModel game) {
 
         try {
             FileOutputStream fileOut = new FileOutputStream(getNameOfFile(game.getGameType()));
@@ -23,12 +23,12 @@ public class GameSerialization implements Persistence {
     }
 
     @Override
-    public Game getGame(GameType gameType) {
+    public GameModel getGame(GameType gameType) {
         try {
             FileInputStream fileIn = new FileInputStream(getNameOfFile(gameType));
             System.out.println("Loading data from /tmp/" + getNameOfFile(gameType) + "\n");
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            Game game = (Game) in.readObject();
+            GameModel game = (GameModel) in.readObject();
             System.out.println(game != null);
             in.close();
             fileIn.close();
@@ -42,7 +42,7 @@ public class GameSerialization implements Persistence {
     }
 
     public boolean haveAGameSave(GameType gameType) {
-        Game game = getGame(gameType);
+        GameModel game = getGame(gameType);
         return game != null;
     }
 
