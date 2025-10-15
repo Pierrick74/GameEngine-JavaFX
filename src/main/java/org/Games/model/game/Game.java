@@ -92,7 +92,7 @@ public class Game implements Serializable, Subject {
     }
 
     public String getRepresentation(int row, int col) {
-        return board.getCell(new Coordinate(row, col)).getType().getValue();
+        return board.getCell(new Coordinate(row, col)).getType().getIcone();
     }
 
     //TODO refacto a faire

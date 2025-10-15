@@ -3,6 +3,8 @@ package org.Games.JavaFX.Views;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -43,6 +45,10 @@ public class GameView extends VBox implements Observer, Serializable {
         titre.setAlignment(Pos.CENTER);
 
         board = new GridPane();
+        board.setGridLinesVisible(true);
+        board.setHgap(2);
+        board.setVgap(2);
+
         int rows = controller.getRowCount();    // 3 pour TicTacToe, 15 pour Gomoku, etc.
         int cols = controller.getColumnCount();
         for (int i = 0; i < rows; i++) {
@@ -54,9 +60,16 @@ public class GameView extends VBox implements Observer, Serializable {
     }
 
     private Button createCell(int i, int j) {
-        String representation = controller.getRepresentation(i,j);
-        Button button = new Button(representation);
+        String path = controller.getRepresentation(i,j);
+        Button button = new Button();
         int size = controller.getButtonSize();
+
+        Image image = new Image(path);
+        ImageView picture = new ImageView(image);
+        picture.setFitWidth(size);
+        picture.setPreserveRatio(true);
+        button.setGraphic(picture);
+
         button.setMinSize(size, size);
         button.setMaxSize(size, size);
         button.setFont(Font.font("Almendra", FontWeight.LIGHT, 15.0));
@@ -93,11 +106,28 @@ public class GameView extends VBox implements Observer, Serializable {
         private void updateBoard() {
         int rows = controller.getRowCount();
         int cols = controller.getColumnCount();
+        int size = controller.getButtonSize();
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                Button cell = (Button) board.getChildren().get(i * cols + j);
-                cell.setText(controller.getRepresentation(i, j));
+                Button cell = null;
+                for (var node : board.getChildren()) {
+                    if (node instanceof Button &&
+                        GridPane.getRowIndex(node) == i &&
+                        GridPane.getColumnIndex(node) == j) {
+                        cell = (Button) node;
+                        break;
+                    }
+                }
+
+                if (cell != null) {
+                    String path = controller.getRepresentation(i, j);
+                    Image image = new Image(path);
+                    ImageView picture = new ImageView(image);
+                    picture.setFitWidth(size);
+                    picture.setPreserveRatio(true);
+                    cell.setGraphic(picture);
+                }
             }
         }
     }
