@@ -3,9 +3,7 @@ package org.Games.model;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.bd.Persistence;
 import org.Games.model.game.GameModel;
-import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
-import org.Games.observer.Observer;
 import org.Games.observer.Observable;
 
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import java.util.ArrayList;
 
 public class AppModel extends Observable {
     private GameType selectedGameType;
-    private GameState gameState = null;
 
     private Persistence dbRepository;
 
