@@ -6,19 +6,15 @@ import org.Games.JavaFX.Views.ChoosePlayerView;
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.AppModel;
-import org.Games.model.bd.GameSerialization;
-import org.Games.model.bd.Persistence;
 import org.Games.model.game.GameModel;
 import org.Games.model.game.GameType;
 
 
 public class AppController implements MenuHandler {
     private AppModel model;
-    private Persistence dbRepository;
 
     public AppController(AppModel model) {
         this.model = model;
-        this.dbRepository = new GameSerialization();
     }
 
     /**
@@ -42,9 +38,6 @@ public class AppController implements MenuHandler {
         ChoosePlayerController controller = new ChoosePlayerController(this, gameType);
         ChoosePlayerView view = new ChoosePlayerView(controller);
         StageRepository.getInstance().replaceScene(view, controller);
-
-        //model.setSelectedGameType(gameType);
-        //launchGameWithAModel(null);
     }
 
     /**
@@ -52,7 +45,7 @@ public class AppController implements MenuHandler {
      * @param gameType
      */
     public void startOldGame(GameType gameType) {
-        GameModel saveGame = dbRepository.getGame(gameType);
+        GameModel saveGame = model.getSaveGame(gameType);
         launchGameWithAModel(saveGame);
     }
 
@@ -133,6 +126,6 @@ public class AppController implements MenuHandler {
      * @param gameType type of game user want to delete
      */
     public void deleteGame(GameType gameType) {
-        dbRepository.deleteGame(gameType);
+        model.deleteGame(gameType);
     }
 }

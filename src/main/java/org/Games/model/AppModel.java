@@ -1,7 +1,9 @@
 package org.Games.model;
 
+import org.Games.Controller.GameController;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.bd.Persistence;
+import org.Games.model.game.GameModel;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
@@ -12,7 +14,6 @@ import java.util.List;
 
 public class AppModel implements Subject {
     private GameType selectedGameType;
-    private boolean isGameSaved;
     private GameState gameState = null;
 
     private Persistence dbRepository;
@@ -37,6 +38,14 @@ public class AppModel implements Subject {
     // Getters
     public GameType getSelectedGameType() {
         return selectedGameType;
+    }
+
+    public GameModel getSaveGame(GameType gameType) {
+        return dbRepository.getGame(gameType);
+    }
+
+    public void deleteGame(GameType gameType) {
+        dbRepository.deleteGame(gameType);
     }
 
     // Setters
