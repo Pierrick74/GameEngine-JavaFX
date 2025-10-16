@@ -19,7 +19,7 @@ public class AppController implements MenuHandler {
 
     /**
      * Change type of game selected in the model
-     * if this type have save game, do nothing and wait for intruction
+     * if this type have save game, do nothing and wait for instruction
      * if had, launch game with a new model
      * @param gameType type of game user want
      */
@@ -32,7 +32,7 @@ public class AppController implements MenuHandler {
 
     /**
      * Select a new game with a type
-     * @param gameType
+     * @param gameType Type of game
      */
     public void startNewGame(GameType gameType) {
         ChoosePlayerController controller = new ChoosePlayerController(this, gameType);
@@ -54,7 +54,7 @@ public class AppController implements MenuHandler {
     }
 
     /**
-     * create game with MVC patern and subscribe view to the model
+     * create game with MVC pattern and subscribe view to the model
      * @param gameModel save game model  if existe
      */
     private void launchGameWithAModel(GameModel gameModel) {
@@ -91,14 +91,14 @@ public class AppController implements MenuHandler {
     }
 
     /**
-     * use for menuhandler, do nothing
+     * use for menu handler, do nothing
      */
     @Override
     public void onNewGame() {
     }
 
     /**
-     * use for menuhandler, do nothing
+     * use for menu handler, do nothing
      */
     @Override
     public void onSaveGame() {
@@ -106,7 +106,7 @@ public class AppController implements MenuHandler {
     }
 
     /**
-     * use for menuhandler, exit
+     * use for menu handler, exit
      */
     @Override
     public void onExit() {

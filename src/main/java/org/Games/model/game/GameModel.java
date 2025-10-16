@@ -126,6 +126,10 @@ public class GameModel implements Serializable, Subject {
         }
     }
 
+    public void saveGame(){
+        dbRepository.saveGame(this);
+    }
+
     //private
     private void changeActivePlayer() {
         activePlayer = activePlayer == 0 ? 1 : 0;

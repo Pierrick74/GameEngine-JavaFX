@@ -2,9 +2,7 @@ package org.Games.Controller;
 
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
-import org.Games.model.bd.GameSerialization;
 import org.Games.observer.Observer;
-import org.Games.model.bd.Persistence;
 import org.Games.model.game.GameModel;
 import org.Games.model.board.Coordinate;
 import org.Games.model.game.GameState;
@@ -147,8 +145,7 @@ public class GameController implements Observer, MenuHandler {
     }
 
     private void saveGame() {
-        Persistence DBRepository = new GameSerialization();
-        DBRepository.saveGame(model);
+        model.saveGame();
     }
 
 
