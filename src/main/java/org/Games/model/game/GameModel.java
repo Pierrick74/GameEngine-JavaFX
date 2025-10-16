@@ -98,7 +98,9 @@ public class GameModel extends Observable implements Serializable {
                     artificialPlayerTurn();
                 });
                 pause.play();
-
+            } else {
+                gameState = GameState.DISPLAYPLAYER;
+                notifyObservers();
             }
         } else {
             gameState = GameState.FINISHED;
@@ -140,7 +142,11 @@ public class GameModel extends Observable implements Serializable {
         lastCoordinate = rules.setCell(board, lastCoordinate, players[activePlayer]);
         gameState =  GameState.DISPLAYBOARD;
         notifyObservers();
-        whoPlay();
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event -> {
+            whoPlay();
+        });
+        pause.play();
     }
 
     /**

@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 public class GameView extends VBox implements Observer, Serializable {
         private Label titre;
+    private Label playerName;
         private GameController controller;
         private GridPane board;
 
@@ -33,7 +34,7 @@ public class GameView extends VBox implements Observer, Serializable {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.getChildren().addAll(board);
-        this.getChildren().addAll(titre, hBox);
+        this.getChildren().addAll(titre, playerName, hBox);
 
         ThemeConfig.applyDarkBackground(this);
     }
@@ -43,6 +44,11 @@ public class GameView extends VBox implements Observer, Serializable {
         titre.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 50.0));
         titre.setAlignment(Pos.CENTER);
+
+        playerName = new Label(controller.getPlayerName());
+        playerName.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        playerName.setFont(Font.font("Arial", FontWeight.BOLD, 25.0));
+        playerName.setAlignment(Pos.CENTER);
 
         board = new GridPane();
         board.setGridLinesVisible(true);
@@ -79,9 +85,13 @@ public class GameView extends VBox implements Observer, Serializable {
 
     @Override
     public void updateState(GameState gameState) {
-        updateBoard();
-        if  (gameState == GameState.FINISHED) {
-            showWinner();
+        if (gameState == GameState.DISPLAYPLAYER) {
+            playerName.setText(controller.getPlayerName());
+        } else {
+            updateBoard();
+            if (gameState == GameState.FINISHED) {
+                showWinner();
+            }
         }
     }
 
@@ -108,6 +118,8 @@ public class GameView extends VBox implements Observer, Serializable {
         int rows = controller.getRowCount();
         int cols = controller.getColumnCount();
         int size = controller.getButtonSize();
+
+        playerName.setText(controller.getPlayerName());
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
