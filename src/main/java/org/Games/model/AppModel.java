@@ -3,6 +3,7 @@ package org.Games.model;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.bd.Persistence;
 import org.Games.model.game.GameModel;
+import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observable;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 public class AppModel extends Observable {
     private GameType selectedGameType;
 
-    private Persistence dbRepository;
+    private final Persistence dbRepository;
 
     public AppModel() {
         this.selectedGameType = null;
@@ -45,7 +46,12 @@ public class AppModel extends Observable {
     // Setters
     public void setSelectedGameType(GameType gameType) {
         this.selectedGameType = gameType;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;  // Mettre à jour le gameState du parent Observable
         notifyObservers();
     }
+
 }
 

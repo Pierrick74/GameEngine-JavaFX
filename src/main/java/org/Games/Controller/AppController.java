@@ -8,6 +8,10 @@ import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.AppModel;
 import org.Games.model.game.GameModel;
 import org.Games.model.game.GameType;
+import org.Games.observer.Observer;
+
+import static org.Games.model.game.GameState.ASKTORESTOREGAME;
+import static org.Games.model.game.GameType.*;
 
 
 public class AppController implements MenuHandler {
@@ -15,19 +19,6 @@ public class AppController implements MenuHandler {
 
     public AppController(AppModel model) {
         this.model = model;
-    }
-
-    /**
-     * Change type of game selected in the model
-     * if this type have save game, do nothing and wait for instruction
-     * if had, launch game with a new model
-     * @param gameType type of game user want
-     */
-    public void onGameSelected(GameType gameType) {
-        model.setSelectedGameType(gameType);
-        if(!model.isGameSaved(gameType)){
-            launchGameWithAModel(null);
-        }
     }
 
     /**
@@ -90,6 +81,23 @@ public class AppController implements MenuHandler {
         StageRepository.getInstance().replaceScene(appView, this);
     }
 
+    public void gameSelected(GameType gameType) {
+        if(isSaveGame(gameType)) {
+            model.setSelectedGameType(gameType);
+            model.setGameState(ASKTORESTOREGAME);
+        } else {
+            startNewGame(gameType);
+        }
+    }
+
+    public void isLoadSaveGame(Boolean bool) {
+        if(bool) {
+            startOldGame(model.getSelectedGameType());
+        } else {
+            startNewGame(model.getSelectedGameType());
+        }
+    }
+
     /**
      * use for menu handler, do nothing
      */
@@ -117,7 +125,7 @@ public class AppController implements MenuHandler {
      * register view to the model
      * @param view App view
      */
-    public void registerView(AppView view) {
+    public void registerView(Observer view) {
         this.model.addObserver(view);
     }
 
