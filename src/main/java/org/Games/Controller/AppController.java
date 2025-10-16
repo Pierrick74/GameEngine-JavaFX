@@ -7,7 +7,9 @@ import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.Vue.ConsoleView;
 import org.Games.model.AppModel;
+import org.Games.model.ChoosePlayerModel;
 import org.Games.model.game.GameModel;
+import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
 
@@ -25,8 +27,13 @@ public class AppController implements MenuHandler {
      * @param gameType Type of game
      */
     public void startNewGame(GameType gameType) {
-        ChoosePlayerController controller = new ChoosePlayerController(this, gameType);
+        ChoosePlayerModel model = new ChoosePlayerModel();
+        ChoosePlayerController controller = new ChoosePlayerController(this, gameType, model);
         ChoosePlayerView view = new ChoosePlayerView(controller);
+
+        controller.registerView(ConsoleView.getInstance());
+        controller.setGameState(GameState.ASKFORCHOSENUMBEROFPLAYER);
+
         StageRepository.getInstance().replaceScene(view, controller);
     }
 

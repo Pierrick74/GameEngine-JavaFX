@@ -35,6 +35,16 @@ public class ConsoleView implements Observer {
                 }
                 break;
 
+            case DISPLAYONLYBOARD:
+                if (gameController != null) {
+                    showPlayers();
+                    showBoard();
+                }
+                break;
+
+            case ASKFORCHOSENUMBEROFPLAYER:
+                showAskForNumberOfPlayer();
+
             case FINISHED:
                 if (gameController != null) {
                     Display.getInstance().displayText("Partie terminée");
@@ -61,8 +71,19 @@ public class ConsoleView implements Observer {
         Display.getInstance().displayText("1: Non");
     }
 
-    private void showClickedCell() {
+    private void showAskForNumberOfPlayer(){
+        Display.getInstance().displayText("Comment voulez-vous jouer?");
+        Display.getInstance().displayText("2: 2 Joueurs Humain");
+        Display.getInstance().displayText("1: 1 humain et un joueur artificiel");
+        Display.getInstance().displayText("0: 2 Joueurs artificiels");
+    }
+
+    private void showPlayers(){
         Display.getInstance().displayText(gameController.getPlayerName());
+    }
+
+    private void showClickedCell() {
+        showPlayers();
         Display.getInstance().displayText("Clicked on cell " + gameController.getLastRow() + " " + gameController.getLastColumn());
     }
 

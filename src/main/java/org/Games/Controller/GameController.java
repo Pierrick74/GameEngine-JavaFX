@@ -90,6 +90,10 @@ public class GameController implements Observer, MenuHandler {
         appController.backToGameSelection();
     }
 
+    public void setGameState(GameState gameState){
+        model.setGameState(gameState);
+    }
+
     public void onCellClicked(int row, int col) {
         try {
             model.humainPlayerTurn(new Coordinate(row, col));
@@ -123,14 +127,6 @@ public class GameController implements Observer, MenuHandler {
     private int getColumn(int maxColonne) {
         Display.getInstance().displayText("quel est la colonne que vous voulez");
         return Terminal.getInstance().askForInteger(maxColonne);
-    }
-
-    private int getNumberOfHumainPlayer(){
-        Display.getInstance().displayText("Comment voulez-vous jouer?");
-        Display.getInstance().displayText("2: 2 Joueurs Humain");
-        Display.getInstance().displayText("1: 1 humain et un joueur artificiel");
-        Display.getInstance().displayText("0: 2 Joueurs artificiels");
-        return Terminal.getInstance().askForInteger(3);
     }
 
     private boolean isHumainWantToSaveGame(){

@@ -10,9 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.Games.Controller.ChoosePlayerController;
 import org.Games.JavaFX.commun.ThemeConfig;
-import org.Games.model.game.GameType;
 
-import static org.Games.model.game.GameType.GOMOKU;
 
 public class ChoosePlayerView extends VBox {
     private Label titre;

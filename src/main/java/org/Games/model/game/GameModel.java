@@ -79,8 +79,7 @@ public class GameModel extends Observable implements Serializable {
     public void humainPlayerTurn(Coordinate coordinate) throws InterruptedException {
         if(rules.isValideCoordinate(board, coordinate)){
             lastCoordinate = rules.setCell(board, coordinate, players[activePlayer]);
-            gameState = GameState.DISPLAYBOARD;
-            notifyObservers();
+            setGameState(GameState.DISPLAYBOARD);
             whoPlay();
         }
     }
@@ -93,18 +92,14 @@ public class GameModel extends Observable implements Serializable {
         if( isGameFinished() == null) {
             changeActivePlayer();
             if (!isPlayerHumainTurn()) {
-                PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(event -> {
-                    artificialPlayerTurn();
-                });
+                PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+                pause.setOnFinished(event -> artificialPlayerTurn());
                 pause.play();
             } else {
-                gameState = GameState.DISPLAYPLAYER;
-                notifyObservers();
+                setGameState(GameState.DISPLAYPLAYER);
             }
         } else {
-            gameState = GameState.FINISHED;
-            notifyObservers();
+            setGameState(GameState.FINISHED);
         }
     }
 
@@ -143,9 +138,7 @@ public class GameModel extends Observable implements Serializable {
         gameState =  GameState.DISPLAYBOARD;
         notifyObservers();
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
-        pause.setOnFinished(event -> {
-            whoPlay();
-        });
+        pause.setOnFinished(event -> whoPlay());
         pause.play();
     }
 
@@ -226,6 +219,7 @@ public class GameModel extends Observable implements Serializable {
     //Setter
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+        notifyObservers();
     }
 
     // observer
@@ -236,7 +230,6 @@ public class GameModel extends Observable implements Serializable {
         // Si le jeu est déjà terminé, notifier immédiatement
         if (isGameFinished() != null) {
             setGameState(GameState.FINISHED);
-            notifyObservers();
         }
 
     }
