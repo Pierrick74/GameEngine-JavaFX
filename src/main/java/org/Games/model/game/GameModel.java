@@ -200,6 +200,10 @@ public class GameModel extends Observable implements Serializable {
         return gameType;
     }
 
+    public String getPlayerName() {
+        return isPlayerHumainTurn() ? "Joueur " + activePlayer : "IA " + activePlayer;
+    }
+
     public Coordinate getLastCoordinate() {
         return lastCoordinate;
     }

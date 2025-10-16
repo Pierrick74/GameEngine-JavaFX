@@ -106,6 +106,10 @@ public class GameController implements Observer, MenuHandler {
         model.removeAllObserver();
     }
 
+    public String getPlayerName() {
+        return model.getPlayerName();
+    }
+
     private Coordinate getCoordinate(int maxLigne, int maxColonne) {
         Display.getInstance().displayText("quel est la ligne que vous voulez");
         int row = Terminal.getInstance().askForInteger(maxLigne);

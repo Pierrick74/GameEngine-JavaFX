@@ -62,7 +62,8 @@ public class ConsoleView implements Observer {
     }
 
     private void showClickedCell() {
-        System.out.println("Clicked on cell " + gameController.getLastRow() + " " + gameController.getLastColumn());
+        Display.getInstance().displayText(gameController.getPlayerName());
+        Display.getInstance().displayText("Clicked on cell " + gameController.getLastRow() + " " + gameController.getLastColumn());
     }
 
     private void showBoard() {
