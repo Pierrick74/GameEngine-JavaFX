@@ -87,11 +87,13 @@ public class GameView extends VBox implements Observer, Serializable {
     public void updateState(GameState gameState) {
         if (gameState == GameState.DISPLAYPLAYER) {
             playerName.setText(controller.getPlayerName());
-        } else {
+            enableBoard(true);
+        } else if (gameState == GameState.DISPLAYBOARD) {
             updateBoard();
-            if (gameState == GameState.FINISHED) {
-                showWinner();
-            }
+            enableBoard(false);
+        } else if (gameState == GameState.FINISHED) {
+            updateBoard();
+            showWinner();
         }
     }
 
@@ -114,7 +116,7 @@ public class GameView extends VBox implements Observer, Serializable {
 
     }
 
-        private void updateBoard() {
+    private void updateBoard() {
         int rows = controller.getRowCount();
         int cols = controller.getColumnCount();
         int size = controller.getButtonSize();
@@ -141,6 +143,14 @@ public class GameView extends VBox implements Observer, Serializable {
                     picture.setPreserveRatio(true);
                     cell.setGraphic(picture);
                 }
+            }
+        }
+    }
+
+    private void enableBoard(boolean enable) {
+        for (var node : board.getChildren()) {
+            if (node instanceof Button) {
+                node.setDisable(!enable);
             }
         }
     }
