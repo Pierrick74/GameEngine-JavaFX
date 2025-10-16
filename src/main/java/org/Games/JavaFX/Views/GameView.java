@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class GameView extends VBox implements Observer, Serializable {
         private Label titre;
     private Label playerName;
-        private GameController controller;
+        private final GameController controller;
         private GridPane board;
 
     public GameView(GameController controller) {
@@ -79,7 +79,7 @@ public class GameView extends VBox implements Observer, Serializable {
         button.setMinSize(size, size);
         button.setMaxSize(size, size);
         button.setFont(Font.font("Almendra", FontWeight.LIGHT, 15.0));
-        button.setOnAction(e -> {controller.onCellClicked(i, j);});
+        button.setOnAction(e -> controller.onCellClicked(i, j));
         return button;
     }
 
@@ -154,5 +154,4 @@ public class GameView extends VBox implements Observer, Serializable {
             }
         }
     }
-
 }

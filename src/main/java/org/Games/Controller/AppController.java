@@ -17,7 +17,7 @@ import static org.Games.model.game.GameState.ASKTORESTOREGAME;
 
 
 public class AppController implements MenuHandler {
-    private AppModel model;
+    private final AppModel model;
 
     public AppController(AppModel model) {
         this.model = model;
@@ -39,7 +39,7 @@ public class AppController implements MenuHandler {
 
     /**
      * select to load save game of type
-     * @param gameType
+     * @param gameType Type of game
      */
     public void startOldGame(GameType gameType) {
         GameModel saveGame = model.getSaveGame(gameType);

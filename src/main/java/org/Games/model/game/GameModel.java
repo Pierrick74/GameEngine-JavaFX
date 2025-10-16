@@ -19,6 +19,7 @@ import org.Games.model.rules.Rules;
 import org.Games.observer.Observer;
 import org.Games.observer.Observable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class GameModel extends Observable implements Serializable {
     private Integer activePlayer = 1;
     private Coordinate lastCoordinate = null;
     private int maxDepth;
-    private GameType gameType;
+    private final GameType gameType;
 
     public GameModel(GameType gameType) {
         this.gameType = gameType;
@@ -238,6 +239,7 @@ public class GameModel extends Observable implements Serializable {
      * Méthode appelée lors de la désérialisation
      * Réinitialise les attributs transient
      */
+    @Serial
     private void readObject(java.io.ObjectInputStream in)
             throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
