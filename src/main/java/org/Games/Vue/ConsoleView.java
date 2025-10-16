@@ -30,6 +30,7 @@ public class ConsoleView implements Observer {
 
             case DISPLAYBOARD:
                 if (gameController != null) {
+                    showClickedCell();
                     showBoard();
                 }
                 break;
@@ -58,6 +59,10 @@ public class ConsoleView implements Observer {
         Display.getInstance().displayText("Voulez vous charger la sauvegarde ?");
         Display.getInstance().displayText("0: Oui");
         Display.getInstance().displayText("1: Non");
+    }
+
+    private void showClickedCell() {
+        System.out.println("Clicked on cell " + gameController.getLastRow() + " " + gameController.getLastColumn());
     }
 
     private void showBoard() {

@@ -16,7 +16,6 @@ public class GameSerialization implements Persistence {
             out.writeObject(game);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in /tmp/" + getNameOfFile(game.getGameType()) + "\n");
         } catch (IOException i) {
             i.printStackTrace();
         }
@@ -26,7 +25,6 @@ public class GameSerialization implements Persistence {
     public GameModel getGame(GameType gameType) {
         try {
             FileInputStream fileIn = new FileInputStream(getNameOfFile(gameType));
-            System.out.println("Loading data from /tmp/" + getNameOfFile(gameType) + "\n");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             GameModel game = (GameModel) in.readObject();
             System.out.println(game != null);
@@ -36,7 +34,6 @@ public class GameSerialization implements Persistence {
         } catch (IOException i) {
             return null;
         } catch (ClassNotFoundException c) {
-            System.out.println("Game class not found");
             return  null;
         }
     }

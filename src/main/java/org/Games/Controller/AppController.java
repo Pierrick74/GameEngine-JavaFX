@@ -59,6 +59,7 @@ public class AppController implements MenuHandler {
             }
             GameView gameView = new GameView(gameController);
             gameController.registerView(gameView);
+            gameController.registerView(ConsoleView.getInstance());
 
             // remove all register of appModel before change view
             model.removeAllObserver();
@@ -82,6 +83,10 @@ public class AppController implements MenuHandler {
         StageRepository.getInstance().replaceScene(appView, this);
     }
 
+    /**
+     * check if there is a save data
+     * @param gameType data type
+     */
     public void gameSelected(GameType gameType) {
         if(isSaveGame(gameType)) {
             model.setSelectedGameType(gameType);

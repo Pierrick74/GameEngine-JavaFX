@@ -82,6 +82,14 @@ public class GameController implements Observer, MenuHandler {
         return model.getWinner();
     }
 
+    public Integer getLastRow(){
+        return model.getLastCoordinate().getRow();
+    }
+
+    public Integer getLastColumn(){
+        return model.getLastCoordinate().getCol();
+    }
+
     public void restartNewGame(){
         appController.deleteGame(model.getGameType());
         restart();
@@ -91,7 +99,6 @@ public class GameController implements Observer, MenuHandler {
     }
 
     public void onCellClicked(int row, int col) {
-        System.out.println("Clicked on cell " + row + " " + col);
         try {
             model.humainPlayerTurn(new Coordinate(row, col));
         } catch (InterruptedException e){
