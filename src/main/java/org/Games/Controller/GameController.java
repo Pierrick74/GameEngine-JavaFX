@@ -40,6 +40,8 @@ public class GameController implements Observer, MenuHandler {
         this.model = Game;
         this.coordinate = model.getLastCoordinate();
         this.appController = appController;
+        // Reprendre le jeu là où on l'a laissé
+        model.whoPlay();
     }
 
     private void initController(AppController appController, Integer numberOfPlayer) throws InterruptedException {
