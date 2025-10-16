@@ -5,7 +5,7 @@ import org.Games.JavaFX.Views.AppView;
 import org.Games.JavaFX.Views.ChoosePlayerView;
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
-import org.Games.Vue.AppConsoleView;
+import org.Games.Vue.ConsoleView;
 import org.Games.model.AppModel;
 import org.Games.model.game.GameModel;
 import org.Games.model.game.GameType;
@@ -20,7 +20,6 @@ public class AppController implements MenuHandler {
     public AppController(AppModel model) {
         this.model = model;
     }
-
     /**
      * Select a new game with a type
      * @param gameType Type of game
@@ -77,9 +76,9 @@ public class AppController implements MenuHandler {
     public void backToGameSelection() {
         model.removeAllObserver();
         AppView appView = new AppView(this);
-        AppConsoleView consoleView = new AppConsoleView();
         registerView(appView);
-        registerView(consoleView);
+        ConsoleView.getInstance().clearGameController();
+        registerView(ConsoleView.getInstance());
         StageRepository.getInstance().replaceScene(appView, this);
     }
 

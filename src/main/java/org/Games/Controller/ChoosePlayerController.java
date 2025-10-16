@@ -3,6 +3,7 @@ package org.Games.Controller;
 import org.Games.JavaFX.StageRepository;
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
+import org.Games.Vue.ConsoleView;
 import org.Games.model.game.GameType;
 
 public class ChoosePlayerController implements MenuHandler {
@@ -19,6 +20,8 @@ public class ChoosePlayerController implements MenuHandler {
             GameController gameController = new GameController(gameType, appController, number);
             GameView gameView = new GameView(gameController);
             gameController.registerView(gameView);
+            gameController.registerView(ConsoleView.getInstance());
+            ConsoleView.getInstance().setGameController(gameController);
 
             StageRepository.getInstance().replaceScene(gameView, gameController);
         } catch (InterruptedException e) {

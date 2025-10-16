@@ -4,6 +4,7 @@ import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.board.Board;
+import org.Games.model.board.Cell;
 import org.Games.model.brain.Brain;
 import org.Games.model.board.Coordinate;
 import org.Games.model.rules.PlacementStrategy.FreePlacement;
@@ -78,6 +79,7 @@ public class GameModel extends Observable implements Serializable {
     public void humainPlayerTurn(Coordinate coordinate) throws InterruptedException {
         if(rules.isValideCoordinate(board, coordinate)){
             lastCoordinate = rules.setCell(board, coordinate, players[activePlayer]);
+            gameState = GameState.DISPLAYBOARD;
             notifyObservers();
             whoPlay();
         }
@@ -136,6 +138,7 @@ public class GameModel extends Observable implements Serializable {
 
         lastCoordinate = brain.getCoordinateForIAPlayer(board, players[activePlayer],players[inactivePlayer], maxDepth);
         lastCoordinate = rules.setCell(board, lastCoordinate, players[activePlayer]);
+        gameState =  GameState.DISPLAYBOARD;
         notifyObservers();
         whoPlay();
     }
@@ -204,6 +207,10 @@ public class GameModel extends Observable implements Serializable {
     //TODO refactor a faire
     public String getWinner() {
         return isGameFinished();
+    }
+
+    public Cell[][] getBoard() {
+        return board.getBoard();
     }
 
     //Setter

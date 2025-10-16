@@ -16,5 +16,6 @@ public enum GameState {
     CREATEGOMOKU,
     CREATEPOWER4,
     ASKTORESTOREGAME,
+    SHOWBOARD,
     MAIN
 }

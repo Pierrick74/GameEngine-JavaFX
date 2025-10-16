@@ -7,7 +7,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.Games.JavaFX.StageRepository;
 import org.Games.JavaFX.Views.AppView;
-import org.Games.Vue.AppConsoleView;
+import org.Games.Vue.ConsoleView;
 import org.Games.model.AppModel;
 
 
@@ -28,7 +28,7 @@ public class Main extends Application {
         AppController appController = new AppController(appModel);
 
         AppView appView = new AppView(appController);
-        AppConsoleView consoleView = new AppConsoleView();
+        ConsoleView consoleView = ConsoleView.getInstance();
 
         appController.registerView(appView);
         appController.registerView(consoleView);

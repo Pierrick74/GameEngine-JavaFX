@@ -139,4 +139,8 @@ public class Board implements Serializable {
         }
         return clone;
     }
+
+    public Cell[][] getBoard() {
+        return board;
+    }
 }

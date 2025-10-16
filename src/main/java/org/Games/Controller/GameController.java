@@ -2,6 +2,8 @@ package org.Games.Controller;
 
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
+import org.Games.Vue.ConsoleView;
+import org.Games.model.board.Cell;
 import org.Games.observer.Observer;
 import org.Games.model.game.GameModel;
 import org.Games.model.board.Coordinate;
@@ -17,12 +19,21 @@ public class GameController implements Observer, MenuHandler {
     GameModel model;
     Coordinate coordinate;
     private AppController appController;
+    private ConsoleView consoleView;
 
     public GameController(GameType gameType, AppController appController, Integer numberOfPlayer) throws InterruptedException {
         this.model = new GameModel(gameType);
         this.coordinate = null;
         initController(appController, numberOfPlayer);
         this.appController = appController;
+    }
+
+    public void setConsoleView(ConsoleView view) {
+        this.consoleView = view;
+        if (view != null) {
+            view.setGameController(this);
+            model.addObserver(view);
+        }
     }
 
     public GameController(GameModel Game, AppController appController) throws InterruptedException {
@@ -43,12 +54,16 @@ public class GameController implements Observer, MenuHandler {
         this.model.setGameState(gameState);
     }
 
-    public void registerView(GameView view) {
+    public void registerView(Observer view) {
         this.model.addObserver(view);
     }
 
     public String getGameName() {
         return model.getGameName();
+    }
+
+    public Cell[][] getBoard() {
+        return model.getBoard();
     }
 
     public int getRowCount() {
