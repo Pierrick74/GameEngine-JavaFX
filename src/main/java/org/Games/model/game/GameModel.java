@@ -16,12 +16,12 @@ import org.Games.model.player.ArtificialPlayer;
 import org.Games.model.player.Player;
 import org.Games.model.rules.Rules;
 import org.Games.observer.Observer;
-import org.Games.observer.Subject;
+import org.Games.observer.Observable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameModel implements Serializable, Subject {
+public class GameModel extends Observable implements Serializable {
     private Board board;
     private Rules rules;
     private Brain brain;
@@ -33,10 +33,6 @@ public class GameModel implements Serializable, Subject {
     private Coordinate lastCoordinate = null;
     private int maxDepth;
     private GameType gameType;
-
-    private GameState gameState =  GameState.MAIN;
-
-    private transient ArrayList<Observer> observers = new ArrayList<Observer>();
 
     public GameModel(GameType gameType) {
         this.gameType = gameType;
@@ -205,7 +201,7 @@ public class GameModel implements Serializable, Subject {
         return lastCoordinate;
     }
 
-    //TODO refacto a faire
+    //TODO refactor a faire
     public String getWinner() {
         return isGameFinished();
     }
@@ -226,23 +222,6 @@ public class GameModel implements Serializable, Subject {
             notifyObservers();
         }
 
-    }
-
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void removeAllObserver() {
-        observers = new ArrayList<Observer>();
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.updateState(gameState);
-        }
     }
 
     /**

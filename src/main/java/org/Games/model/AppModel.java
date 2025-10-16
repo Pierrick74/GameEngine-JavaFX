@@ -1,24 +1,21 @@
 package org.Games.model;
 
-import org.Games.Controller.GameController;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.bd.Persistence;
 import org.Games.model.game.GameModel;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
-import org.Games.observer.Subject;
+import org.Games.observer.Observable;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AppModel implements Subject {
+
+public class AppModel extends Observable {
     private GameType selectedGameType;
     private GameState gameState = null;
 
     private Persistence dbRepository;
-
-    private List<Observer> observers;
 
     public AppModel() {
         this.selectedGameType = null;
@@ -52,29 +49,6 @@ public class AppModel implements Subject {
     public void setSelectedGameType(GameType gameType) {
         this.selectedGameType = gameType;
         notifyObservers();
-    }
-
-    // Implémentation of Subject
-    @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.updateState(gameState);
-        }
-    }
-
-    @Override
-    public void removeAllObserver() {
-        observers = new ArrayList<Observer>();
     }
 }
 
