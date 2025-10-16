@@ -5,13 +5,13 @@ import org.Games.JavaFX.Views.AppView;
 import org.Games.JavaFX.Views.ChoosePlayerView;
 import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
+import org.Games.Vue.AppConsoleView;
 import org.Games.model.AppModel;
 import org.Games.model.game.GameModel;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
 
 import static org.Games.model.game.GameState.ASKTORESTOREGAME;
-import static org.Games.model.game.GameType.*;
 
 
 public class AppController implements MenuHandler {
@@ -77,7 +77,9 @@ public class AppController implements MenuHandler {
     public void backToGameSelection() {
         model.removeAllObserver();
         AppView appView = new AppView(this);
+        AppConsoleView consoleView = new AppConsoleView();
         registerView(appView);
+        registerView(consoleView);
         StageRepository.getInstance().replaceScene(appView, this);
     }
 
