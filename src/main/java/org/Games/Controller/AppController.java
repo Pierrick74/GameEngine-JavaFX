@@ -58,12 +58,12 @@ public class AppController implements MenuHandler {
                 gameController = new GameController(model.getSelectedGameType(), this, 2);
             }
             GameView gameView = new GameView(gameController);
+            model.removeAllObserver();
+            gameController.removeAllObserver();
+
             gameController.registerView(gameView);
             gameController.registerView(ConsoleView.getInstance());
-
-            // remove all register of appModel before change view
-            model.removeAllObserver();
-
+            ConsoleView.getInstance().setGameController(gameController);
             StageRepository.getInstance().replaceScene(gameView, gameController);
 
         } catch (InterruptedException e) {

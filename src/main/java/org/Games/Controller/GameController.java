@@ -1,6 +1,5 @@
 package org.Games.Controller;
 
-import org.Games.JavaFX.Views.GameView;
 import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.Vue.ConsoleView;
 import org.Games.model.board.Cell;
@@ -28,19 +27,10 @@ public class GameController implements Observer, MenuHandler {
         this.appController = appController;
     }
 
-    public void setConsoleView(ConsoleView view) {
-        this.consoleView = view;
-        if (view != null) {
-            view.setGameController(this);
-            model.addObserver(view);
-        }
-    }
-
     public GameController(GameModel Game, AppController appController) throws InterruptedException {
         this.model = Game;
         this.coordinate = model.getLastCoordinate();
         this.appController = appController;
-        // Reprendre le jeu là où on l'a laissé
         model.whoPlay();
     }
 
@@ -112,6 +102,9 @@ public class GameController implements Observer, MenuHandler {
         return model.getButtonSize();
     }
 
+    public void removeAllObserver() {
+        model.removeAllObserver();
+    }
 
     private Coordinate getCoordinate(int maxLigne, int maxColonne) {
         Display.getInstance().displayText("quel est la ligne que vous voulez");

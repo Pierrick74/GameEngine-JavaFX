@@ -1,6 +1,6 @@
 package org.Games.Vue;
 
-import org.Games.Controller.GameController;;
+import org.Games.Controller.GameController;
 import org.Games.model.game.GameState;
 import org.Games.observer.Observer;
 
