@@ -3,16 +3,18 @@ package org.Games.JavaFX.Views;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.Games.Controller.ChoosePlayerController;
+import org.Games.JavaFX.KeyHandler;
 import org.Games.JavaFX.commun.ThemeConfig;
 
 
-public class ChoosePlayerView extends VBox {
+public class ChoosePlayerView extends VBox implements KeyHandler {
     private Label titre;
     private HBox selectionPlayer;
     private ChoosePlayerController controller;
@@ -49,4 +51,8 @@ public class ChoosePlayerView extends VBox {
         return button;
     }
 
+    @Override
+    public void onKeyPressed(KeyEvent event) {
+        controller.keyPressed(event.getText());
+    }
 }

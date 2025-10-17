@@ -9,6 +9,8 @@ import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
 
+import static org.Games.model.game.GameState.INVALIDINPUT;
+
 public class ChoosePlayerController implements MenuHandler {
     private AppController appController;
     private GameType gameType;
@@ -35,6 +37,23 @@ public class ChoosePlayerController implements MenuHandler {
             throw new RuntimeException(e);
         }
     }
+    public void keyPressed(String keyCode) {
+        switch (keyCode) {
+            case "0":
+                numberOfHumain(0);
+                break;
+            case "1":
+                numberOfHumain(1);
+                break;
+            case "2":
+                numberOfHumain(2);
+                break;
+            default:
+                model.setGameState(INVALIDINPUT);
+                break;
+        }
+    }
+
 
     public void registerView(Observer observer) {
         model.addObserver(observer);
