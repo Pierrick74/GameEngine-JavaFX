@@ -20,10 +20,10 @@ import java.io.Serializable;
 
 
 public class GameView extends VBox implements Observer, Serializable {
-        private Label titre;
+    private Label titre;
     private Label playerName;
-        private final GameController controller;
-        private GridPane board;
+    private final GameController controller;
+    private GridPane board;
 
     public GameView(GameController controller) {
         super(10);
@@ -102,7 +102,6 @@ public class GameView extends VBox implements Observer, Serializable {
         titre.setTextFill(Color.GREEN);
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 60.0));
 
-        // Désactiver toutes les cases
         for (var node : board.getChildren()) {
             if (node instanceof Button) {
                 node.setDisable(true);

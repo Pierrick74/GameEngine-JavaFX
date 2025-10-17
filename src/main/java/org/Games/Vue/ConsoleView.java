@@ -24,6 +24,10 @@ public class ConsoleView implements Observer {
     @Override
     public void updateState(GameState gameState) {
         switch (gameState) {
+            case ASKFORCHOSEGAME:
+                showAllGameAvailable();
+                break;
+
             case ASKTORESTOREGAME:
                 showRestoreGameQuestion();
                 break;
@@ -44,6 +48,7 @@ public class ConsoleView implements Observer {
 
             case ASKFORCHOSENUMBEROFPLAYER:
                 showAskForNumberOfPlayer();
+                break;
 
             case FINISHED:
                 if (gameController != null) {

@@ -89,6 +89,7 @@ public class AppController implements MenuHandler {
         registerView(appView);
         ConsoleView.getInstance().clearGameController();
         registerView(ConsoleView.getInstance());
+        model.setGameState(GameState.ASKFORCHOSEGAME);
         StageRepository.getInstance().replaceScene(appView, this);
     }
 
