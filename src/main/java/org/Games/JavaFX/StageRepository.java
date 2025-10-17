@@ -1,6 +1,5 @@
 package org.Games.JavaFX;
 
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;

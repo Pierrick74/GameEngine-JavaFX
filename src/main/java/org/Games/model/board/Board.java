@@ -30,13 +30,6 @@ public class Board implements Serializable {
         }
     }
 
-    /*
-    use for display
-     */
-    public void display() {
-        Display.getInstance().display(board);
-    }
-
     /**
      * check if board is full
      * @return true if it fulls

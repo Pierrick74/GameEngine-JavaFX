@@ -157,7 +157,7 @@ public class GameModel extends Observable implements Serializable {
         }
 
         if(rules.isFinished(board, lastCoordinate)){
-            return "Joueur " + activePlayer + " gagne";
+            return getPlayerName() + " gagne";
         }
 
         if(board.isFull()){

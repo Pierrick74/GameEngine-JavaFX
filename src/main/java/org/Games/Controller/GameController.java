@@ -1,7 +1,6 @@
 package org.Games.Controller;
 
 import org.Games.JavaFX.Views.MenuHandler;
-import org.Games.Vue.ConsoleView;
 import org.Games.model.board.Cell;
 import org.Games.observer.Observer;
 import org.Games.model.game.GameModel;
@@ -13,12 +12,10 @@ import org.Games.Vue.Terminal;
 
 import static java.lang.System.exit;
 
-
 public class GameController implements Observer, MenuHandler {
     GameModel model;
     Coordinate coordinate;
     private AppController appController;
-    private ConsoleView consoleView;
 
     public GameController(GameType gameType, AppController appController, Integer numberOfPlayer) throws InterruptedException {
         this.model = new GameModel(gameType);
