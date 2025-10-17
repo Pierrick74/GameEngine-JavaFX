@@ -100,8 +100,7 @@ public class GameModel extends Observable implements Serializable {
                 currentPause.setOnFinished(event -> artificialPlayerTurn());
                 currentPause.play();
             } else {
-                GameState state = rules.getTypeOfPlacement() == TypeOfPlacement.FREE ? GameState.ASKFORROW : GameState.ASKFORCOL;
-                setGameState(state);
+                setGameState(GameState.DISPLAYPLAYER);
             }
         } else {
             setGameState(GameState.FINISHED);
