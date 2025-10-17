@@ -9,9 +9,9 @@ import java.io.Serializable;
  * Responsibility of the board
  */
 public class Board implements Serializable {
-    Integer xSize;
-    Integer ySize;
-    Cell[][] board;
+    private Integer xSize;
+    private Integer ySize;
+    private Cell[][] board;
 
     /**
      * build the board with 2 parameters and fill with empty cell
@@ -19,6 +19,10 @@ public class Board implements Serializable {
      * @param ySize number of rows
      */
     public Board(Integer xSize, Integer ySize) {
+        if (xSize < 0 || ySize < 0 || xSize == null || ySize == null) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
+
         this.xSize = xSize;
         this.ySize = ySize;
         board = new Cell[ySize][xSize];
@@ -44,7 +48,22 @@ public class Board implements Serializable {
         return true;
     }
 
+    /**
+     * use for get all cell at same row
+     * @param coordinate
+     * @return array of Cell
+     */
     public Cell[] getHorizontalCells(Coordinate coordinate) {
+        if (coordinate == null || coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
+        if(xSize < 0 || xSize == null) {
+            throw new IllegalArgumentException("Invalid size");
+        }
+        if(board == null || board.length == 0) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
+
         Cell[] horizontalCells = new Cell[xSize];
 
         for(int col = 0; col < xSize; col++) {
@@ -53,7 +72,22 @@ public class Board implements Serializable {
         return horizontalCells;
     }
 
+    /**
+     * use for gat all cell at same column of coordinate
+     * @param coordinate
+     * @return array of Cell
+     */
     public Cell[] getVerticalCells(Coordinate coordinate) {
+        if (coordinate == null || coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
+        if(ySize < 0 || ySize == null) {
+            throw new IllegalArgumentException("Invalid size");
+        }
+        if(board == null || board.length == 0) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
+
         Cell[] verticalCells = new Cell[ySize];
         for(int row = 0; row < ySize; row++) {
             verticalCells[row] = board[row][coordinate.getCol()];
@@ -61,7 +95,22 @@ public class Board implements Serializable {
         return verticalCells;
     }
 
+    /**
+     * use to get all the Cell in the diagonal of coordinate
+     * @param coordinate
+     * @return array of Cell
+     */
     public Cell[] getDiagonalCells(Coordinate coordinate) {
+        if (coordinate == null || coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
+        if(ySize < 0 || ySize == null || xSize == null || xSize < 0) {
+            throw new IllegalArgumentException("Invalid size");
+        }
+        if(board == null || board.length == 0) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
+
         int min = Math.min(coordinate.getRow(), coordinate.getCol());
         int x = coordinate.getCol() - min;
         int y = coordinate.getRow() - min;
@@ -75,6 +124,16 @@ public class Board implements Serializable {
     }
 
     public Cell[] getReverseDiagonalCells(Coordinate coordinate) {
+        if (coordinate == null || coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
+        if(ySize < 0 || ySize == null || xSize == null || xSize < 0) {
+            throw new IllegalArgumentException("Invalid size");
+        }
+        if(board == null || board.length == 0) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
+
         int min = Math.min(coordinate.getRow(), xSize - 1 - coordinate.getCol());
         int x = coordinate.getCol() + min;
         int y = coordinate.getRow() - min;
@@ -93,6 +152,9 @@ public class Board implements Serializable {
      * @return true if there is a player inside
      */
     public Boolean isEmptyCase(Coordinate coordinate) {
+        if (coordinate == null || coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
         return getCell(coordinate).getType() == Representation.EMPTY;
     }
 
@@ -102,6 +164,12 @@ public class Board implements Serializable {
      * @return a Cell
      */
     public Cell getCell(Coordinate coordinate) {
+        if (coordinate == null || coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
+        if(board == null || board.length == 0) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
         return board[coordinate.getRow()][coordinate.getCol()];
     }
 
@@ -111,6 +179,16 @@ public class Board implements Serializable {
      * @param player player to put
      */
     public void setCell(Coordinate coordinate, Player player) {
+        if(board == null || board.length == 0) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
+        if (coordinate == null || coordinate.getRow() < 0 || coordinate.getCol() < 0) {
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
+        if (player == null) {
+            throw new IllegalArgumentException("Invalid player");
+        }
+
         board[coordinate.getRow()][coordinate.getCol()] = new Cell(player);
     }
 
@@ -123,6 +201,13 @@ public class Board implements Serializable {
     }
 
     public Board getClone() {
+        if(ySize < 0 || ySize == null || xSize == null || xSize < 0) {
+            throw new IllegalArgumentException("Invalid size");
+        }
+        if(board == null || board.length == 0) {
+            throw new IllegalArgumentException("Invalid board parameters");
+        }
+
         Board clone = new Board(xSize, ySize);
         for (int i = 0; i < ySize; i++) {
             for (int j = 0; j < xSize; j++) {

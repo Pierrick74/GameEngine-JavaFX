@@ -21,6 +21,9 @@ public class AppController implements MenuHandler {
     private final AppModel model;
 
     public AppController(AppModel model) {
+        if (model == null) {
+            throw new IllegalArgumentException("AppModel ne peut pas être null");
+        }
         this.model = model;
     }
     /**
@@ -28,6 +31,10 @@ public class AppController implements MenuHandler {
      * @param gameType Type of game
      */
     public void startNewGame(GameType gameType) {
+        if(gameType == null){
+            throw new IllegalArgumentException("GameType ne peut pas être null");
+        }
+
         ChoosePlayerModel model = new ChoosePlayerModel();
         ChoosePlayerController controller = new ChoosePlayerController(this, gameType, model);
         ChoosePlayerView view = new ChoosePlayerView(controller);
@@ -43,12 +50,17 @@ public class AppController implements MenuHandler {
      * @param gameType Type of game
      */
     public void startOldGame(GameType gameType) {
+        if(gameType == null){
+            throw new IllegalArgumentException("GameType ne peut pas être null");
+        }
         GameModel saveGame = model.getSaveGame(gameType);
         launchGameWithAModel(saveGame);
     }
 
     public boolean isSaveGame(GameType gameType) {
-
+        if(gameType == null){
+            throw new IllegalArgumentException("GameType ne peut pas être null");
+        }
         return model.isGameSaved(gameType);
     }
 
@@ -59,25 +71,20 @@ public class AppController implements MenuHandler {
     private void launchGameWithAModel(GameModel gameModel) {
         System.out.println("Lancement du jeu: ");
 
-        try {
-            GameController gameController;
-            if(gameModel != null){
-                gameController = new GameController(gameModel, this);
-            } else {
-                gameController = new GameController(model.getSelectedGameType(), this, 2);
-            }
-            GameView gameView = new GameView(gameController);
-            model.removeAllObserver();
-            gameController.removeAllObserver();
-
-            gameController.registerView(gameView);
-            gameController.registerView(ConsoleView.getInstance());
-            ConsoleView.getInstance().setGameController(gameController);
-            StageRepository.getInstance().replaceScene(gameView, gameController);
-
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        GameController gameController;
+        if(gameModel != null){
+            gameController = new GameController(gameModel, this);
+        } else {
+            gameController = new GameController(model.getSelectedGameType(), this, 2);
         }
+        GameView gameView = new GameView(gameController);
+        model.removeAllObserver();
+        gameController.removeAllObserver();
+
+        gameController.registerView(gameView);
+        gameController.registerView(ConsoleView.getInstance());
+        ConsoleView.getInstance().setGameController(gameController);
+        StageRepository.getInstance().replaceScene(gameView, gameController);
     }
 
     /**
@@ -94,20 +101,14 @@ public class AppController implements MenuHandler {
     }
 
     /**
-     * Stop the current game when leaving
-     * @param gameController the game controller to stop
-     */
-    public void stopCurrentGame(GameController gameController) {
-        if (gameController != null) {
-            gameController.stopGame();
-        }
-    }
-
-    /**
      * check if there is a save data
      * @param gameType data type
      */
     public void gameSelected(GameType gameType) {
+        if(gameType == null){
+            throw new IllegalArgumentException("GameType ne peut pas être null");
+        }
+
         if(isSaveGame(gameType)) {
             model.setSelectedGameType(gameType);
             model.setGameState(ASKTORESTOREGAME);
@@ -136,7 +137,6 @@ public class AppController implements MenuHandler {
      */
     @Override
     public void onSaveGame() {
-
     }
 
     /**

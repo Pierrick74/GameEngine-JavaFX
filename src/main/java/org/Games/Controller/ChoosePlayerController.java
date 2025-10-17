@@ -17,27 +17,50 @@ public class ChoosePlayerController implements MenuHandler {
     private ChoosePlayerModel model;
 
     public ChoosePlayerController(AppController appController, GameType gameType, ChoosePlayerModel model) {
+        if (appController == null) {
+            throw new IllegalArgumentException("appController ne peut pas être null");
+        }
+
+        if (gameType == null) {
+            throw new IllegalArgumentException("gameType ne peut pas être null");
+        }
+
+        if (model == null) {
+            throw new IllegalArgumentException("model ne peut pas être null");
+        }
+
         this.appController = appController;
         this.gameType = gameType;
         this.model = model;
     }
 
     public void numberOfHumain(Integer number) {
-        try {
-            GameController gameController = new GameController(gameType, appController, number);
-            GameView gameView = new GameView(gameController);
-            gameController.registerView(gameView);
-            gameController.registerView(ConsoleView.getInstance());
-            ConsoleView.getInstance().setGameController(gameController);
-
-            gameController.setGameState(GameState.DISPLAYONLYBOARD);
-
-            StageRepository.getInstance().replaceScene(gameView, gameController);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (number == null) {
+            throw new IllegalArgumentException("Le nombre de joueurs ne peut pas être null");
         }
+
+        if (number < 0 || number > 2) {
+            throw new IllegalArgumentException(
+                    "Le nombre de joueurs  doit être entre 0 et 2"
+            );
+        }
+
+        GameController gameController = new GameController(gameType, appController, number);
+        GameView gameView = new GameView(gameController);
+        gameController.registerView(gameView);
+        gameController.registerView(ConsoleView.getInstance());
+        ConsoleView.getInstance().setGameController(gameController);
+
+        gameController.setGameState(GameState.DISPLAYONLYBOARD);
+
+        StageRepository.getInstance().replaceScene(gameView, gameController);
     }
     public void keyPressed(String keyCode) {
+        if(keyCode == null || keyCode.isEmpty()) {
+            model.setGameState(INVALIDINPUT);
+            return;
+        }
+
         switch (keyCode) {
             case "0":
                 numberOfHumain(0);
@@ -54,12 +77,18 @@ public class ChoosePlayerController implements MenuHandler {
         }
     }
 
-
     public void registerView(Observer observer) {
+        if (observer == null) {
+            throw new IllegalArgumentException("GameState ne peut pas être null");
+        }
         model.addObserver(observer);
     }
 
     public void setGameState(GameState gameState) {
+        if (gameState == null) {
+            throw new IllegalArgumentException("GameState ne peut pas être null");
+        }
+
         model.setGameState(gameState);
     }
 
@@ -70,11 +99,11 @@ public class ChoosePlayerController implements MenuHandler {
 
     @Override
     public void onSaveGame() {
-
     }
 
     @Override
     public void onExit() {
         System.exit(0);
     }
+
 }

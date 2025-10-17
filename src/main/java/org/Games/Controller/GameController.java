@@ -7,33 +7,49 @@ import org.Games.model.game.GameModel;
 import org.Games.model.board.Coordinate;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
-import org.Games.Vue.Display;
-import org.Games.Vue.Terminal;
 
 import static java.lang.System.exit;
 import static org.Games.model.game.GameState.INVALIDINPUT;
 
 public class GameController implements Observer, MenuHandler {
-    GameModel model;
-    Coordinate coordinate;
+    private final GameModel model;
     private AppController appController;
 
-    public GameController(GameType gameType, AppController appController, Integer numberOfPlayer) throws InterruptedException {
+    public GameController(GameType gameType, AppController appController, Integer numberOfPlayer) {
+        if (gameType == null) {
+            throw new IllegalArgumentException("gameType ne peut pas être null");
+        }
+        if (appController == null) {
+            throw new IllegalArgumentException("appController ne peut pas être null");
+        }
+        if (numberOfPlayer == null) {
+            throw new IllegalArgumentException("Le nombre de joueurs ne peut pas être null");
+        }
+
+        if (numberOfPlayer < 0 || numberOfPlayer > 2) {
+            throw new IllegalArgumentException(
+                    "Le nombre de joueurs  doit être entre 0 et 2"
+            );
+        }
+
         this.model = new GameModel(gameType);
-        this.coordinate = null;
         initController(appController, numberOfPlayer);
         this.appController = appController;
     }
 
-    public GameController(GameModel Game, AppController appController) throws InterruptedException {
-        this.model = Game;
-        this.coordinate = model.getLastCoordinate();
+    public GameController(GameModel game, AppController appController) {
+        if (game == null) {
+            throw new IllegalArgumentException("game ne peut pas être null");
+        }
+        if (appController == null) {
+            throw new IllegalArgumentException("appController ne peut pas être null");
+        }
+        this.model = game;
         this.appController = appController;
         model.whoPlay();
     }
 
-    private void initController(AppController appController, Integer numberOfPlayer) throws InterruptedException {
-        //TODO A CHANGER
+    private void initController(AppController appController, Integer numberOfPlayer) {
         model.createPlayersWithNumberOfHumain(numberOfPlayer);
         model.whoPlay();
         this.appController = appController;
@@ -41,11 +57,98 @@ public class GameController implements Observer, MenuHandler {
 
     @Override
     public void updateState(GameState gameState) {
+        if (gameState == null) {
+            throw new IllegalArgumentException("gameState ne peut pas être null");
+        }
         this.model.setGameState(gameState);
     }
 
     public void registerView(Observer view) {
+        if (view == null) {
+            throw new IllegalArgumentException("view ne peut pas être null");
+        }
         this.model.addObserver(view);
+    }
+
+    public void restartNewGame(){
+        if (appController != null) {
+            appController.deleteGame(model.getGameType());
+            restart();
+        } else {
+            throw new IllegalArgumentException("pas de appController , impossible de restart");
+        }
+
+    }
+
+    public void setGameState(GameState gameState){
+        model.setGameState(gameState);
+    }
+
+    public void onCellClicked(int row, int col) {
+        try {
+            model.humainPlayerTurn(new Coordinate(row, col));
+        } catch (InterruptedException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public int getButtonSize(){
+        return model.getButtonSize();
+    }
+
+    public void removeAllObserver() {
+        if(model != null) {
+            model.removeAllObserver();
+        } else {
+            throw new IllegalArgumentException("il manque le model pour removeAllObserver");
+        }
+    }
+
+    public String getPlayerName() {
+        return model.getPlayerName();
+    }
+
+    public void keyPressed(String keyCode) {
+        if (keyCode.matches("[0-9]")){
+            model.keyPressed(keyCode);
+        } else if ( (keyCode.equals("\r") || keyCode.equals("\n"))){
+            model.valideKeyInput();
+        } else {
+            model.setGameState(INVALIDINPUT);
+        }
+    }
+
+    @Override
+    public void onNewGame() {
+        restart();
+    }
+
+    @Override
+    public void onSaveGame() {
+        saveGame();
+    }
+
+    @Override
+    public void onExit() {
+        saveGame();
+        exit(1);
+    }
+
+    private void saveGame() {
+        model.saveGame();
+    }
+
+    private void stopGame() {
+        if(model != null) {
+            model.stopGame();
+        } else {
+            throw new IllegalArgumentException("il manque le model pour stopgame");
+        }
+    }
+
+    private void restart() {
+        stopGame();
+        appController.backToGameSelection();
     }
 
     public String getGameName() {
@@ -80,53 +183,8 @@ public class GameController implements Observer, MenuHandler {
         return model.getLastCoordinate().getCol();
     }
 
-    public void restartNewGame(){
-        appController.deleteGame(model.getGameType());
-        restart();
-    }
-    public void restart() {
-        stopGame();
-        appController.backToGameSelection();
-    }
 
-    public void setGameState(GameState gameState){
-        model.setGameState(gameState);
-    }
-
-    public void onCellClicked(int row, int col) {
-        try {
-            model.humainPlayerTurn(new Coordinate(row, col));
-        } catch (InterruptedException e){
-            System.err.println("Interrupted while waiting for player turn");
-        }
-    }
-
-    public int getButtonSize(){
-        return model.getButtonSize();
-    }
-
-    public void removeAllObserver() {
-        model.removeAllObserver();
-    }
-
-    public void stopGame() {
-        model.stopGame();
-    }
-
-    public String getPlayerName() {
-        return model.getPlayerName();
-    }
-
-    public void keyPressed(String keyCode) {
-        if (keyCode.matches("[0-9]")){
-            model.keyPressed(keyCode);
-        } else if ( (keyCode.equals("\r") || keyCode.equals("\n"))){
-            model.valideKeyInput();
-        } else {
-            model.setGameState(INVALIDINPUT);
-        }
-    }
-
+/*
     private Coordinate getCoordinate(int maxLigne, int maxColonne) {
         Display.getInstance().displayText("quel est la ligne que vous voulez");
         int row = Terminal.getInstance().askForInteger(maxLigne);
@@ -157,108 +215,5 @@ public class GameController implements Observer, MenuHandler {
         int result =  Terminal.getInstance().askForInteger(2);
         return  result == 0;
     }
-
-    @Override
-    public void onNewGame() {
-        restart();
-    }
-
-    @Override
-    public void onSaveGame() {
-        saveGame();
-    }
-
-    @Override
-    public void onExit() {
-        saveGame();
-        exit(1);
-    }
-
-    private void saveGame() {
-        model.saveGame();
-    }
-
-
-/*
-    public void start() throws InterruptedException {
-
-        while(game.getGameState() != GameState.FINISHED) {
-            switch (game.getGameState()) {
-
-                case DISPLAYBOARD:
-                    game.displayBoard();
-                    switch (game.getOldGameState()) {
-                        case INITPLAYER:
-                            game.setGameState(GameState.CHECKPLAYER);
-                            break;
-                        case MOVE, IAMOVE:
-                            game.setGameState(GameState.CHECKFINISH);
-                            break;
-                        case INITGAME:
-                            game.setGameState(GameState.CHECKPLAYER);
-                    }
-                    break;
-
-                case CHECKSAVE:
-                    if(isHumainWantToSaveGame()){
-                        dbRepository.saveGame(game);
-                    }
-                    game.setGameState(GameState.CHECKPLAYER);
-                    break;
-
-                case CHECKPLAYER:
-                    Display.getInstance().displayText("Joueur " + game.getActivePlayer());
-                    if(game.isPlayerHumainTurn()) {
-                        game.setGameState(GameState.ASKPLAYER);
-                    } else {
-                        game.setGameState(GameState.IAMOVE);
-                    }
-                    break;
-
-                case MOVE:
-                    game.humainPlayerTurn(coordinate);
-                    game.setGameState(GameState.DISPLAYBOARD);
-                    break;
-
-                case CHECKFINISH:
-                    String winner = game.isGameFinished();
-
-                    if (winner != null) {
-                        Display.getInstance().displayText(winner);
-                        game.setGameState(GameState.FINISHED);
-                    } else {
-                        game.changeActivePlayer();
-                        game.setGameState(GameState.CHECKSAVE);
-                    }
-                    break;
-
-                case ASKPLAYER:
-                    if( game.getTypeOfPlacement() == TypeOfPlacement.FREE) {
-                        coordinate = getCoordinate(game.getySize(),  game.getxSize());
-                        if(!game.isValideCoordinate(coordinate)) {
-                            Display.getInstance().displayText("La case est déja prise, merci de rentrer une nouvelle valeur");
-                            break;
-                        }
-                    } else  {
-                        int col = getColumn(game.getxSize());
-                        coordinate = new  Coordinate(0, col);
-                        if(!game.isValideCoordinate(coordinate)) {
-                            Display.getInstance().displayText("La Colonne est Saturée");
-                            break;
-                        }
-                    }
-
-                    game.setGameState(GameState.MOVE);
-                    break;
-
-                case IAMOVE:
-                    game.artificialPlayerTurn();
-                    game.setGameState(GameState.DISPLAYBOARD);
-                    break;
-            }
-            Thread.sleep(500);
-        }
-    }
-
 */
 }
