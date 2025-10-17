@@ -7,6 +7,9 @@ public class Coordinate implements Serializable {
     private final int row;
 
     public Coordinate(int row, int col) {
+        if(row < 0 || col < 0 ){
+            throw new IllegalArgumentException("Invalid coordinate");
+        }
         this.col = col;
         this.row = row;
     }

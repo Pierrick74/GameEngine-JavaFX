@@ -13,6 +13,9 @@ public class Cell implements Serializable {
     }
 
     public Cell(Player player) {
+        if(player == null){
+            throw new IllegalArgumentException("Player cannot be null");
+        }
         this.player = player;
     }
 
