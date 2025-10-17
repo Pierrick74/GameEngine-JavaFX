@@ -11,6 +11,7 @@ import org.Games.Vue.Display;
 import org.Games.Vue.Terminal;
 
 import static java.lang.System.exit;
+import static org.Games.model.game.GameState.INVALIDINPUT;
 
 public class GameController implements Observer, MenuHandler {
     GameModel model;
@@ -114,6 +115,16 @@ public class GameController implements Observer, MenuHandler {
 
     public String getPlayerName() {
         return model.getPlayerName();
+    }
+
+    public void keyPressed(String keyCode) {
+        if (keyCode.matches("[0-9]")){
+            model.keyPressed(keyCode);
+        } else if ( (keyCode.equals("\r") || keyCode.equals("\n"))){
+            model.valideKeyInput();
+        } else {
+            model.setGameState(INVALIDINPUT);
+        }
     }
 
     private Coordinate getCoordinate(int maxLigne, int maxColonne) {

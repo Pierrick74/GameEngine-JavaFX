@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -152,5 +153,9 @@ public class GameView extends VBox implements Observer, Serializable {
                 node.setDisable(!enable);
             }
         }
+    }
+
+    public void onKeyPressed(KeyEvent event) {
+        controller.keyPressed(event.getText());
     }
 }

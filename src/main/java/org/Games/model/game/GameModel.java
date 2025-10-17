@@ -15,6 +15,7 @@ import org.Games.model.commun.RepresentationStrategy.RepresentationStrategy;
 import org.Games.model.commun.RepresentationStrategy.TicTacToeRepresentation;
 import org.Games.model.player.ArtificialPlayer;
 import org.Games.model.player.Player;
+import org.Games.model.rules.PlacementStrategy.TypeOfPlacement;
 import org.Games.model.rules.Rules;
 import org.Games.observer.Observer;
 import org.Games.observer.Observable;
@@ -36,6 +37,7 @@ public class GameModel extends Observable implements Serializable {
     private int maxDepth;
     private final GameType gameType;
     private transient PauseTransition currentPause;
+    private int currentInput;
 
     public GameModel(GameType gameType) {
         this.gameType = gameType;
@@ -98,7 +100,8 @@ public class GameModel extends Observable implements Serializable {
                 currentPause.setOnFinished(event -> artificialPlayerTurn());
                 currentPause.play();
             } else {
-                setGameState(GameState.DISPLAYPLAYER);
+                GameState state = rules.getTypeOfPlacement() == TypeOfPlacement.FREE ? GameState.ASKFORROW : GameState.ASKFORCOL;
+                setGameState(state);
             }
         } else {
             setGameState(GameState.FINISHED);
@@ -153,6 +156,18 @@ public class GameModel extends Observable implements Serializable {
             currentPause = null;
         }
     }
+
+    public void keyPressed(String keyCode) {
+        currentInput = currentInput * 10;
+        currentInput += Integer.parseInt(keyCode);
+    }
+
+    public void valideKeyInput() {
+        if(gameState == GameState.ASKFORROW) {
+
+        }
+    }
+
 
     /**
      * check if active player is a humain
@@ -239,11 +254,9 @@ public class GameModel extends Observable implements Serializable {
     public void addObserver(Observer observer) {
         observers.add(observer);
 
-        // Si le jeu est déjà terminé, notifier immédiatement
         if (isGameFinished() != null) {
             setGameState(GameState.FINISHED);
         }
-
     }
 
     /**
