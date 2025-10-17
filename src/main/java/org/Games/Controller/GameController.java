@@ -84,6 +84,7 @@ public class GameController implements Observer, MenuHandler {
         restart();
     }
     public void restart() {
+        stopGame();
         appController.backToGameSelection();
     }
 
@@ -105,6 +106,10 @@ public class GameController implements Observer, MenuHandler {
 
     public void removeAllObserver() {
         model.removeAllObserver();
+    }
+
+    public void stopGame() {
+        model.stopGame();
     }
 
     public String getPlayerName() {

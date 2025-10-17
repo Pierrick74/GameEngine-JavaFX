@@ -35,6 +35,7 @@ public class GameModel extends Observable implements Serializable {
     private Coordinate lastCoordinate = null;
     private int maxDepth;
     private final GameType gameType;
+    private transient PauseTransition currentPause;
 
     public GameModel(GameType gameType) {
         this.gameType = gameType;
@@ -93,9 +94,9 @@ public class GameModel extends Observable implements Serializable {
         if( isGameFinished() == null) {
             changeActivePlayer();
             if (!isPlayerHumainTurn()) {
-                PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-                pause.setOnFinished(event -> artificialPlayerTurn());
-                pause.play();
+                currentPause = new PauseTransition(Duration.seconds(0.5));
+                currentPause.setOnFinished(event -> artificialPlayerTurn());
+                currentPause.play();
             } else {
                 setGameState(GameState.DISPLAYPLAYER);
             }
@@ -138,9 +139,19 @@ public class GameModel extends Observable implements Serializable {
         lastCoordinate = rules.setCell(board, lastCoordinate, players[activePlayer]);
         gameState =  GameState.DISPLAYBOARD;
         notifyObservers();
-        PauseTransition pause = new PauseTransition(Duration.seconds(1));
-        pause.setOnFinished(event -> whoPlay());
-        pause.play();
+        currentPause = new PauseTransition(Duration.seconds(1));
+        currentPause.setOnFinished(event -> whoPlay());
+        currentPause.play();
+    }
+
+    /**
+     * Stop all running animations and timers
+     */
+    public void stopGame() {
+        if (currentPause != null) {
+            currentPause.stop();
+            currentPause = null;
+        }
     }
 
     /**

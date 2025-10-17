@@ -93,6 +93,16 @@ public class AppController implements MenuHandler {
     }
 
     /**
+     * Stop the current game when leaving
+     * @param gameController the game controller to stop
+     */
+    public void stopCurrentGame(GameController gameController) {
+        if (gameController != null) {
+            gameController.stopGame();
+        }
+    }
+
+    /**
      * check if there is a save data
      * @param gameType data type
      */
