@@ -49,7 +49,7 @@ public class AppModel extends Observable {
     }
 
     public void setGameState(GameState gameState) {
-        this.gameState = gameState;  // Mettre à jour le gameState du parent Observable
+        this.gameState = gameState;
         notifyObservers();
     }
 

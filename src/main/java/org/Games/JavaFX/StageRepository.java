@@ -31,8 +31,16 @@ public class StageRepository {
 
     public void replaceScene(javafx.scene.Parent scene, MenuHandler menuHandler) {
         this.menuHandler = menuHandler;
-        stage.setScene(createScene(scene));
+        Scene newScene = createScene(scene);
+
+        if (scene instanceof KeyHandler) {
+            newScene.setOnKeyPressed(((KeyHandler) scene)::onKeyPressed);
+        }
+
+        stage.setScene(newScene);
         stage.show();
+
+        scene.requestFocus();
     }
 
     public Scene createScene(javafx.scene.Parent root) {

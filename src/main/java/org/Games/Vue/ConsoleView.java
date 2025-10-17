@@ -55,6 +55,11 @@ public class ConsoleView implements Observer {
                     }
                 }
                 break;
+
+            case INVALIDINPUT:
+                Display.getInstance().displayText("Entrée invalide. Veuillez réessayer.");
+                break;
+
         }
     }
 
@@ -63,6 +68,7 @@ public class ConsoleView implements Observer {
         Display.getInstance().displayText("0: TicTacToe");
         Display.getInstance().displayText("1: Gomoku");
         Display.getInstance().displayText("2: Power4");
+
     }
 
     private void showRestoreGameQuestion(){

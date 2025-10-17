@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -13,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.Games.Controller.AppController;
+import org.Games.JavaFX.KeyHandler;
 import org.Games.JavaFX.commun.ThemeConfig;
 import org.Games.model.game.GameState;
 import org.Games.model.game.GameType;
@@ -20,7 +22,7 @@ import org.Games.observer.Observer;
 
 import static org.Games.model.game.GameType.*;
 
-public class AppView extends VBox implements Observer {
+public class AppView extends VBox implements Observer, KeyHandler {
     private Label titre;
     private VBox vBoxGomoku;
     private VBox vBoxTicTacToe;
@@ -140,5 +142,10 @@ public class AppView extends VBox implements Observer {
         }
         ThemeConfig.applyButtonStyle(button);
         return button;
+    }
+
+    @Override
+    public void onKeyPressed(KeyEvent event) {
+        controller.keyPressed(event.getText());
     }
 }

@@ -14,6 +14,7 @@ import org.Games.model.game.GameType;
 import org.Games.observer.Observer;
 
 import static org.Games.model.game.GameState.ASKTORESTOREGAME;
+import static org.Games.model.game.GameState.INVALIDINPUT;
 
 
 public class AppController implements MenuHandler {
@@ -47,6 +48,7 @@ public class AppController implements MenuHandler {
     }
 
     public boolean isSaveGame(GameType gameType) {
+
         return model.isGameSaved(gameType);
     }
 
@@ -148,5 +150,34 @@ public class AppController implements MenuHandler {
      */
     public void deleteGame(GameType gameType) {
         model.deleteGame(gameType);
+    }
+
+    public void keyPressed(String keyCode) {
+        switch (keyCode) {
+            case "0":
+                if(model.getSelectedGameType() != null){
+                    isLoadSaveGame(true);
+                } else {
+                    gameSelected(GameType.TICTACTOE);
+                }
+                break;
+            case "1":
+                if(model.getSelectedGameType() != null){
+                    isLoadSaveGame(false);
+                } else {
+                    gameSelected(GameType.GOMOKU);
+                }
+                break;
+                case "2":
+                    if(model.getSelectedGameType() == null){
+                        gameSelected(GameType.POWER4);
+                    } else {
+                        model.setGameState(INVALIDINPUT);
+                    }
+                    break;
+            default:
+                model.setGameState(INVALIDINPUT);
+                break;
+        }
     }
 }

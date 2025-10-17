@@ -2,7 +2,6 @@ package org.Games.model.board;
 
 import org.Games.model.player.Representation;
 import org.Games.model.player.Player;
-import org.Games.Vue.Display;
 
 import java.io.Serializable;
 

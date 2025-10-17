@@ -1,6 +1,5 @@
 package org.Games;
 
-
 import javafx.stage.StageStyle;
 import org.Games.Controller.AppController;
 import javafx.application.Application;
