@@ -85,10 +85,6 @@ public class GameController implements Observer, MenuHandler {
         model.displayInput();
     }
 
-    public void setGameState(GameState gameState){
-        model.setGameState(gameState);
-    }
-
     public void onCellClicked(int row, int col) {
         try {
             model.humainPlayerTurn(new Coordinate(row, col));
@@ -197,38 +193,4 @@ public class GameController implements Observer, MenuHandler {
     public String getInput() {
         return model.getInput();
     }
-
-
-/*
-    private Coordinate getCoordinate(int maxLigne, int maxColonne) {
-        Display.getInstance().displayText("quel est la ligne que vous voulez");
-        int row = Terminal.getInstance().askForInteger(maxLigne);
-
-        Display.getInstance().displayText("quel est la colonne que vous voulez");
-        int col = Terminal.getInstance().askForInteger(maxColonne);
-
-        return new Coordinate(row, col);
-    }
-
-    private int getColumn(int maxColonne) {
-        Display.getInstance().displayText("quel est la colonne que vous voulez");
-        return Terminal.getInstance().askForInteger(maxColonne);
-    }
-
-    private boolean isHumainWantToSaveGame(){
-        Display.getInstance().displayText("Voulez-vous sauvgarder le jeu?");
-        Display.getInstance().displayText("0: oui");
-        Display.getInstance().displayText("1: non");
-        int result =  Terminal.getInstance().askForInteger(2);
-        return  result == 0;
-    }
-
-    private boolean isHumainWantToRestoreGame(){
-        Display.getInstance().displayText("Il y a une partie sauvegardée, voulez vous la restaurer?");
-        Display.getInstance().displayText("0: oui");
-        Display.getInstance().displayText("1: non");
-        int result =  Terminal.getInstance().askForInteger(2);
-        return  result == 0;
-    }
-*/
 }

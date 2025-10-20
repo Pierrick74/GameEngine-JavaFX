@@ -27,7 +27,7 @@ public class AppView extends VBox implements Observer, KeyHandler {
     private VBox vBoxGomoku;
     private VBox vBoxTicTacToe;
     private VBox vBoxPower4;
-    private AppController controller;
+    private final AppController controller;
 
     private VBox saveBoxDialog;
 
@@ -136,9 +136,9 @@ public class AppView extends VBox implements Observer, KeyHandler {
         button.setDefaultButton(true);
         button.setFont(Font.font("Almendra", FontWeight.LIGHT, 15.0));
         if(labelText.equals("Oui")){
-            button.setOnAction(e-> {controller.isLoadSaveGame(true);});
+            button.setOnAction(e-> controller.isLoadSaveGame(true));
         } else {
-            button.setOnAction(e-> {controller.isLoadSaveGame(false);});
+            button.setOnAction(e-> controller.isLoadSaveGame(false));
         }
         ThemeConfig.applyButtonStyle(button);
         return button;

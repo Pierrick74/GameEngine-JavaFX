@@ -1,7 +1,6 @@
 package org.Games.model.game;
 
 import javafx.animation.PauseTransition;
-import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.board.Board;
@@ -282,17 +281,11 @@ public class GameModel extends Observable implements Serializable {
         if(GameType.POWER4 != gameType) {
             return board.getCell(new Coordinate(row, col)).getType().getIcone();
         } else {
-            switch (representation) {
-                case "/org/Games/JavaFX/assets/icone/red.png":
-                    representation = "/org/Games/JavaFX/assets/icone/red1.png";
-                break;
-                case "/org/Games/JavaFX/assets/icone/yellow.png":
-                    representation = "/org/Games/JavaFX/assets/icone/yellow1.png";
-                    break;
-                default:
-                    representation = "/org/Games/JavaFX/assets/icone/emptyPower4.png";
-                    break;
-            }
+            representation = switch (representation) {
+                case "/org/Games/JavaFX/assets/icone/red.png" -> "/org/Games/JavaFX/assets/icone/red1.png";
+                case "/org/Games/JavaFX/assets/icone/yellow.png" -> "/org/Games/JavaFX/assets/icone/yellow1.png";
+                default -> "/org/Games/JavaFX/assets/icone/emptyPower4.png";
+            };
             return representation;
         }
 
