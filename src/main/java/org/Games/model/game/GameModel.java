@@ -170,6 +170,18 @@ public class GameModel extends Observable implements Serializable {
         }
     }
 
+    private Boolean isOnlyOneInput() {
+        return isOnlyOneInputInRow() || isOnlyOneInputInCol();
+    }
+
+    private Boolean isOnlyOneInputInRow() {
+        return oldGameState == GameState.ASKFORROW && board.getYSize() < 10;
+    }
+
+    private Boolean isOnlyOneInputInCol() {
+        return oldGameState == GameState.ASKFORCOL && board.getXSize() < 10;
+    }
+
     private Boolean isValidatedInput(Integer input) {
         if(gameState == GameState.ASKFORROW) {
             int checkInput = currentInput * 10;
@@ -200,6 +212,13 @@ public class GameModel extends Observable implements Serializable {
     }
 
     public void errorIsDisplay() {
+        if(gameState == GameState.SHOWINPUT) {
+            if (isOnlyOneInput()) {
+                gameState = oldGameState;
+                valideKeyInput();
+                return;
+            }
+        }
         setGameState(oldGameState);
     }
 
