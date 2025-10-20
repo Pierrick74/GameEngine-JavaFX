@@ -31,8 +31,8 @@ Application de jeux de plateau développée en Java avec JavaFX.
 
 1. Cloner le repository :
 ```bash
-git clone https://github.com/Pierrick74/TicTacToe-java-campus.git
-cd TicTacToe-java-campus
+git clone https://github.com/Pierrick74/GameEngine-JavaFX.git
+cd GameEngine-JavaFX
 ```
 
 2. Lancer l'application :
