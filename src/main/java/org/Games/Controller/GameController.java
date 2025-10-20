@@ -1,5 +1,7 @@
 package org.Games.Controller;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import org.Games.JavaFX.Views.MenuHandler;
 import org.Games.model.board.Cell;
 import org.Games.observer.Observer;
@@ -77,7 +79,10 @@ public class GameController implements Observer, MenuHandler {
         } else {
             throw new IllegalArgumentException("pas de appController , impossible de restart");
         }
+    }
 
+    public void displayInput() {
+        model.displayInput();
     }
 
     public void setGameState(GameState gameState){
@@ -108,14 +113,20 @@ public class GameController implements Observer, MenuHandler {
         return model.getPlayerName();
     }
 
-    public void keyPressed(String keyCode) {
-        if (keyCode.matches("[0-9]")){
-            model.keyPressed(keyCode);
-        } else if ( (keyCode.equals("\r") || keyCode.equals("\n"))){
+    public void errorIsDisplay() {
+        model.errorIsDisplay();
+    }
+
+    public void keyPressed(KeyEvent event) {
+
+        if(event.getCode() == KeyCode.ENTER) {
             model.valideKeyInput();
+        } else if (event.getText().matches("[0-9]") ){
+            model.keyPressed(event.getText());
         } else {
             model.setGameState(INVALIDINPUT);
         }
+        event.consume();
     }
 
     @Override
@@ -181,6 +192,10 @@ public class GameController implements Observer, MenuHandler {
 
     public Integer getLastColumn(){
         return model.getLastCoordinate().getCol();
+    }
+
+    public String getInput() {
+        return model.getInput();
     }
 
 

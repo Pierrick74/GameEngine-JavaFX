@@ -13,10 +13,20 @@ public class Brain implements Serializable {
     Rules rules;
 
     public Brain(Rules rules) {
+        if(rules == null) {
+            throw new IllegalArgumentException("Rules cannot be null");
+        }
         this.rules = rules;
     }
 
-    public Coordinate getCoordinateForIAPlayer(Board board, Player me, Player opponent, Integer depth) {
+    public Coordinate getCoordinateForIAPlayer(Board board, Player me, Player opponent, int depth) {
+        if(board == null) {
+            throw new IllegalArgumentException("Board cannot be null");
+        }
+        if(me == null  || opponent == null) {
+            throw new IllegalArgumentException("Player cannot be null");
+        }
+
         MinMaxResult result = minimaxAlt(board, depth, true, me, opponent, null);
         System.out.println("==> CHOIX FINAL: (" + result.move().getRow() + "," + result.move().getCol() + ") avec score " + result.score());
         return result.move();
@@ -30,11 +40,21 @@ public class Brain implements Serializable {
             Player opponent,
             Coordinate coordinate
     ) {
+        if(board == null) {
+            throw new IllegalArgumentException("Board cannot be null");
+        }
+
+        if(me == null  || opponent == null) {
+            throw new IllegalArgumentException("Player cannot be null");
+        }
+
+        if(depth < 0) {
+            depth = 0;
+        }
 
         MinMaxResult result;
         MinMaxResult bestResult = null;
 
-        // si gagner / perdu
         if(coordinate != null){
             if (rules.isFinished(board, coordinate)) {
                 return switch (rules.getResult(board, coordinate)) {
@@ -65,7 +85,7 @@ public class Brain implements Serializable {
                 testBoard.setCell(c, opponent);
             }
             result = minimaxAlt(testBoard, depth-1, !isMyTurn, me, opponent, c);
-            //System.out.println("Coup testé: (" + c.getRow() + "," + c.getCol() + ") -> score: " + result.score());
+
             if(bestResult == null) {
                 bestResult = new MinMaxResult(result.score(), c);
             } else if(isMyTurn) {

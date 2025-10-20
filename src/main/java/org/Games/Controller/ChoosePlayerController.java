@@ -51,7 +51,7 @@ public class ChoosePlayerController implements MenuHandler {
         gameController.registerView(ConsoleView.getInstance());
         ConsoleView.getInstance().setGameController(gameController);
 
-        gameController.setGameState(GameState.DISPLAYONLYBOARD);
+       gameController.displayInput();
 
         StageRepository.getInstance().replaceScene(gameView, gameController);
     }

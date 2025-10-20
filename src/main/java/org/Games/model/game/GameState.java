@@ -23,5 +23,5 @@ public enum GameState {
     MAIN,
     INVALIDINPUT,
     ASKFORROW,
-    ASKFORCOL
+    SHOWINPUT, ASKFORCOL
 }

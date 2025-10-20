@@ -1,6 +1,7 @@
 package org.Games.model.game;
 
 import javafx.animation.PauseTransition;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import org.Games.model.bd.GameSerialization;
 import org.Games.model.board.Board;
@@ -38,6 +39,7 @@ public class GameModel extends Observable implements Serializable {
     private final GameType gameType;
     private transient PauseTransition currentPause;
     private int currentInput;
+    private int selectedRow = 0;
 
     public GameModel(GameType gameType) {
         this.gameType = gameType;
@@ -100,7 +102,8 @@ public class GameModel extends Observable implements Serializable {
                 currentPause.setOnFinished(event -> artificialPlayerTurn());
                 currentPause.play();
             } else {
-                setGameState(GameState.DISPLAYPLAYER);
+                GameState state = rules.getTypeOfPlacement() == TypeOfPlacement.FREE ? GameState.ASKFORROW : GameState.ASKFORCOL;
+                setGameState(state);
             }
         } else {
             setGameState(GameState.FINISHED);
@@ -157,16 +160,54 @@ public class GameModel extends Observable implements Serializable {
     }
 
     public void keyPressed(String keyCode) {
-        currentInput = currentInput * 10;
-        currentInput += Integer.parseInt(keyCode);
+        if (isValidatedInput(Integer.parseInt(keyCode))){
+            currentInput = currentInput * 10;
+            currentInput += Integer.parseInt(keyCode);
+            setGameState(GameState.SHOWINPUT);
+        } else {
+            currentInput = 0;
+            setGameState(GameState.INVALIDINPUT);
+        }
+    }
+
+    private Boolean isValidatedInput(Integer input) {
+        if(gameState == GameState.ASKFORROW) {
+            int checkInput = currentInput * 10;
+            checkInput += input;
+            return checkInput <= board.getYSize();
+        }
+        if(gameState == GameState.ASKFORCOL) {
+            int checkInput = currentInput * 10;
+            checkInput += input;
+            return checkInput <= board.getXSize();
+        }
+        return false;
     }
 
     public void valideKeyInput() {
         if(gameState == GameState.ASKFORROW) {
-
+            selectedRow = currentInput;
+            currentInput = 0;
+            setGameState(GameState.ASKFORCOL);
+        } else if(gameState == GameState.ASKFORCOL) {
+            try {
+                humainPlayerTurn(new Coordinate(selectedRow, currentInput));
+                currentInput = 0;
+            } catch (InterruptedException e) {
+                throw new IllegalArgumentException("Impossible de jouer le coup");
+            }
         }
     }
 
+    public void errorIsDisplay() {
+        setGameState(oldGameState);
+    }
+
+
+    public void displayInput(){
+        GameState state = rules.getTypeOfPlacement() == TypeOfPlacement.FREE ? GameState.ASKFORROW : GameState.ASKFORCOL;
+        setGameState(state);
+    }
 
     /**
      * check if active player is a humain
@@ -242,12 +283,6 @@ public class GameModel extends Observable implements Serializable {
         return board.getBoard();
     }
 
-    //Setter
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-        notifyObservers();
-    }
-
     // observer
     @Override
     public void addObserver(Observer observer) {
@@ -269,5 +304,9 @@ public class GameModel extends Observable implements Serializable {
         // Réinitialiser dbRepository après chargement
         this.dbRepository = new GameSerialization();
         this.observers = new ArrayList<>();
+    }
+
+    public String getInput() {
+        return String.valueOf(currentInput);
     }
 }

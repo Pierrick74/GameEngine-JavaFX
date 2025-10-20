@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.Games.Controller.GameController;
+import org.Games.JavaFX.KeyHandler;
 import org.Games.JavaFX.commun.ThemeConfig;
 import org.Games.model.game.GameState;
 import org.Games.observer.Observer;
@@ -20,7 +21,7 @@ import org.Games.observer.Observer;
 import java.io.Serializable;
 
 
-public class GameView extends VBox implements Observer, Serializable {
+public class GameView extends VBox implements Observer, KeyHandler, Serializable {
     private Label titre;
     private Label playerName;
     private final GameController controller;
@@ -38,6 +39,8 @@ public class GameView extends VBox implements Observer, Serializable {
         this.getChildren().addAll(titre, playerName, hBox);
 
         ThemeConfig.applyDarkBackground(this);
+
+        this.setFocusTraversable(true);
     }
 
     private void initializeComponents()  {
@@ -56,7 +59,7 @@ public class GameView extends VBox implements Observer, Serializable {
         board.setHgap(2);
         board.setVgap(2);
 
-        int rows = controller.getRowCount();    // 3 pour TicTacToe, 15 pour Gomoku, etc.
+        int rows = controller.getRowCount();
         int cols = controller.getColumnCount();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -86,7 +89,7 @@ public class GameView extends VBox implements Observer, Serializable {
 
     @Override
     public void updateState(GameState gameState) {
-        if (gameState == GameState.DISPLAYPLAYER) {
+        if (gameState == GameState.ASKFORROW || gameState == GameState.ASKFORCOL) {
             playerName.setText(controller.getPlayerName());
             enableBoard(true);
         } else if (gameState == GameState.DISPLAYBOARD) {
@@ -156,6 +159,6 @@ public class GameView extends VBox implements Observer, Serializable {
     }
 
     public void onKeyPressed(KeyEvent event) {
-        controller.keyPressed(event.getText());
+        controller.keyPressed(event);
     }
 }

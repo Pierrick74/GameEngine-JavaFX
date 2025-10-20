@@ -211,7 +211,11 @@ public class Board implements Serializable {
         Board clone = new Board(xSize, ySize);
         for (int i = 0; i < ySize; i++) {
             for (int j = 0; j < xSize; j++) {
-                clone.board[i][j] = new Cell(board[i][j].player);
+                if (board[i][j].player == null) {
+                    clone.board[i][j] = new Cell();
+                } else {
+                    clone.board[i][j] = new Cell(board[i][j].player);
+                }
             }
         }
         return clone;

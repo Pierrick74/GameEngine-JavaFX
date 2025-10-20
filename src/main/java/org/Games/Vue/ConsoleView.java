@@ -63,6 +63,24 @@ public class ConsoleView implements Observer {
 
             case INVALIDINPUT:
                 Display.getInstance().displayText("Entrée invalide. Veuillez réessayer.");
+                if(gameController != null) {
+                    gameController.errorIsDisplay();
+                }
+                break;
+
+            case SHOWINPUT:
+                Display.getInstance().displayText(gameController.getInput());
+                if(gameController != null) {
+                    gameController.errorIsDisplay();
+                }
+                break;
+
+            case ASKFORCOL:
+                Display.getInstance().displayText("Quelle colonne voulez vous?");
+                break;
+
+            case ASKFORROW:
+                Display.getInstance().displayText("Quelle ligne voulez vous ?");
                 break;
 
         }
