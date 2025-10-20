@@ -278,7 +278,25 @@ public class GameModel extends Observable implements Serializable {
     }
 
     public String getRepresentation(int row, int col) {
-        return board.getCell(new Coordinate(row, col)).getType().getIcone();
+        String representation = board.getCell(new Coordinate(row, col)).getType().getIcone();
+        if(GameType.POWER4 != gameType) {
+            return board.getCell(new Coordinate(row, col)).getType().getIcone();
+        } else {
+            switch (representation) {
+                case "/org/Games/JavaFX/assets/icone/red.png":
+                    representation = "/org/Games/JavaFX/assets/icone/red1.png";
+                break;
+                case "/org/Games/JavaFX/assets/icone/yellow.png":
+                    representation = "/org/Games/JavaFX/assets/icone/yellow1.png";
+                    break;
+                default:
+                    representation = "/org/Games/JavaFX/assets/icone/emptyPower4.png";
+                    break;
+            }
+            return representation;
+        }
+
+
     }
 
     public GameType getGameType() {

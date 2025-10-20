@@ -31,7 +31,7 @@ public class ChoosePlayerView extends VBox implements KeyHandler {
 
     private void initializeComponents()  {
         titre = new Label("Combien de joueur ?");
-        titre.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        titre.setTextFill(Color.web(ThemeConfig.TEXT));
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 50.0));
         titre.setAlignment(Pos.CENTER);
 

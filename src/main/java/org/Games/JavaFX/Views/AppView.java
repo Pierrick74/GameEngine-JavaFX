@@ -62,7 +62,7 @@ public class AppView extends VBox implements Observer, KeyHandler {
 
         Label label = new Label(labelText);
         label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        label.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        label.setTextFill(Color.web(ThemeConfig.TEXT));
 
         button.setGraphic(picture);
         button.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
@@ -93,7 +93,7 @@ public class AppView extends VBox implements Observer, KeyHandler {
         vBoxPower4 = createVBox("/org/Games/JavaFX/assets/power4.png", "Power4", GameType.POWER4);
 
         titre = new Label("Choisissez un jeu");
-        titre.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        titre.setTextFill(Color.web(ThemeConfig.TEXT));
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 50.0));
         titre.setAlignment(Pos.CENTER);
 
@@ -109,7 +109,7 @@ public class AppView extends VBox implements Observer, KeyHandler {
 
     private VBox createSavedFileDialog() {
         Label question = new Label("Voulez vous charger la sauvegarde ?");
-        question.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        question.setTextFill(Color.web(ThemeConfig.TEXT));
         question.setFont(Font.font("Arial", FontWeight.BOLD, 20.0));
         question.setAlignment(Pos.CENTER);
 

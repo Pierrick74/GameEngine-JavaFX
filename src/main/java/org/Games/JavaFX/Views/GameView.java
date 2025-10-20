@@ -45,12 +45,12 @@ public class GameView extends VBox implements Observer, KeyHandler, Serializable
 
     private void initializeComponents()  {
         titre = new Label(controller.getGameName());
-        titre.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        titre.setTextFill(Color.web(ThemeConfig.TEXT));
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 50.0));
         titre.setAlignment(Pos.CENTER);
 
         playerName = new Label(controller.getPlayerName());
-        playerName.setTextFill(Color.web(ThemeConfig.TEXT_GREEN));
+        playerName.setTextFill(Color.web(ThemeConfig.TEXT));
         playerName.setFont(Font.font("Arial", FontWeight.BOLD, 25.0));
         playerName.setAlignment(Pos.CENTER);
 

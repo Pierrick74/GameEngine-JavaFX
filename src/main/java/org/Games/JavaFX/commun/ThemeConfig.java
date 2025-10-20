@@ -6,12 +6,12 @@ import javafx.scene.layout.Region;
 public class ThemeConfig {
     // Couleurs
     public static final String TEXT_LIGHT = "#264653";
-    public static final String TEXT_GREEN = "#2A9D8F";
-    public static final String BUTTON_YELLOW = "#FFCB05";
+    public static final String TEXT = "#e8e8e8";
+    public static final String BUTTON_YELLOW = "#06b6d4";
 
     // Styles CSS
     public static final String DARK_BACKGROUND_STYLE =
-            "-fx-background-color: #E8E4DC;" +
+            "-fx-background-color: #0a1428;" +
                     "-fx-alignment: center; ";
 
     public static final String PLAYER_INFORMATION_STYLE =
@@ -22,14 +22,14 @@ public class ThemeConfig {
 
     public static final String BUTTON_STYLE =
             "-fx-background-color: " + BUTTON_YELLOW + ";" +
-                    "-fx-text-fill: #2A9D8F;" +
+                    "-fx-text-fill:  " + TEXT + ";" +
                     "-fx-font-weight: bold;" +
                     "-fx-background-radius: 8;" +
-                    "-fx-border-color: " + TEXT_GREEN + ";" +
+                    "-fx-border-color: " + TEXT + ";" +
                     "-fx-border-width: 2;";
 
     public static final String INPUT_STYLE =
-            "-fx-border-color: " + TEXT_GREEN + ";" +
+            "-fx-border-color: " + TEXT + ";" +
                     "-fx-border-width: 2;";
 
     // Méthodes utilitaires
