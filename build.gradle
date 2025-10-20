@@ -23,6 +23,8 @@ def osPlatform = osName.contains('win') ? 'win' :
 dependencies {
     implementation "org.openjfx:javafx-controls:${javaFxVersion}:${osPlatform}"
     implementation "org.openjfx:javafx-fxml:${javaFxVersion}:${osPlatform}"
+    implementation "org.openjfx:javafx-graphics:${javaFxVersion}:${osPlatform}"
+    implementation "org.openjfx:javafx-base:${javaFxVersion}:${osPlatform}"
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
