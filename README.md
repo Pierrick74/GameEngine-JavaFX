@@ -4,9 +4,14 @@ Application de jeux de plateau développée en Java avec JavaFX.
 
 ## Jeux disponibles
 
+![Menu principal](image/menu.png)
 - **TicTacToe** (3x3)
 - **Gomoku** (15x15)
 - **Power4** (7x6)
+
+
+![Menu principal](image/power4.png)
+![Menu principal](image/tictactoe.png)
 
 ## Fonctionnalités
 
