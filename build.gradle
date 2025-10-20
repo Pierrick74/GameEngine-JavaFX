@@ -16,14 +16,13 @@ application {
 
 def javaFxVersion = '21'
 def osName = System.getProperty('os.name').toLowerCase()
-def platform = osName.contains('win') ? 'win' :
-               osName.contains('mac') ? 'mac' :
-               osName.contains('linux') ? 'linux' : 'win'
+def osPlatform = osName.contains('win') ? 'win' :
+                 osName.contains('mac') ? 'mac' :
+                 osName.contains('linux') ? 'linux' : 'win'
 
 dependencies {
-    // JavaFX dependencies (téléchargées automatiquement par Gradle)
-    implementation "org.openjfx:javafx-controls:${javaFxVersion}:${platform}"
-    implementation "org.openjfx:javafx-fxml:${javaFxVersion}:${platform}"
+    implementation "org.openjfx:javafx-controls:${javaFxVersion}:${osPlatform}"
+    implementation "org.openjfx:javafx-fxml:${javaFxVersion}:${osPlatform}"
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
